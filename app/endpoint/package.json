@@ -1,0 +1,12 @@
+{
+  "name": "rfi-library-endpoint",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Pass-through retrieval for the PulsePoint RFI answer library (Pinecone document index). REST + MCP.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test.js"
+  },
+  "engines": { "node": ">=20" }
+}

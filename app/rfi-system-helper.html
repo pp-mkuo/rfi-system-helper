@@ -1,0 +1,616 @@
+<title>RFI System Helper</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
+<style>
+/* Layout: one working column (max 1120px); summary before detail; rows are the detail. */
+:root {
+  --bg: #f6f7f9; --panel: #ffffff; --fg: #14202b; --muted: #5b6b7a; --line: #d9dfe6;
+  --accent: #1f6f78; --accent-fg: #ffffff; --accent-soft: #e2f0f1;
+  --green: #1d7a3e; --green-soft: #dff3e5; --amber: #9a6400; --amber-soft: #fbefcf; --red: #b3261e; --red-soft: #fbe1df;
+  --font: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121a21; --panel: #1a242d; --fg: #e8edf1; --muted: #9aa8b4; --line: #2d3a46;
+  --accent: #5fb7c0; --accent-fg: #0d1a1c; --accent-soft: #1d3a3e;
+  --green: #5ccb7f; --green-soft: #173a25; --amber: #e3b341; --amber-soft: #3d3014; --red: #ff8a80; --red-soft: #4a1f1c;
+  color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #121a21; --panel: #1a242d; --fg: #e8edf1; --muted: #9aa8b4; --line: #2d3a46;
+  --accent: #5fb7c0; --accent-fg: #0d1a1c; --accent-soft: #1d3a3e;
+  --green: #5ccb7f; --green-soft: #173a25; --amber: #e3b341; --amber-soft: #3d3014; --red: #ff8a80; --red-soft: #4a1f1c;
+  color-scheme: dark; }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--font); font-size: 15px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 0 48px; }
+.wrap { max-width: 1120px; margin: 0 auto; display: grid; gap: 20px; }
+h1 { font-size: 22px; font-weight: 700; margin: 0; letter-spacing: -0.01em; }
+h2 { font-size: 15px; font-weight: 600; margin: 0 0 10px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+p { margin: 0; }
+a { color: var(--accent); }
+header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding-block: 20px 4px; border-bottom: 1px solid var(--line); }
+header .sub { color: var(--muted); font-size: 14px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel); color: var(--muted); white-space: nowrap; }
+.chip::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--line); }
+.chip.ok::before { background: var(--green); } .chip.bad::before { background: var(--red); } .chip.warn::before { background: var(--amber); }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 18px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 760px) { .grid2 { grid-template-columns: 1fr; } }
+label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 4px; }
+textarea, input[type=text], select { width: 100%; font: inherit; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; }
+textarea { min-height: 150px; resize: vertical; }
+textarea:focus, input:focus, select:focus, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+button { font: inherit; font-weight: 600; font-size: 14px; border-radius: 6px; padding: 8px 14px; border: 1px solid var(--line); background: var(--panel); color: var(--fg); cursor: pointer; }
+button.primary { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+button.small { font-size: 12.5px; padding: 4px 10px; font-weight: 500; }
+button:disabled { opacity: 0.5; cursor: default; }
+.muted { color: var(--muted); font-size: 13.5px; }
+.mono { font-family: var(--mono); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+.pill { display: inline-block; font-size: 12px; font-weight: 600; padding: 2px 9px; border-radius: 4px; letter-spacing: 0.04em; }
+.pill.GREEN { background: var(--green-soft); color: var(--green); } .pill.AMBER { background: var(--amber-soft); color: var(--amber); } .pill.RED { background: var(--red-soft); color: var(--red); }
+.progress { height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; }
+.progress > div { height: 100%; width: 0; background: var(--accent); transition: width 0.3s; }
+.counts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.count { border-left: 4px solid var(--line); padding: 6px 12px; }
+.count b { display: block; font-size: 24px; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.count.GREEN { border-color: var(--green); } .count.AMBER { border-color: var(--amber); } .count.RED { border-color: var(--red); }
+.summary ul { margin: 6px 0 0; padding-left: 18px; } .summary li { margin: 2px 0; }
+.filters button[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); }
+.qrow { display: grid; grid-template-columns: 56px 1fr; gap: 10px 14px; padding: 14px 0; border-top: 1px solid var(--line); }
+.qrow:first-child { border-top: 0; }
+.qrow .num { font-family: var(--mono); font-size: 13px; color: var(--muted); padding-top: 3px; }
+.qrow .q { font-weight: 500; }
+.qrow .meta { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; font-size: 13px; color: var(--muted); margin-top: 6px; }
+.qrow textarea { min-height: 84px; margin-top: 8px; font-size: 14px; }
+.qrow details { margin-top: 8px; font-size: 13.5px; }
+.qrow summary { cursor: pointer; color: var(--accent); }
+.src { border-left: 3px solid var(--line); padding: 4px 10px; margin: 6px 0; }
+.src .h { display: flex; flex-wrap: wrap; gap: 8px; color: var(--muted); font-size: 12.5px; }
+.flag { display: inline-block; font-size: 12px; padding: 1px 7px; border-radius: 4px; background: var(--amber-soft); color: var(--amber); }
+.flag.err { background: var(--red-soft); color: var(--red); }
+.fb button[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); }
+.runs li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; padding: 6px 0; border-top: 1px solid var(--line); font-size: 14px; }
+.runs ul { list-style: none; margin: 0; padding: 0; }
+.notice { padding: 10px 12px; border-radius: 6px; background: var(--amber-soft); color: var(--amber); font-size: 14px; }
+.notice.err { background: var(--red-soft); color: var(--red); }
+[hidden] { display: none !important; }
+@media (prefers-reduced-motion: reduce) { .progress > div { transition: none; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1>RFI System Helper</h1>
+      <p class="sub">Triage a client RFI, draft green answers from the PulsePoint answer library, route the rest.</p>
+    </div>
+    <div class="chips" id="chips">
+      <span class="chip" id="chip-sample">Claude</span>
+      <span class="chip" id="chip-lib">Library connector</span>
+      <span class="chip" id="chip-db">Run log</span>
+    </div>
+  </header>
+
+  <section class="panel" id="setup">
+    <h2>1 · Questionnaire</h2>
+    <div class="grid2">
+      <div>
+        <label for="paste">Paste questions, one per line (leading numbers are kept as the question #)</label>
+        <textarea id="paste" placeholder="1. Can you target by medical condition and remain HIPAA compliant?&#10;2. Provide your information security policy and most recent SOC 2 report.&#10;3. Which brand safety vendors do you integrate with?"></textarea>
+        <div class="row" style="margin-top:8px">
+          <label for="file" style="margin:0">or upload .xlsx / .csv</label>
+          <input type="file" id="file" accept=".xlsx,.csv">
+        </div>
+        <div id="colpick" class="row" hidden style="margin-top:8px">
+          <div><label for="qcol">Question column</label><select id="qcol"></select></div>
+          <div><label for="ncol">Number column</label><select id="ncol"></select></div>
+          <span class="muted" id="filenote"></span>
+        </div>
+      </div>
+      <div>
+        <label for="runname">Run name</label>
+        <input type="text" id="runname" placeholder="e.g. CMI Data RFI – Nov 2026">
+        <div class="grid2" style="margin-top:10px">
+          <div><label for="ae">AE on the account</label><input type="text" id="ae" placeholder="name, or leave as a role"></div>
+          <div><label for="am">AM on the account</label><input type="text" id="am"></div>
+          <div><label for="psm">PSM/CM on the account</label><input type="text" id="psm"></div>
+        </div>
+        <p class="muted" style="margin-top:10px">Red questions are never drafted or searched. Green and amber questions are searched in the library; only green ones are drafted, and a green question with no usable match is reclassified amber and routed.</p>
+        <div class="row" style="margin-top:14px">
+          <button class="primary" id="start">Triage and draft</button>
+          <button id="stop" hidden>Stop</button>
+          <span class="muted" id="status"></span>
+        </div>
+      </div>
+    </div>
+    <div class="progress" style="margin-top:14px"><div id="bar"></div></div>
+    <div class="notice" id="notice" hidden></div>
+  </section>
+
+  <section class="panel runs" id="history">
+    <h2>Your runs</h2>
+    <p class="muted" id="runs-empty">Runs you start are saved here under your own account. Editors can read every run through the artifact's data store.</p>
+    <ul id="runs"></ul>
+  </section>
+
+  <section class="panel summary" id="summary" hidden>
+    <h2>2 · Scope summary</h2>
+    <div class="counts" id="counts"></div>
+    <div id="summary-body" style="margin-top:12px"></div>
+    <div class="row" style="margin-top:14px">
+      <button class="primary" id="export">Export triaged workbook (.xlsx)</button>
+      <button id="retry" hidden>Retry failed rows</button>
+      <span class="muted" id="exportnote"></span>
+    </div>
+  </section>
+
+  <section class="panel" id="rowspanel" hidden>
+    <div class="row" style="justify-content:space-between">
+      <h2 style="margin:0">3 · Questions</h2>
+      <div class="row filters" id="filters">
+        <button class="small" data-f="all" aria-pressed="true">All</button>
+        <button class="small" data-f="RED">Red</button>
+        <button class="small" data-f="AMBER">Amber</button>
+        <button class="small" data-f="GREEN">Green</button>
+        <button class="small" data-f="flagged">Flagged</button>
+        <button class="small" data-f="failed">Failed</button>
+      </div>
+    </div>
+    <div id="rows" style="margin-top:8px"></div>
+  </section>
+</div>
+
+<script>
+"use strict";
+// ---------------------------------------------------------------------------
+// Maggie Kuo's rules, ported from skill/SKILL.md (2026-11). Workflow is hers; keep edits in sync with the skill.
+// ---------------------------------------------------------------------------
+const LIBRARY_SERVER = "RFI Library";           // the claude.ai connector's display name, exactly
+const LIBRARY_TOOL = "search_library";
+const SCORE_FLOOR = 0.45;
+
+const ROUTING = [
+  { key: "tech-integrations", topic: "Tech integrations", route: "Mike Leviste; TPM", esc: "Paul Bennett", lane: "AMBER" },
+  { key: "openrtb", topic: "OpenRTB / bid request specs, endpoints, latency, tmax, data centers, QPS", route: "TPM", esc: "Paul Bennett", lane: "AMBER" },
+  { key: "ad-formats", topic: "Ad formats, CTV, ad podding, VAST", route: "TPM", esc: "Paul Bennett", lane: "AMBER", unconfirmed: true },
+  { key: "identity", topic: "Identifiers and identity (EIDs, UID2, RampID, cookie sync)", route: "TPM", esc: "Paul Bennett", lane: "AMBER", unconfirmed: true },
+  { key: "platform-capabilities", topic: "Platform / product capabilities the library doesn't cover", route: "Becky Hallam", esc: "", lane: "AMBER" },
+  { key: "roadmap", topic: "Future roadmap", route: "Amanda Alterman", esc: "", lane: "AMBER" },
+  { key: "inventory", topic: "Inventory (supply) overview and logistics", route: "Jay Irwin / Walker Linares", esc: "", lane: "AMBER" },
+  { key: "exchange", topic: "Exchange, supply scale, partner-specific questions", route: "Jay Irwin / Walker Linares", esc: "", lane: "AMBER" },
+  { key: "curated-markets", topic: "Curated markets", route: "Jay Irwin / Walker Linares; Doug Richards", esc: "", lane: "AMBER" },
+  { key: "deals", topic: "Deals, PMP, programmatic guaranteed (PG)", route: "Jay Irwin (deal strategy); Doug Richards (deal operations)", esc: "TPM (PG and deal-sync mechanics)", lane: "AMBER" },
+  { key: "account-setup", topic: "Set-up, activation, general capabilities for this account", route: "PSM/CM on the account", esc: "Zach Rice", lane: "AMBER" },
+  { key: "brand-safety", topic: "Brand safety, ad fraud, IVT, supply quality", route: "Divyang / Matt Katz", esc: "TPM (how blocks work technically)", lane: "AMBER" },
+  { key: "company-facts", topic: "Company overview facts the library doesn't cover (HQ, countries, terms)", route: "Matt Katz", esc: "Jessica Hoffman", lane: "AMBER", unconfirmed: true },
+  { key: "ad-policies", topic: "Ad policies, advertiser vetting, LegitScript", route: "Matt Katz", esc: "Jessica Hoffman", lane: "AMBER", unconfirmed: true },
+  { key: "pricing", topic: "Pricing (rates, discounts, commercial terms), differentiators, sales process", route: "AE on the account", esc: "AE's VP", lane: "AMBER" },
+  { key: "reporting-billing", topic: "Reporting specifics, billing, discrepancies, commercial commitments, client relations", route: "AM on the account; Erica Yard", esc: "AM's superior; Julie Maggio", lane: "AMBER" },
+  { key: "social", topic: "Reddit / social audiences", route: "Mimi Liu", esc: "", lane: "AMBER" },
+  { key: "legal-privacy", topic: "Legal, privacy, data rights (GDPR, CCPA, COPPA, state laws), data privacy", route: "Jessica Hoffman — jhhoffman@webmd.net (WebMD; email or gchat only); IB RFI team — rfi@internetbrands.com", esc: "TPM (technical facts only, e.g. how opt-out signals are handled)", lane: "RED" },
+  { key: "sustainability", topic: "Sustainability", route: "michael.cordova@internetbrands.com", esc: "", lane: "RED" },
+  { key: "security", topic: "Data and platform infrastructure security", route: "Security/privacy team — rfi@internetbrands.com", esc: "", lane: "RED" },
+  { key: "hr-policy", topic: "HR, DE&I, other company policy sourced from IB", route: "Internet Brands RFI team — rfi@internetbrands.com", esc: "", lane: "RED" },
+  { key: "gap-data", topic: "Data process, data foundation, targeting methodology (no owner on file)", route: "SME needed — no owner on file (data process / targeting methodology)", esc: "", lane: "AMBER", gap: true },
+  { key: "gap-supply-path", topic: "Supply path, schain, sellers.json, ads.txt (no owner on file)", route: "SME needed — no owner on file (supply path); try Matt Katz (policy) or TPM (technical)", esc: "", lane: "AMBER", gap: true },
+  { key: "unknown", topic: "No routing row fits", route: "SME needed — owner unknown", esc: "", lane: "AMBER", gap: true },
+];
+
+const TRIAGE_RULES = [
+  "Scope test: What the platform DOES -> Client Strategy (CS) answers. How the company HANDLES a topic -> routed out.",
+  "GREEN (CS scope): general overview of PulsePoint capabilities for programmatic activations: targeting; reporting; pricing MODELS and structures (not a quote); methodologies; PulsePoint-specific teams (product, marketing, supply/exchange, brand safety, etc.).",
+  "AMBER (CS owns it, needs an internal SME): still a PulsePoint capability question but past what the library covers: unreleased roadmap, exchange or supply-path specifics, OpenRTB or integration detail, account-specific setup, actual rates/discounts/terms, this client's billing or reporting setup.",
+  "RED (route out, never answered by CS): an in-depth review of policies or procedures: HR policies; sustainability and DE&I; data/platform security (infosec policy, SOC 2, pen tests, incident response); legal and privacy policy (data retention, DPA, GDPR/CCPA policy); anything sourced from Internet Brands teams. Red questions are never drafted, never searched.",
+  "Edge cases: 'Is your data HIPAA-compliant and de-identified to regulatory standards?' GREEN (platform methodology). 'Can you target by medical condition and remain HIPAA compliant?' GREEN. 'Provide your information security policy / SOC 2 / pen test results' RED (security). 'Describe your incident response process' RED (security). 'What is your data retention policy? / Do you have a DPA?' RED (legal-privacy). 'Which brand safety vendors do you integrate with?' GREEN. 'What is your content moderation policy?' RED (hr-policy, IB RFI team). 'What does your product team own?' GREEN. 'What is your DE&I hiring commitment?' RED (hr-policy). 'How does your pricing model work?' GREEN. 'What CPM would we pay / what discounts apply?' AMBER (pricing). 'What's on your roadmap for next year?' AMBER (roadmap). 'Do you support ad podding / which VAST versions?' AMBER (ad-formats) unless the library covers it. 'Can you run PG on Disney via Magnite?' AMBER (deals).",
+  "Where the routing table and the green scope overlap, GREEN wins: pricing models, reporting capabilities, brand safety vendors, ad formats and product capabilities are GREEN when they are capability questions. They route only for what a library cannot support (rates, this client's setup, a capability with no match, OpenRTB/CTV mechanics, a fraud incident).",
+  "A question that straddles the line is split: capability half GREEN, policy half RED (or AMBER), each part verbatim. Do not force one label onto a two-part question. Otherwise return the whole question as a single part, verbatim.",
+  "Creative spec questions (file types, sizes, durations) are GREEN: the PulsePoint Ad Specifications guide is client-facing.",
+  "Never invent a contact: if no routing row fits, use topic 'unknown'. Topics 'gap-data' and 'gap-supply-path' have no owner on file; use them rather than guessing.",
+].join("\n");
+
+const DRAFT_RULES = [
+  "You are the generation layer for a PulsePoint Client Strategy team member answering one client RFI question. The client is comparing DSPs side by side and skimming.",
+  "The library is the source of FACTS, not wording. Copy-pasting a retrieved answer is the failure to avoid: it was written for a different client and often answers a neighboring question.",
+  "GROUNDING: every claim traces to a retrieved answer. No filling gaps from general knowledge about PulsePoint, ad tech or healthcare data. If the library does not say it, it does not go in.",
+  "Regulatory claim sentences are quoted VERBATIM from the source: HIPAA compliance, de-identification methodology, and named-regulation compliance statements (GDPR, CCPA). Write fresh framing around them; the verbatim rule covers the claim sentence, not the paragraph.",
+  "Everything else is composed fresh: targeting, reporting, pricing models, methodology, teams, integrations.",
+  "Say when you stitched from several records (set stitched=true). Name the gaps: if part of the question has no source, put that part in 'uncovered' and do not answer it.",
+  "SHAPE: 'Can you / do you support X?' -> direct yes or no in the first three words, then the mechanism, then why it matters. 'Describe your methodology' -> the how in 3-5 sentences with named components. 'What data do you use?' -> source, scale, what it lets the client do. 'What reporting is available?' -> what they get, cadence, delivery, self-serve vs managed. 'How does pricing work?' -> model structures, never a rate. 'Tell us about your team' -> what the team owns and what the client gets, not headcount.",
+  "LENGTH: simple capability confirmation 1-3 sentences; methodology or process 3-6 sentences or 3-5 tight bullets; hard ceiling ~150 words unless the question asks for depth. Every sentence must add a fact.",
+  "VOICE: lead with the differentiator only when the sources support it (healthcare-specific data, HCP/NPI-level targeting, de-identified claims data, HIPAA-compliant architecture, endemic health supply). Concrete beats adjectival. Active voice, present tense, first person plural ('we', 'our platform'), confident not hedged. Answer first, differentiate second.",
+  "BANNED WORDS: best-in-class, industry-leading, cutting-edge, robust, seamless, unparalleled, revolutionary, synergy, holistic, turnkey. 'Unique' only when literally true.",
+  "NEVER: comparative claims about other DSPs; naming or disparaging a competitor; invented numbers (any figure appears only verbatim from a source); yes-to-everything (state what we do today, do not imply more). Selling never overrides grounding.",
+  "SCORES are a hint, not a verdict. >=0.75 near-exact: facts solid, still rewrite. 0.60-0.75 good coverage: compose across top matches. 0.45-0.60 adjacent: READ the record; if it genuinely answers, write from it and flag 'no verbatim match'; if not, decision AMBER. <0.45: no basis, decision AMBER. A 0.50 match that answers beats a 0.70 that does not.",
+  "FLAGS to set when they apply: 'stale source' (a used source updated before 2025), 'unapproved regulatory language' (a regulatory claim taken from a source whose legal_approved is false), 'stitched claim', 'uncovered sub-question', 'old-stack wording' (only source is stack 'Client Strategy'), 'unverified source' (a source from the Q&A Bank, stack contains 'unverified'), 'no verbatim match', 'needs legal review' (any privacy/regulatory answer whose sources lack legal_approved).",
+].join("\n");
+
+// ---------------------------------------------------------------------------
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const uid = () => (crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2) + Date.now().toString(36));
+
+const caps = { sample: null, db: null, user: null, downloads: null, mcp: null };
+const state = { run: null, rows: [], roles: {}, userId: null, filter: "all", running: false, ctl: null, libraryOk: null };
+let parsedUpload = null;
+
+// --- capabilities -----------------------------------------------------------
+(async () => {
+  const use = n => (window.claude?.use ? window.claude.use(n) : Promise.resolve(null)).catch(() => null);
+  [caps.sample, caps.db, caps.user, caps.downloads, caps.mcp] = await Promise.all(["sample", "db", "user", "downloads", "mcp"].map(use));
+  setChip("chip-sample", caps.sample ? "ok" : "bad", caps.sample ? "Claude ready" : "Claude unavailable here");
+  if (caps.user) state.userId = await caps.user.id().catch(() => null);
+  const dbOk = caps.db && state.userId;
+  setChip("chip-db", dbOk ? "ok" : "warn", dbOk ? "Run log on" : "Run log off (not saved)");
+  if (caps.mcp) {
+    try {
+      const { servers } = await caps.mcp.listTools(LIBRARY_SERVER);
+      const s = servers.find(x => x.server === LIBRARY_SERVER);
+      state.libraryOk = !!(s && s.tools.length);
+      setChip("chip-lib", state.libraryOk ? "ok" : "bad", state.libraryOk ? `Library: ${s.authStatus === "connected" ? "connected" : "will ask on first search"}` : "Library connector missing");
+    } catch (e) { setChip("chip-lib", "warn", "Library: " + (e.code || "unknown")); }
+  } else setChip("chip-lib", "bad", "Library connector unavailable");
+  if (!state.libraryOk) showNotice(`Add the "${LIBRARY_SERVER}" connector in claude.ai Settings → Connectors (an admin can add it for the organization). Without it, questions are triaged and routed but nothing is drafted.`);
+  if (!caps.downloads) $("exportnote").textContent = "Export is unavailable in this view.";
+  loadRuns();
+})();
+function setChip(id, cls, text) { const c = $(id); c.className = "chip " + cls; c.textContent = text; }
+function showNotice(msg, err) { const n = $("notice"); n.hidden = !msg; n.textContent = msg || ""; n.className = "notice" + (err ? " err" : ""); }
+
+// --- input --------------------------------------------------------------------
+function parsePaste(text) {
+  const out = []; let i = 0;
+  for (const raw of text.split(/\r?\n/)) {
+    const line = raw.trim(); if (!line) continue;
+    i++;
+    const m = line.match(/^(?:q(?:uestion)?\s*)?(\d+(?:\.\d+)*[a-z]?)[.):\-\s]+\s*(.+)$/i);
+    out.push(m ? { n: m[1], q: m[2].trim() } : { n: String(i), q: line });
+  }
+  return out;
+}
+function parseCsv(text) {
+  const rows = []; let row = [], cell = "", inq = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (inq) { if (c === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else inq = false; } else cell += c; }
+    else if (c === '"') inq = true;
+    else if (c === ",") { row.push(cell); cell = ""; }
+    else if (c === "\n" || c === "\r") { if (c === "\r" && text[i + 1] === "\n") i++; row.push(cell); rows.push(row); row = []; cell = ""; }
+    else cell += c;
+  }
+  if (cell || row.length) { row.push(cell); rows.push(row); }
+  return rows.filter(r => r.some(x => String(x).trim()));
+}
+$("file").addEventListener("change", async e => {
+  const f = e.target.files[0]; if (!f) return;
+  let grid;
+  try {
+    if (/\.csv$/i.test(f.name)) grid = parseCsv(await f.text());
+    else {
+      const wb = new ExcelJS.Workbook(); await wb.xlsx.load(await f.arrayBuffer());
+      const ws = wb.worksheets[0]; grid = [];
+      ws.eachRow((r, idx) => { const vals = []; r.eachCell({ includeEmpty: true }, (c, ci) => { vals[ci - 1] = cellText(c.value); }); grid[idx - 1] = vals; });
+      grid = grid.filter(r => r && r.some(x => String(x || "").trim()));
+    }
+  } catch (err) { showNotice("Could not read that file: " + err.message, true); return; }
+  if (!grid.length) { showNotice("That file has no rows.", true); return; }
+  const header = grid[0].map((h, i) => String(h || "").trim() || `Column ${i + 1}`);
+  const width = Math.max(...grid.map(r => r.length));
+  const score = Array.from({ length: width }, (_, c) => grid.slice(1).reduce((s, r) => s + String(r[c] || "").length, 0));
+  const qGuess = score.indexOf(Math.max(...score));
+  const nGuess = header.findIndex(h => /^(#|no\.?|num(ber)?|q(uestion)?\s*#?|id|ref)$/i.test(h));
+  const opts = (sel, extra) => { sel.innerHTML = (extra ? `<option value="-1">${extra}</option>` : "") + header.map((h, i) => `<option value="${i}">${esc(h)}</option>`).join(""); };
+  opts($("qcol")); $("qcol").value = String(qGuess);
+  opts($("ncol"), "Row order"); $("ncol").value = String(nGuess);
+  parsedUpload = { grid, header };
+  $("colpick").hidden = false; $("filenote").textContent = `${f.name}: ${grid.length - 1} rows (first row read as headers)`;
+  if (!$("runname").value) $("runname").value = f.name.replace(/\.[^.]+$/, "");
+});
+function cellText(v) { if (v == null) return ""; if (typeof v === "object") return v.richText ? v.richText.map(t => t.text).join("") : (v.text ?? v.result ?? v.toString()); return String(v); }
+function questionsFromUpload() {
+  const qc = +$("qcol").value, nc = +$("ncol").value;
+  return parsedUpload.grid.slice(1).map((r, i) => ({ n: nc >= 0 && String(r[nc] || "").trim() ? String(r[nc]).trim() : String(i + 1), q: String(r[qc] || "").trim() })).filter(x => x.q);
+}
+
+// --- run ----------------------------------------------------------------------
+$("start").addEventListener("click", startRun);
+$("stop").addEventListener("click", () => { state.ctl?.abort(); $("stop").disabled = true; });
+$("retry").addEventListener("click", () => runPipeline(state.rows.filter(r => r.status === "failed")));
+
+async function startRun() {
+  if (!caps.sample) return showNotice("Claude is not available in this view, so nothing can be triaged.", true);
+  const qs = parsedUpload ? questionsFromUpload() : parsePaste($("paste").value);
+  if (!qs.length) return showNotice("Paste at least one question or upload a questionnaire.", true);
+  showNotice("");
+  state.roles = { ae: $("ae").value.trim(), am: $("am").value.trim(), psm: $("psm").value.trim() };
+  state.run = { id: uid(), name: $("runname").value.trim() || `Run ${new Date().toLocaleString()}`, createdAt: new Date().toISOString(), total: qs.length, roles: state.roles, status: "running", libraryAvailable: !!state.libraryOk };
+  state.rows = qs.map(x => ({ id: uid(), n: x.n, question: x.q, lane: null, topic: null, route: "", esc: "", sources: [], topScore: null, draft: "", finalDraft: "", flags: [], stitched: false, uncovered: "", feedback: null, accepted: false, status: "pending", error: "" }));
+  await dbRun("set", state.run);
+  $("summary").hidden = false; $("rowspanel").hidden = false;
+  renderAll();
+  await triageAll();
+  await runPipeline(state.rows.filter(r => r.lane && r.lane !== "RED"));
+}
+
+function setRunning(on) {
+  state.running = on; $("start").disabled = on; $("stop").hidden = !on; $("stop").disabled = false;
+  if (!on && state.run) { state.run.status = "done"; dbRun("update", { status: "done", finished: new Date().toISOString(), counts: counts() }); }
+}
+function progress(done, total, text) { $("bar").style.width = total ? (100 * done / total) + "%" : "0"; $("status").textContent = text || ""; }
+
+async function withBackoff(fn, label) {
+  let wait = 30000;
+  for (let attempt = 0; ; attempt++) {
+    try { return await fn(); }
+    catch (e) {
+      if (e.code === "rate_limited" && attempt < 3 && !state.ctl.signal.aborted) {
+        progress(null, null, `${label}: Claude rate limit, waiting ${wait / 1000}s…`);
+        await sleep(wait); wait *= 2; continue;
+      }
+      throw e;
+    }
+  }
+}
+const fatal = new Set(["not_granted", "sampling_disabled", "not_declared", "capability_disabled", "session_expired", "cancelled"]);
+
+async function triageAll() {
+  setRunning(true); state.ctl = new AbortController();
+  const pending = state.rows.filter(r => !r.lane);
+  const BATCH = 20; let done = 0;
+  const topics = ROUTING.map(r => `${r.key} — ${r.topic} [${r.lane}]`).join("\n");
+  for (let i = 0; i < pending.length; i += BATCH) {
+    const batch = pending.slice(i, i + BATCH);
+    progress(done, pending.length, `Triaging ${done}/${pending.length}…`);
+    const prompt = `You are triaging client RFI questions for PulsePoint Client Strategy (CS). Apply these rules exactly.\n\n${TRIAGE_RULES}\n\nRouting topics (choose the key whose row would own the question if CS cannot answer it from the library; give one for every part, GREEN included, as the fallback owner):\n${topics}\n\nQuestions:\n${JSON.stringify(batch.map(r => ({ n: r.n, q: r.question })))}\n\nReply with only a JSON array, one object per question in the same order: {"n":"<n>","parts":[{"text":"<the whole question verbatim, or one verbatim part>","lane":"GREEN"|"AMBER"|"RED","topic":"<key>","why":"<at most 12 words>"}]}. Split a question only when it genuinely straddles lanes; otherwise exactly one part.`;
+    let out;
+    try { out = await withBackoff(() => caps.sample.json(prompt, { modelTier: "default", signal: state.ctl.signal, cache: false }), "Triage"); }
+    catch (e) {
+      batch.forEach(r => { r.status = "failed"; r.error = "triage: " + (e.code || "error"); });
+      if (fatal.has(e.code)) { showNotice(e.code === "cancelled" ? "Stopped." : `Claude refused: ${e.code}. ${e.code === "not_granted" ? "Allow this page to use Claude and start again." : ""}`, e.code !== "cancelled"); renderAll(); setRunning(false); return; }
+      showNotice(`Triage failed for ${batch.length} questions (${e.code || e.message}). Use "Retry failed rows".`, true); continue;
+    }
+    applyTriage(batch, Array.isArray(out) ? out : []);
+    done += batch.length; renderAll();
+  }
+  progress(pending.length, pending.length, "Triage complete.");
+}
+
+function applyTriage(batch, out) {
+  const byN = new Map(out.map(o => [String(o.n), o]));
+  const expanded = [];
+  for (const row of state.rows) {
+    if (!batch.includes(row)) { expanded.push(row); continue; }
+    const o = byN.get(String(row.n));
+    const parts = (o && Array.isArray(o.parts) && o.parts.length) ? o.parts : [{ text: row.question, lane: "AMBER", topic: "unknown", why: "triage returned nothing" }];
+    parts.forEach((p, i) => {
+      const r = i === 0 ? row : { ...row, id: uid(), sources: [], flags: [] };
+      r.n = parts.length > 1 ? `${row.n}${"abcdefgh"[i] || i}` : row.n;
+      r.question = parts.length > 1 ? String(p.text || row.question) : row.question;
+      r.lane = ["GREEN", "AMBER", "RED"].includes(p.lane) ? p.lane : "AMBER";
+      r.topic = ROUTING.some(x => x.key === p.topic) ? p.topic : "unknown";
+      r.why = String(p.why || "");
+      route(r);
+      r.status = r.lane === "RED" ? "routed" : "triaged";
+      expanded.push(r);
+      dbRow("set", r);
+    });
+  }
+  state.rows = expanded;
+}
+
+function route(r) {
+  const t = ROUTING.find(x => x.key === r.topic) || ROUTING.at(-1);
+  const roles = state.roles;
+  const sub = s => s.replace("AE on the account", roles.ae ? `AE: ${roles.ae}` : "AE on the account")
+    .replace("AM on the account", roles.am ? `AM: ${roles.am}` : "AM on the account")
+    .replace("PSM/CM on the account", roles.psm ? `PSM/CM: ${roles.psm}` : "PSM/CM on the account");
+  r.flags = r.flags.filter(f => !["no owner on file", "owner unconfirmed"].includes(f));
+  if (r.lane === "GREEN") { r.route = "CS — answered"; r.esc = ""; return; }
+  let who = sub(t.route);
+  if (t.unconfirmed) { who += " (owner unconfirmed)"; r.flags.push("owner unconfirmed"); }
+  if (t.gap) r.flags.push("no owner on file");
+  r.route = (r.lane === "RED" ? "Route out: " : "SME: ") + who;
+  r.esc = sub(t.esc || "");
+}
+
+async function runPipeline(rows) {
+  if (!rows.length) { setRunning(false); renderAll(); return; }
+  setRunning(true); state.ctl = new AbortController();
+  rows.forEach(r => { if (r.status === "failed") { r.status = "triaged"; r.error = ""; } });
+  let done = 0; const total = rows.length;
+  const work = rows.slice();
+  const worker = async () => {
+    while (work.length && !state.ctl.signal.aborted) {
+      const r = work.shift();
+      await processRow(r);
+      done++; progress(done, total, `Searching and drafting ${done}/${total}…`);
+      renderRow(r); renderSummary();
+    }
+  };
+  await Promise.all([worker(), worker()]);  // a couple of Claude calls at a time; a flood is rate-limited
+  progress(total, total, state.ctl.signal.aborted ? "Stopped." : "Done.");
+  setRunning(false); renderAll();
+}
+
+async function processRow(r) {
+  if (r.lane === "RED") return;
+  // Phase 1: retrieve (green and amber)
+  if (state.libraryOk && !r.sources.length) {
+    r.status = "retrieving"; renderRow(r);
+    try {
+      const res = await caps.mcp.callTool(LIBRARY_SERVER, LIBRARY_TOOL, { question: r.question, topK: 5 }, { signal: state.ctl.signal });
+      const payload = res.payload && typeof res.payload === "object" ? res.payload : safeJson(res.content?.[0]?.text);
+      r.sources = (payload?.results || []).map(s => ({ id: s.id, score: s.score, stack: s.stack, updated: s.updated, source: s.source, legal: !!s.legal_approved, tags: s.tags || [], question: s.question, answer: s.answer }));
+      r.topScore = r.sources[0]?.score ?? 0;
+    } catch (e) {
+      if (e.code === "cancelled") { r.status = "triaged"; return; }
+      r.status = "failed"; r.error = `search: ${e.code || e.message}`;
+      if (e.code === "server_not_connected" || e.code === "needs_reauth") { state.libraryOk = false; setChip("chip-lib", "bad", "Library: " + e.code); }
+      dbRow("update", r); return;
+    }
+  }
+  if (r.lane !== "GREEN") { r.status = "routed"; dbRow("update", r); return; }
+  if (!state.libraryOk && !r.sources.length) { r.status = "skipped"; r.error = "library unavailable"; dbRow("update", r); return; }
+  // Phase 2: draft (green only); no usable match -> amber
+  if (!r.sources.length || r.topScore < SCORE_FLOOR) { demote(r, `top score ${r.topScore?.toFixed(2) ?? "n/a"} below ${SCORE_FLOOR}`); dbRow("update", r); return; }
+  r.status = "drafting"; renderRow(r);
+  const prompt = `${DRAFT_RULES}\n\nClient question:\n${r.question}\n\nRetrieved library records (JSON):\n${JSON.stringify(r.sources.map(s => ({ id: s.id, score: s.score, stack: s.stack, updated: s.updated, legal_approved: s.legal, tags: s.tags, question: s.question, answer: s.answer })))}\n\nDecide first whether the records genuinely answer the question (read them; the score is a hint). If they do, write the answer. If they do not, do not stretch: decision "AMBER".\nReply with only JSON: {"decision":"DRAFT"|"AMBER","draft":"<the answer, or empty>","sources_used":["<id>",...],"stitched":true|false,"uncovered":"<sub-question with no source, or empty>","flags":["<flag>",...],"why_amber":"<one sentence if AMBER, else empty>"}`;
+  try {
+    const o = await withBackoff(() => caps.sample.json(prompt, { modelTier: "default", signal: state.ctl.signal }), `#${r.n}`);
+    if (o.decision === "AMBER" || !String(o.draft || "").trim()) { demote(r, o.why_amber || "library does not answer this"); }
+    else {
+      r.draft = String(o.draft).trim(); r.finalDraft = r.draft;
+      r.stitched = !!o.stitched; r.uncovered = String(o.uncovered || "");
+      const used = new Set((o.sources_used || []).map(String));
+      r.sources.forEach(s => { s.used = used.has(s.id); });
+      r.flags = [...new Set([...(Array.isArray(o.flags) ? o.flags.map(String) : []), ...(r.stitched ? ["stitched claim"] : []), ...(r.uncovered ? ["uncovered sub-question"] : [])])];
+      r.status = "drafted";
+    }
+  } catch (e) {
+    if (e.code === "cancelled") { r.status = "triaged"; return; }
+    r.status = "failed"; r.error = `draft: ${e.code || e.message}`;
+    if (fatal.has(e.code)) { state.ctl.abort(); showNotice(`Claude stopped answering: ${e.code}.`, true); }
+  }
+  dbRow("update", r);
+}
+function demote(r, why) { r.lane = "AMBER"; r.why = why; r.draft = r.finalDraft = ""; route(r); r.flags = [...new Set([...r.flags, "no library match"])]; r.status = "routed"; }
+function safeJson(s) { try { return JSON.parse(s); } catch { return null; } }
+
+// --- db -----------------------------------------------------------------------
+function runRef() { return caps.db && state.userId && state.run ? caps.db.doc(`logs/${state.userId}/runs/${state.run.id}`) : null; }
+async function dbRun(op, data) { const ref = runRef(); if (!ref) return; try { await ref[op](data); } catch (e) { console.warn("db run", e); setChip("chip-db", "warn", "Run log: write refused"); } }
+const rowWrites = new Map();
+function dbRow(op, r) {
+  const ref = runRef(); if (!ref) return;
+  const body = { n: r.n, question: r.question, lane: r.lane, topic: r.topic, why: r.why || "", route: r.route, esc: r.esc,
+    retrievedIds: r.sources.map(s => s.id), scores: r.sources.map(s => s.score), topScore: r.topScore,
+    draft: r.draft, finalDraft: r.finalDraft, flags: r.flags, stitched: r.stitched, uncovered: r.uncovered,
+    feedback: r.feedback, accepted: r.accepted, status: r.status, error: r.error, updatedAt: new Date().toISOString() };
+  const prev = rowWrites.get(r.id) || Promise.resolve();   // one write at a time per document
+  const next = prev.then(() => ref.collection("rows").doc(r.id)[op === "update" ? "set" : "set"](body)).catch(e => console.warn("db row", e));
+  rowWrites.set(r.id, next);
+}
+const debounced = new Map();
+function dbRowLater(r) { clearTimeout(debounced.get(r.id)); debounced.set(r.id, setTimeout(() => dbRow("update", r), 800)); }
+
+async function loadRuns() {
+  if (!caps.db || !state.userId) return;
+  try {
+    const snap = await caps.db.collection(`logs/${state.userId}/runs`).orderBy("createdAt", "desc").limit(25).get();
+    const ul = $("runs"); ul.innerHTML = "";
+    $("runs-empty").hidden = !snap.empty;
+    snap.docs.forEach(d => {
+      const x = d.data(); const li = document.createElement("li");
+      li.innerHTML = `<span>${esc(x.name)} <span class="muted">· ${esc(new Date(x.createdAt).toLocaleString())} · ${x.total} questions · ${esc(x.status)}</span></span>`;
+      const b = document.createElement("button"); b.className = "small"; b.textContent = "Open"; b.onclick = () => openRun(d.id, x);
+      li.append(b); ul.append(li);
+    });
+  } catch (e) { console.warn("runs", e); }
+}
+async function openRun(id, run) {
+  if (state.running) return;
+  state.run = { ...run, id }; state.roles = run.roles || {};
+  const snap = await caps.db.collection(`logs/${state.userId}/runs/${id}/rows`).get();
+  state.rows = snap.docs.map(d => { const x = d.data(); return { id: d.id, ...x, sources: (x.retrievedIds || []).map((sid, i) => ({ id: sid, score: x.scores?.[i], question: "(reopen: source text not stored)", answer: "" })), flags: x.flags || [] }; });
+  state.rows.sort((a, b) => String(a.n).localeCompare(String(b.n), undefined, { numeric: true }));
+  $("summary").hidden = false; $("rowspanel").hidden = false; renderAll();
+  showNotice(`Opened "${run.name}". Source texts are not kept in the log; re-run a row to see them again.`);
+}
+
+// --- render -------------------------------------------------------------------
+function counts() {
+  const c = { GREEN: 0, AMBER: 0, RED: 0, flagged: 0, failed: 0, total: state.rows.length };
+  for (const r of state.rows) { if (r.lane) c[r.lane]++; if (r.flags.length) c.flagged++; if (r.status === "failed") c.failed++; }
+  return c;
+}
+function groupBy(rows, key) { const m = new Map(); rows.forEach(r => { const k = key(r); if (!m.has(k)) m.set(k, []); m.get(k).push(r.n); }); return m; }
+function summaryLines() {
+  const c = counts(); const lines = [];
+  const outside = c.RED + c.AMBER;
+  lines.push(`${outside} of ${c.total} questions are outside CS scope (${c.RED} red, ${c.AMBER} amber): you will have questions you cannot answer yourself.`);
+  const red = groupBy(state.rows.filter(r => r.lane === "RED"), r => r.route.replace(/^Route out: /, ""));
+  lines.push(`RED, route out (${c.RED}):`); red.forEach((ns, k) => lines.push(`  ${k}: #${ns.join(", #")}`)); if (!red.size) lines.push("  none");
+  const amber = groupBy(state.rows.filter(r => r.lane === "AMBER"), r => r.route.replace(/^SME: /, ""));
+  lines.push(`AMBER, needs an internal SME (${c.AMBER}):`); amber.forEach((ns, k) => lines.push(`  ${k}: #${ns.join(", #")}`)); if (!amber.size) lines.push("  none");
+  const gaps = state.rows.filter(r => r.flags.includes("no owner on file")).map(r => r.n);
+  const unconf = state.rows.filter(r => r.flags.includes("owner unconfirmed")).map(r => r.n);
+  const roles = [["AE", state.roles.ae], ["AM", state.roles.am], ["PSM/CM", state.roles.psm]].filter(([, v]) => !v).map(([k]) => k);
+  const usedRoles = roles.filter(k => state.rows.some(r => r.route.includes(k + " on the account")));
+  lines.push("Open routing gaps:");
+  if (gaps.length) lines.push(`  No owner on file: #${gaps.join(", #")}`);
+  if (unconf.length) lines.push(`  Owner unconfirmed (Q&A Bank proposed): #${unconf.join(", #")}`);
+  if (usedRoles.length) lines.push(`  Account roles still to fill in: ${usedRoles.join(", ")}`);
+  if (!gaps.length && !unconf.length && !usedRoles.length) lines.push("  none");
+  const greenFlagged = state.rows.filter(r => r.lane === "GREEN" && r.flags.length).length;
+  lines.push(`GREEN, CS answered (${c.GREEN}): ${greenFlagged} carry flags to review before sending.`);
+  if (c.failed) lines.push(`${c.failed} rows failed and need a retry.`);
+  return lines;
+}
+function renderSummary() {
+  const c = counts();
+  $("counts").innerHTML = [["GREEN", "CS answers"], ["AMBER", "needs SME"], ["RED", "route out"]].map(([k, l]) => `<div class="count ${k}"><b>${c[k]}</b><span class="muted">${l}</span></div>`).join("") +
+    `<div class="count"><b>${c.flagged}</b><span class="muted">flagged</span></div>`;
+  $("summary-body").innerHTML = "<ul>" + summaryLines().map(l => `<li${l.startsWith("  ") ? ' style="margin-left:16px"' : ""}>${esc(l.trim())}</li>`).join("") + "</ul>";
+  $("retry").hidden = !c.failed || state.running;
+}
+function renderAll() { renderSummary(); $("rows").innerHTML = ""; state.rows.forEach(r => $("rows").append(rowEl(r))); applyFilter(); }
+function renderRow(r) { const old = document.querySelector(`[data-id="${r.id}"]`); if (old) old.replaceWith(rowEl(r)); applyFilter(); }
+function rowEl(r) {
+  const el = document.createElement("div"); el.className = "qrow"; el.dataset.id = r.id; el.dataset.lane = r.lane || ""; el.dataset.flagged = r.flags.length ? "1" : ""; el.dataset.failed = r.status === "failed" ? "1" : "";
+  const statusText = { pending: "waiting for triage", triaged: "queued", retrieving: "searching library…", drafting: "drafting…", drafted: "", routed: "", failed: "failed", skipped: "not drafted (library unavailable)" }[r.status] || "";
+  let body = `<div class="num">#${esc(r.n)}</div><div>
+    <div class="q">${esc(r.question)}</div>
+    <div class="meta">${r.lane ? `<span class="pill ${r.lane}">${r.lane}</span>` : ""}<span>${esc(r.route)}</span>${r.esc ? `<span>Escalation: ${esc(r.esc)}</span>` : ""}${r.why ? `<span class="muted">${esc(r.why)}</span>` : ""}${statusText ? `<span class="${r.status === "failed" ? "flag err" : "muted"}">${esc(statusText)}${r.error ? ": " + esc(r.error) : ""}</span>` : ""}</div>`;
+  if (r.lane === "GREEN" && (r.status === "drafted" || r.finalDraft)) {
+    body += `<textarea id="d-${r.id}" aria-label="Draft answer for question ${esc(r.n)}">${esc(r.finalDraft)}</textarea>
+      <div class="meta"><span>${r.flags.map(f => `<span class="flag">${esc(f)}</span>`).join(" ")}</span>
+      <span class="fb"><button class="small" data-fb="up" aria-pressed="${r.feedback === "up"}" aria-label="Good answer">👍</button> <button class="small" data-fb="down" aria-pressed="${r.feedback === "down"}" aria-label="Bad answer">👎</button></span>
+      <label style="margin:0;display:inline-flex;gap:6px;align-items:center"><input type="checkbox" id="a-${r.id}" ${r.accepted ? "checked" : ""}> accepted</label></div>`;
+  } else if (r.flags.length) body += `<div class="meta">${r.flags.map(f => `<span class="flag">${esc(f)}</span>`).join(" ")}</div>`;
+  if (r.sources.length) {
+    body += `<details><summary>${r.sources.length} library matches (top ${Number(r.topScore ?? 0).toFixed(2)})</summary>` + r.sources.map(s => `<div class="src"><div class="h"><span class="mono">${Number(s.score ?? 0).toFixed(3)}</span><span>${esc(s.stack || "")}</span><span>${esc(s.updated || "")}</span>${s.legal ? "<span>Legal Approved</span>" : ""}${s.used ? "<span><b>used</b></span>" : ""}</div><div><b>${esc(s.question)}</b></div><div>${esc(s.answer)}</div></div>`).join("") + "</details>";
+  }
+  el.innerHTML = body + "</div>";
+  const ta = el.querySelector("textarea"); if (ta) ta.addEventListener("input", () => { r.finalDraft = ta.value; dbRowLater(r); });
+  el.querySelectorAll("[data-fb]").forEach(b => b.addEventListener("click", () => { r.feedback = r.feedback === b.dataset.fb ? null : b.dataset.fb; dbRow("update", r); renderRow(r); }));
+  const cb = el.querySelector(`#a-${r.id}`); if (cb) cb.addEventListener("change", () => { r.accepted = cb.checked; dbRow("update", r); });
+  return el;
+}
+$("filters").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; state.filter = b.dataset.f; $("filters").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b)); applyFilter(); });
+function applyFilter() {
+  const f = state.filter;
+  document.querySelectorAll(".qrow").forEach(el => { el.hidden = !(f === "all" || el.dataset.lane === f || (f === "flagged" && el.dataset.flagged) || (f === "failed" && el.dataset.failed)); });
+}
+
+// --- export -------------------------------------------------------------------
+$("export").addEventListener("click", async () => {
+  if (!caps.downloads) return;
+  const wb = new ExcelJS.Workbook();
+  const sum = wb.addWorksheet("Scope summary"); sum.getColumn(1).width = 110;
+  sum.addRow([`${state.run?.name || "RFI"} — scope summary (${new Date().toLocaleDateString()})`]).font = { bold: true, size: 13 };
+  sum.addRow([]);
+  summaryLines().forEach(l => { const row = sum.addRow([l.trim()]); if (!l.startsWith("  ")) row.font = { bold: true }; row.alignment = { wrapText: true }; });
+  const ws = wb.addWorksheet("Questions");
+  ws.columns = [{ header: "#", key: "n", width: 7 }, { header: "Question", key: "q", width: 50 }, { header: "Triage", key: "t", width: 9 }, { header: "Route", key: "r", width: 40 }, { header: "Escalation", key: "e", width: 26 }, { header: "Draft answer", key: "d", width: 60 }, { header: "Source question(s)", key: "sq", width: 40 }, { header: "Source date(s)", key: "sd", width: 14 }, { header: "Legal Approved", key: "la", width: 14 }, { header: "Flags", key: "f", width: 30 }];
+  ws.getRow(1).font = { bold: true };
+  const fill = { RED: "FFF4C7C3", AMBER: "FFFCE8B2", GREEN: "FFD9EAD3" };
+  const order = { RED: 0, AMBER: 1, GREEN: 2 };
+  [...state.rows].sort((a, b) => (order[a.lane] ?? 3) - (order[b.lane] ?? 3) || String(a.n).localeCompare(String(b.n), undefined, { numeric: true })).forEach(r => {
+    const used = r.sources.filter(s => s.used); const srcs = used.length ? used : (r.lane === "GREEN" ? r.sources.slice(0, 3) : []);
+    const row = ws.addRow({ n: r.n, q: r.question, t: r.lane || "", r: r.route, e: r.esc, d: r.lane === "RED" ? "" : r.finalDraft,
+      sq: srcs.map(s => s.question).join("\n"), sd: srcs.map(s => s.updated).join("\n"), la: srcs.map(s => s.legal ? "Yes" : "No").join("\n"), f: r.flags.join("; ") });
+    row.alignment = { vertical: "top", wrapText: true };
+    if (fill[r.lane]) row.getCell("t").fill = { type: "pattern", pattern: "solid", fgColor: { argb: fill[r.lane] } };
+  });
+  ws.views = [{ state: "frozen", ySplit: 1 }];
+  try {
+    const buf = await wb.xlsx.writeBuffer();
+    const name = (state.run?.name || "rfi").replace(/[^\w.-]+/g, "_").slice(0, 60) + "-triaged.xlsx";
+    await caps.downloads.save({ filename: name, data: new Blob([buf]) });
+    $("exportnote").textContent = "Workbook saved.";
+  } catch (e) { $("exportnote").textContent = e.code === "declined" ? "Save cancelled." : `Export failed: ${e.code || e.message}`; }
+});
+</script>
