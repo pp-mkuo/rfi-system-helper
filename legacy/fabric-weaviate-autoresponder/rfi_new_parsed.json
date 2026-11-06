@@ -1,0 +1,402 @@
+[
+  {
+    "category": "Audiences and Inventory",
+    "question": "Does your platform allow for audience/segment level optimizations?",
+    "answer": "The PulsePoint platform allows for and specializes in audience/segment level optimizations, primarily featured within the Adaptive Optimization selection available on all tactics. Within that feature, users are able to identify online (digital activity, condition research trends, click behavior, site engagement behavior, etc.) and offline (diagnosis behavior, claims information) in order to prioritize delivery to the users who exhibit those signals within a more comprehensive data audience. These audience-based optimizations can also select Medscape and WebMD direct buys and consumption of brand-relevant information on these 1st party sites to prioritize certain users within an audience. Users are able to program their tactics against priority brand signals in order to optimize towards the outcomes desired. This suite of audience optimizations are distinct from targeting, which is yes/no logic, vs prioritization logic within the segment. The platform is also able to optimize audiences based on all standard DSP functionality, including but not limited to users who are within certain geos, on browsers, consuming certain articles, and so on."
+  },
+  {
+    "category": "Audiences and Inventory",
+    "question": "Are we able to apply specific pixels to individual tactics/lines (not just the overall campaigns)?",
+    "answer": "Yes, users are able to append specific Conversion pixels to line items in order to understand user behavior post-ad event. These pixels are also able to be customized against different key action items on brand landing pages, or more general brand initiatives. When it comes to re-engaging users that may have been captured within certain pixel audiences, users are able to apply these specific audiences to individual tactics – and these can come in the form of a retargeting pixel, or a Smart Pixel (which as well as selecting a specific pixel audience, can allow for more business rules to be included)."
+  },
+  {
+    "category": "Audiences and Inventory",
+    "question": "Do you have off-the-shelf audiences in-platform?",
+    "answer": "PulsePoint has a variety of off-the-shelf audiences in-platform. As PulsePoint is a healthcare specific DSP, our premium audiences are centralized in both the Healthcare Professional space, as well as the Direct to Consumer space, ensuring privacy and compliance is top-of-mind. HCP audiences that are available off-the-shelf are supported by our Medscape-authenticated HCP device graph of more than 4.5M doctors, and include but are not limited to NPI Target Lists, Specialty HCPs, HCPs informed by their clinical behavior (Rx, Dx, Px), Practice Staff, HCPs consuming endemic content and engaging with important information related to patient care, and so many more. Our patient audiences, fueled by both WebMD and our understanding of the doctors that are treating these patients, include but are not limited to bespoke claims-based audiences, health content consumption audiences, OTC populations, consumers who are searching keyword terms related to brands, and so on. Through partnership with Medscape and WebMD, PulsePoint is continuously building compliant and privacy-safe audiences that are requested by clients in order to deliver the best-in-class solutions for all client needs."
+  },
+  {
+    "category": "Audiences and Inventory",
+    "question": "How does your platform identify and target physicians? I.e. what is your platform's target list tech?",
+    "answer": "The HCP identity graph uses the power of Medscape's physician member database to authenticate 4.2 million NPI numbers across the United States to inform and validate all HCP targeting from the platform. The offline NPI numbers are translated into online IDs within a proprietary identity infrastructure and through the use of several verified onboarders.\n\n| Data Input | Description |\n| :---- | :---- |\n| NPI List Upload | Upload a CSV or TXT of specific NPI numbers directly into the platform. We support plain lists as well as an enriched “Static With Attributes” format (NPI + name, address, specialty). Once uploaded, the list is immediately available for campaign targeting |\n| API integration | For teams that need automation, our API lets you programmatically create, update, and manage NPI lists - enabling real-time syncs with your CRM or data warehouse |\n\n| HCP Targeting Type | Description |\n| :---- | :---- |\n| HCP by Specialty | Pre-built segments grouped by medical specialty (cardiology, oncology, dermatology, etc.) so you can get started without uploading a custom list |\n| SmartLists™  | Dynamic NPI lists that automatically add or remove HCPs based on real-time signals: website engagement, prescribing behavior, clinical activity, or endemic research |\n| Prescribing & Clinical Behavior | Target based on Rx volume, brand/generic preferences, diagnosis patterns, procedure volumes, or patient mix - all derived from de-identified claims data |\n| Endemic Research | Reach HCPs who are actively researching condition-specific content on trusted health publisher sites like Medscape |\n| Top Prescribers/Droppers | Focus on the highest-volume prescribers in a therapeutic category, or re-engage those showing declining Rx trends |\n| Care Team Expansion | Start with a core HCP list and extend to other providers on the same care team or at the same facility |\n\nOn average, addressability to each of these HCP lists is above 90%."
+  },
+  {
+    "category": "Audiences and Inventory",
+    "question": "Do you have both endemic & non-endemic inventory?",
+    "answer": "PulsePoint is directly integrated to an expansive set of supply sources across screens and formats in order to access both Endemic and Non-endemic inventory types. In terms of Endemic inventory, as PulsePoint, WebMD, and Medscape are all within the same company umbrella, those domains and affiliated domains are directly accessible and prioritized to LIFE users. PulsePoint has also been in partnership with all major Endemic sites across the ecosystem as a healthcare specialized DSP in the space. In terms of non-endemic, PulsePoint also has relationships with all major premium supply partners and SSPs in the space, including but not limited to AdX, Magnite, Index, Pubmatic, etc. and has access to publishers such as Roku, Peacock, and other hard-to-reach environments. These environments are able to be accessed across the platform, with no limitations to DTC or HCP audiences. PulsePoint is also able to push audiences to social media and search platforms, so while not directly accessible within LIFE, users can use PulsePoint’s best-in-class audiences to expand reach within all biddable media channels – including these walled gardens."
+  },
+  {
+    "category": "Audiences and Inventory",
+    "question": "What % of the HCP universe can your platform reach?",
+    "answer": "PulsePoint is able to reach close to 100% of the HCP universe through the platform. For any given specialty, target list, or claims-fueled NPI list, PulsePoint is able to reach up to 95% of those doctors, and reach them within the first 72 hours. This is due to PulsePoint using constantly updated IDs in order to find and reach these physicians, as opposed to longer lookback windows that may include inactive or expired IDs. This methodology is unique to PulsePoint and backed by the Medscape HCP ecosystem, which is authenticated on an ongoing basis to ensure the identity graph is up to date and current for all client needs."
+  },
+  {
+    "category": "Audiences and Inventory",
+    "question": "Do you have 1:1 NPI-level matching capabilities?",
+    "answer": "Yes. PulsePoint offers 1:1 NPI-level matching, targeting, and physician level reporting based on deterministic identity models."
+  },
+  {
+    "category": "Audiences and Inventory",
+    "question": "What are your average data CPMs for 1st party data tactics?",
+    "answer": "Average data CPMs can vary based on whether clients are trying to reach HCPs or consumers, and there is quite a wide spread between those two audience sets in terms of data CPMs. DTC audiences can range anywhere from $0.25 to $3.50 within the platform, and HCP audiences can go from $15 and up depending on the sophistication of the digital signal, clinical signal, and so on. PulsePoint is always open to feedback on data costs, and while the audiences are best-in-class, continuously want to do right by clients to ensure that data cost is fair for the value that they provide brands."
+  },
+  {
+    "category": "Audiences and Inventory",
+    "question": "Are you able to provide PLD-level reporting? At what cadence (e.g. daily/weekly/monthly)?",
+    "answer": "PulsePoint specializes and was first-to-market in being able to provide clients with physician level data in order to advance insights and activation methods to achieve the best outcomes. NPI-level physician-level data reporting is available at any cadence that works for clients, and PulsePoint reps will often come up with a cadence that is customized and tailored to the client in order to balance both the need for information quickly, with achieving statistical significance of gaining insights into NPI behaviors."
+  },
+  {
+    "category": "Audiences and Inventory",
+    "question": "What proprietary DSP features do you have that can help us optimize for the most cost-efficient bids against HCPs?",
+    "answer": "PulsePoint offers multiple bid optimization tools directly in the platform. By nature, the DSP is programmed to be as cost efficient and opportunistic as possible. The aim of the campaign is both to achieve brand KPIs as a top priority, but also to avoid costs where they are unnecessary against competition. A few ways that the platform does this is through media optimization settings, which include the ability to program tactics to achieve the most cost efficient CPM, and custom bidding settings against various filters that may be appended to the tactics through mid multipliers. A difference about the LIFE platform in comparison to other platforms is that LIFE uses the base bid as essentially the “max” bid, and where possible, uses a range of $0 to base bid in order to inform just how much we can lower the bid while still winning against priority HCPs in the platform. It is of utmost importance to balance low media costs with the data costs that are often associated with doctor targeting, and the platform is wired to achieve the strongest cost per NPI reach in the market."
+  },
+  {
+    "category": "Audiences and Inventory",
+    "question": "What channels are currently available on your platform?",
+    "answer": "PulsePoint can deliver across display, video, CTV, audio, EHR, eNewsletter, native, DOOH, and all channels that are compatible with programmatic advertising within the DSP. PulsePoint is also able to push data segments to social media and search platforms, so while we are not able to directly manage those campaigns within the platform, those are integrated in order to run with PulsePoint data, and there is an interface in order to set-up, manage, and update those data segments and push them to other walled garden biddable media platforms. PulsePoint is always evolving the access integrated within the DSP, so in the off chance there is a channel not accessible within LIFE directly, we will work swiftly to integrate and ensure that clients are able to run on that channel within a short turnaround time."
+  },
+  {
+    "category": "Audiences and Inventory",
+    "question": "What e-Newsletter (eNL) inventory do you have?",
+    "answer": "PulsePoint has a variety of eNewsletter inventory integrated within the platform, both from external eNewsletter suppliers, and within the Medscape and WebMD set of eNewsletter programs. These can include but are not limited to Medscape, MDEdge, Haymarket, Bulletin Health for specific publishers, and also a comprehensive partnership with LiveIntent in order to capture oversight of all programmatically available eNewsletter publishers within the ecosystem."
+  },
+  {
+    "category": "Audiences and Inventory",
+    "question": "Can you activate endemically on newer channels against a specific NPI list?",
+    "answer": "Yes, NPI targeting (with PLDR) is available across all of our HCP channels, including standard programmatic channels such as display, video, CTV, but also inclusive of HCP-specific channels such as endemic properties, eNewsletters, and within the EHR space. PulsePoint also has integrations with various medical journals and endemic publishers integrated a few ways in the platform, through deals and private marketplaces, through inclusion lists and our endemic toggle, and through Endemic Research smartlists, which can capture NPIs who have researched conditions, brands, treatments, etc. on endemic properties, and who can then be re-engaged through the various endemic channels that we have available to serve on."
+  },
+  {
+    "category": "Audiences and Inventory",
+    "question": "What SSPs do you have relationships with? Please specify any channel-specific SSPs here as well (e.g. eNL SSPs, audio SSPs, etc.)",
+    "answer": "Audio: Adswizz, iHeart Media, SiriusXM, Spotify, Triton, Pandora*\n\nCTV: A+E Networks, Amazon, AMC Networks, Apple, Canela, Comcast, Crackle, DirecTV Stream, Disney, Fox, FuboTV, Future Today, Hallmark Media, Hulu + Live TV, LG, NBCUniversal (Comcast), Netflix, Paramount, PBS, Philo, Plex, Redbox, Roku, Samsung, Scripps CTV, Sling TV, Spectrum Reach, TelevisaUnivision, Urbanone, Vice Media, Vizio, Warner Bros. Discovery, Xumo (Comcast/Charter), YouTube TV*\n\nEndemic (some include ENL as well): Bulletin Healthcare (ENL), Cleveland Clinic (Sherman Marketing) (ENL), Drugs, Eyes on Eyecare (ENL), FlexDME, Flora, Foremedics (ENL), GlobalRPH, Haymarket (ENL), Healio (ENL), HealthSystem, HIMSS, HIT Consultant, MDlinx/M3 (ENL), Medical Joyworks, Medscape (ENL), Physician's Weekly, PhysiciansSignout, PubCollective, RER Medical Apps, Research Gate, RxNetwork, Statnews, Varadigm, Veritas Health, WebMD, WenoExchange, Wiley, MDEdge (ENL), Nursing Network (ENL), Healthday (ENL), Oncologytube (ENL),*\n\nPublisher: Hearst Magazines, People-Inc, SheMedia, US News, USAToday, VOX*\n\nSSP: 33Across, Adx, Connatix/JWP, Criteo, Equativ, Freestar, FreeWheel, GumGum, Index Exchange, InMobi, Kargo, Liveintent (ENL), Magnite, Medianet, Mobilefuse, Nativo, Nexxen, OneTag, OpenX, Pubmatic, Se7en, Sharethrough, Smaato, Sonobi, Taboola, Teads, Triplelift, Unity, VRTCAL, Xandr, YieldMo*\n\nDOOH: PlaceExchange, Vistar Media*"
+  },
+  {
+    "category": "Audiences and Inventory",
+    "question": "What buy types are available on your platform (PG, PMP)?",
+    "answer": "LIFE users are able to use any desired buy types within the platform, depending on the goal of the tactic and the inventory selection. Open Exchange (OE): Preferred, no floor, competitive pricing. Full OE access via 40+ integrated SSPs across all formats. Private Marketplace (PMP): Preferred, variable floor by publisher, no platform minimum. PulsePoint has pre-negotiated PMPs available to all LIFE users for priority and premium publishers, as well as the ability to customize and negotiate deals and upload them directly into the platform for any PMP of clients choosing. Programmatic Guaranteed (PG): PGs are negotiated on a per deal basis, and PulsePoint is able to run PGs for clients through Medscape, Adx, and other SSPs that clients select."
+  },
+  {
+    "category": "Audiences and Inventory",
+    "question": "Do you have any proprietary relationships (inventory, data or otherwise)?",
+    "answer": "PulsePoint’s entire product suite sits on top of a unique, differentiated data foundation consisting of a proprietary first party identity graph, clinical data and the Medscape/WebMD integration. The combination of these three data pillars is different from any other programmatic partner and enables our clients to leverage a deep repository of 1st party data to plan, activate, optimize and measure media campaigns all through one platform."
+  },
+  {
+    "category": "Audiences and Inventory",
+    "question": "What channels can you provide PLD for? Are there any limitations?",
+    "answer": "NPI reporting is available for any tactic using PulsePoint’s HCP identity graph to build the audience, with no format-level restrictions."
+  },
+  {
+    "category": "Audiences and Inventory",
+    "question": "Do you have any exclusive inventory/data partnerships with HCP facing publications/channels/data providers?",
+    "answer": "PulsePoint is able to tap into Medscape as we are both a part of Internet Brands. This first party data/inventory partner allows us to elevate identification and authentication of HCPs at large, a differentiator to any other DSP, who are unable to activate Medscape inventory programmatically. PulsePoint is also working on integrating with a series of alternative endemic partnerships that will allow further refinement of our HCP buying capability."
+  },
+  {
+    "category": "Audiences and Inventory",
+    "question": "Do you have programmatic access to any online medical journals?",
+    "answer": "PulsePoint is the only DSP in the industry that can offer access to Medscape via Programmatic Guaranteed deals, which is the nation's largest medical journal. Examples of our HCP content that are integrated within the platform globally are Healio, Medscape, GlobalRPH, HMP Global, Haymarket, amongst others."
+  },
+  {
+    "category": "Integrations",
+    "question": "What channels are currently available on your platform?",
+    "answer": "We deliver HCP and DTC campaigns across display, video, CTV, audio, EHR, eNewsletter, native, and DOOH channels with 1:1 NPI-level targeting, deterministic reporting, and in-platform measurement including script lift (TRx/NRx/NBRx) and audience quality metrics. All channels that are available to be delivered programmatically are available to be run within the LIFE platform, and the platform has the tech integrated in order to accommodate all programmatic channels and partners."
+  },
+  {
+    "category": "Integrations",
+    "question": "Do you have endemic e-Newsletter (eNL) inventory?",
+    "answer": "PulsePoint has access to various endemic enewsletter inventory sources, including but not limited to Medscape, MDEdge, Haymarket, Bulletin Health, and LiveIntent as a distribution partner."
+  },
+  {
+    "category": "Integrations",
+    "question": "Can you activate endemically on newer channels against a specific NPI list?",
+    "answer": "Yes, NPI targeting (with PLDR) is available across all of our HCP channels, including standard programmatic channels such as display, video, CTV, but also inclusive of HCP-specific channels such as endemic properties, eNewsletters, and within the EHR space. PulsePoint also has integrations with various medical journals and endemic publishers integrated a few ways in the platform, through deals and private marketplaces, through inclusion lists and our endemic toggle, and through Endemic Research smartlists, which can capture NPIs who have researched conditions, brands, treatments, etc. on endemic properties, and who can then be re-engaged through the various endemic channels that we have available to serve on."
+  },
+  {
+    "category": "Integrations",
+    "question": "What SSPs do you have relationships with? Please specify any channel specific SSPs here as well (e.g. eNL SSPs, audio SSPs, etc.)",
+    "answer": "Audio: Adswizz, iHeart Media, SiriusXM, Spotify, Triton, Pandora\n\nCTV: A+E Networks, Amazon, AMC Networks, Apple, Canela, Comcast, Crackle, DirecTV Stream, Disney, Fox, FuboTV, Future Today, Hallmark Media, Hulu + Live TV, LG, NBCUniversal (Comcast), Netflix, Paramount, PBS, Philo, Plex, Redbox, Roku, Samsung, Scripps CTV, Sling TV, Spectrum Reach, TelevisaUnivision, Urbanone, Vice Media, Vizio, Warner Bros. Discovery, Xumo (Comcast/Charter), YouTube TV\n\nEndemic (some include ENL as well): Bulletin Healthcare (ENL), Cleveland Clinic (Sherman Marketing) (ENL), Drugs, Eyes on Eyecare (ENL), FlexDME, Flora, Foremedics (ENL), GlobalRPH, Haymarket (ENL), Healio (ENL), HealthSystem, HIMSS, HIT Consultant, MDlinx/M3 (ENL), Medical Joyworks, Medscape (ENL), Physician's Weekly, PhysiciansSignout, PubCollective, RER Medical Apps, Research Gate, RxNetwork, Statnews, Varadigm, Veritas Health, WebMD, WenoExchange, Wiley, MDEdge (ENL), Nursing Network (ENL), Healthday (ENL), Oncologytube (ENL),\n\nPublisher: Hearst Magazines, People-Inc, SheMedia, US News, USAToday, VOX, Drugs.com\n\nSSP: 33Across, Adx, Connatix/JWP, Criteo, Equativ, Freestar, FreeWheel, GumGum, Index Exchange, InMobi, Kargo, Liveintent (ENL), Magnite, Medianet, Mobilefuse, Nativo, Nexxen, OneTag, OpenX, Pubmatic, Se7en, Sharethrough, Smaato, Sonobi, Taboola, Teads, Triplelift, Unity, VRTCAL, Xandr, YieldMo\n\nDOOH: PlaceExchange, Vistar Media"
+  },
+  {
+    "category": "Integrations",
+    "question": "What buy types are available on your platform (PG, PMP)?",
+    "answer": "LIFE users are able to use any desired buy types within the platform, depending on the goal of the tactic and the inventory selection. Open Exchange (OE): Preferred, no floor, competitive pricing. Full OE access via 40+ integrated SSPs across all formats. Private Marketplace (PMP): Preferred, variable floor by publisher, no platform minimum. PulsePoint has pre-negotiated PMPs available to all LIFE users for priority and premium publishers, as well as the ability to customize and negotiate deals and upload them directly into the platform for any PMP of clients choosing. Programmatic Guaranteed (PG): PGs are negotiated on a per deal basis, and PulsePoint is able to run PGs for clients through Medscape, Adx, and other SSPs that clients select."
+  },
+  {
+    "category": "Integrations",
+    "question": "Do you have any proprietary endemic relationships (inventory, data or otherwise)?",
+    "answer": "PulsePoint’s entire product suite sits on top of a unique, differentiated data foundation consisting of a proprietary first party identity graph, clinical data and the Medscape/WebMD integration. The combination of these three data pillars is different from any other programmatic partner and enables our clients to leverage a deep repository of 1st party data to plan, activate, optimize and measure media campaigns all through one platform."
+  },
+  {
+    "category": "Integrations",
+    "question": "What channels/relationships are currently on the product roadmap?",
+    "answer": "Outside of the channels and relationships that are already organized into the PulsePoint activation ecosystem, there are various of initiatives that are on the roadmap. In 2026, PulsePoint is focused on ensuring that we have a comprehensive set of walled garden biddable media platforms that we are able to push our data to for activation. Meta, LinkedIn, X, Reddit, Google, Bing, Pinterest, and other social platforms that clients are bringing to us as priority are built into the platform, either in GA or in beta. PulsePoint is also working to ensure that the relationships that we have with data partners for data onboarding and verification, and healthcare-specific measurement partners such as Crossix and IQVIA, are built into our suite or reporting products. This will allow clients to select into seeing platform reporting in accordance to more general measurement contracts that brands work with. PulsePoint is focused on ensuring that the technology can constantly evolve towards more sophistication in HCP and patient reach, and ultimately enabling the platform to stitch those two audiences together for maximum brand cohesion in the market, resulting in the highest ROI possible for brands. This means that we are working through Adaptive Optimization elevation, measurement dashboards that clients can use to pull insights and discover near real-time insights on how the media delivery backs into claims behaviors, updating proprietary data segments based on deeper claims and digital brand signals. PulsePoint is always open to demoing all of our new offers and proprietary technology solutions to clients, and look forward to the opportunity to share our continuous updates."
+  },
+  {
+    "category": "Integrations",
+    "question": "What channels can you provide PLD for? Are there any limitations?",
+    "answer": "NPI reporting is available for any tactic using PulsePoint’s HCP identity graph to build the audience, with no format-level restrictions."
+  },
+  {
+    "category": "Integrations",
+    "question": "Can you activate on newer channels such as Connected Home for Audio?",
+    "answer": "Yes, PulsePoint is able to set up specific deals for clients who are looking to activate within connected audio inventory environments."
+  },
+  {
+    "category": "Integrations",
+    "question": "For PMP and PG deals, are you able to provide insights, especially for Audio, CTV, and DOOH partners?",
+    "answer": "Yes — PulsePoint has an integrated reporting suit that allows users to pull all insights available for standard buying against PMP and PG deals. There are no Pulsepoint-specific limitations related to reporting and insights for any channel. If attempting to troubleshoot, PulsePoint's Debugger tool gives self-serve, near real-time delivery diagnostics down to the individual Deal ID level for PMP and PG deals across the platform, letting traders see exactly which targeting filters are blocking a specific deal's availability, with no additional activation needed from the client. Channel-specific supply processes add further visibility: for DOOH, PulsePoint works with PlaceExchange or Vistar to build a deal plan with estimated available impressions, screen list, and creative specs for client review; for CTV, insight comes through Curated Markets' dedicated supply pipes and bi-directional feedback across 130+ prenegotiated deals (note: Curated Market deal IDs are not exposed within Debugger itself)."
+  },
+  {
+    "category": "Integrations",
+    "question": "Do you have access to EHR inventory? If so, what partners are you working with?",
+    "answer": "PulsePoint operates the largest programmatic EHR solution in the market, with the ability to reach 850,000+ opted-in HCPs across 1,500+ hospitals and affiliated practices in both ambulatory and health system settings, including access to Epic and Cerner. Full 1:1 NPI-level reporting is included with every EHR activation. (Point-of-care EHR inventory via Veradigm, FlexDME, Weno Exchange, Practice EHR, hospital systems such as Flora, Epic, Cerner, and so many more)"
+  },
+  {
+    "category": "Integrations",
+    "question": "Which onboarders do you work with? Are there any pharma restrictions when utilizing these onboarders?",
+    "answer": "Offline NPI numbers are translated to online IDs via four verified onboarding partners (LiveRamp, Throtle, Datavant) within a proprietary identity infrastructure anchored by Medscape's physician database (4.5M+ opt-in, refreshed on an ongoing basis). All restrictions that come from working within the pharma & healthcare space are considered in our integration chats with onboarders, ensuring there is top-to-bottom compliance as the utmost importance for us and our clients. As members of the NAI, all partners that we work with follow NAI guidelines for sensitive condition audience segment naming and modeling."
+  },
+  {
+    "category": "Integrations",
+    "question": "Do you have any solutions to pull in ad server creative information?",
+    "answer": "The “Ad Server Creative ID” dimension in Report Builder of the Life platform enables marketers to see campaign performance broken down by individual creatives, a level more granular than the typical LIFE placement. When users implement a PulsePoint pixel into a campaign, creative-level data flows directly into existing Report Builder templates. This offering currently supports campaigns on Google Campaign Manager 360 campaigns (fka DCM), and FlashTalking."
+  },
+  {
+    "category": "Integrations",
+    "question": "Do you have a native activation app listed on the Salesforce AppExchange? If not native, can you ingest customer segments via custom S3 buckets or an Ingestion API?",
+    "answer": "Yes, PulsePoint has the capability to ingest target lists from an sFTP network. The audience sizes and the success of the list ingestion will need to be sent manually by the team."
+  },
+  {
+    "category": "Tech and AI/Automation",
+    "question": "How are you currently preparing for the cookieless future? Specifically, what potential impact do you see this having on your platform/tech? Do you have your own unique solution? If so, what other solutions is it compatible with in the market?",
+    "answer": "PulsePoint has completed preparing for a potential cookieless future a couple of years ago. This framework includes a combination of digital identifiers, consortium ID's (ex: rampid, UID2.0), first party data and Tokens (ex: Datavant). PulsePoint has also completed Medscape single sign-on integration for physician-level targeting and reporting without cookies."
+  },
+  {
+    "category": "Tech and AI/Automation",
+    "question": "If we are enabling cookieless targeting, are you able to provide 3rd-party and/or proprietary measurement capabilities? If yes, please expand on all capabilities.",
+    "answer": "Yes — PulsePoint is committed to integrating with the major external ID providers (RampID, UID2, and ID5) and has completed Medscape single sign-on integration for physician-level targeting and reporting without cookies. On the measurement side, our in-platform capabilities run on a raw claims data feed and aren't cookie-dependent — this includes audience quality, NRx, TRx, NBRx, and other performance indicators for both HCP and DTC.."
+  },
+  {
+    "category": "Tech and AI/Automation",
+    "question": "Are you integrated with/have experience working with Tealium, AAM, and Flashtalking?",
+    "answer": "PulsePoint has experience working with all three of those partners; Tealium, AAM, and Flashtalking. PulsePoint has an API specifically for use with Flashtalking. PulsePoint also has clients that use Tealium and our team has experience working with them. PulsePoint has an AAM instance through Medscape/WebMD that we use in order to supply more solution offerings to clients who require specific integrations in order to activate."
+  },
+  {
+    "category": "Tech and AI/Automation",
+    "question": "Do you have sequential messaging capabilities in-platform? If so, what triggers can we use to serve creative?",
+    "answer": "Sequential Messaging is a generally available campaign type that automatically delivers creatives in a set sequence based on a target's real-time, omnichannel engagement with PulsePoint media and/or a brand's website. Triggers are fully customizable: condition type options are Clicks, Impressions, Time, Page Views and Conversions (Page Views and Conversions require a conversion pixel), and users can customize the conditions necessary to advance to the next step in the sequence using AND/OR logic to route audiences between steps. It supports NPI-level HCP targeting and works across most PulsePoint channels, including EHR (a capability unique to PulsePoint). It's available to all campaign types in the platform, regardless of whether the clients are hands-on in a self-service capacity, but also if PulsePoint manages campaigns on behalf of clients directly."
+  },
+  {
+    "category": "Tech and AI/Automation",
+    "question": "Do you accept Tealium, Adobe, or similar partner macros for data pass back?",
+    "answer": "Yes, Pulsepoint supports data passback. The most common is Campaign IDs, but if Kinesso has a specific data passback method or partner requested, PulsePoint will accommodate all requests in order to ensure a strong partnership."
+  },
+  {
+    "category": "Tech and AI/Automation",
+    "question": "Do you have any additional terms in place (or, if not, are they required) that are required for data passback to clean rooms, etc.?",
+    "answer": "Technical controls: HIPAA-compliant data clean room for all claims data processing (Forian); data is not exposed at the individual patient level. DTC audience models produce probabilistic segments, not identifiable health records. Contractual controls: PulsePoint requires data partners (Forian, Komodo Health, Liveramp, Throtle, Datavant) to maintain HIPAA compliance and appropriate BAAs. Downstream use restrictions are enforced via platform terms of service and IO-level agreements. Specific DPA templates available upon request."
+  },
+  {
+    "category": "Tech and AI/Automation",
+    "question": "What data is fueling your identify graph?",
+    "answer": "Offline NPI numbers are translated to online IDs via four verified onboarding partners (LiveRamp, Throtle, Datavant) within a proprietary identity infrastructure anchored by Medscape's physician database. PulsePoint's HCP identity graph is not a static, one-time build. It is a continuously updated construct maintained through: 1\\) Weekly ingestion of NPPES data dissemination files to capture any changes to NPI active status, specialty taxonomy, or provider details, 2\\) Continuous signal intake from authenticated HCP networks (Medscape), ensuring that newly registered HCPs and profile updates are reflected rapidly, 3\\) Quarterly reconciliation against Healthlink Dimensions credentialing data, providing a structured validation pass independent of platform signal flow, 4\\) Event-driven updates when new HCP records are encountered through campaign delivery (e.g., a previously unresolved NPI becomes resolvable due to new device signals).\n\n| *Data Element* | *Typical Data Age* | *Update Trigger* |\n| :---- | :---- | :---- |\n| *NPI active/inactive status* | *≤7 days* | *Weekly NPPES ingestion* |\n| *Specialty / taxonomy* | *≤7–14 days* | *Weekly NPPES + quarterly Healthlink Dimensions* |\n| *Device-to-NPI linkage (deterministic)* | *Real-time / continuous* | *Medscape authenticated session signals* |\n| *Specialty-based pre-built segments* | *Quarterly* | *Healthlink Dimensions refresh cycle* |"
+  },
+  {
+    "category": "Tech and AI/Automation",
+    "question": "Do you have an automated dashboard that can do real-time optimizations on the back end based on the KPI that is selected?",
+    "answer": "Absolutely. As a core part of PulsePoint’s offering, automatically updated dashboards reflect all real-time optimizations that are made based on the KPIs that are input within each tactic in a campaign. There are lots of KPI choices that clients are able to make, and each optimizes our media to ensure that that KPI is the goal of the delivery of the programmatic program. Examples of optimizations that can inform backend algorithms include but are not limited to CPM, CTR, Clinical behavior, audience quality, video completion rate, cost per acquisitions, and so many more."
+  },
+  {
+    "category": "Tech and AI/Automation",
+    "question": "For PMPs, do we have insight into the number of avails being sent & bid rejection reasonings?",
+    "answer": "All users are able to look into PMP deals in order to understand number of avails being sent, bid rejection reasons, clearing CPMs and how they differ from floor/fixed CPM pricing set by publisher, domains that are associated with the deals, ad sizes that are passed through the deals, and lots more diagnostic metrics that arm users with the ability to make real-time decisions on the PMPs being purchased on. All of these metrics are available directly in the DSP, both accessible within each individual tactic, and also within PulsePoint’s deal marketplace, where all PulsePoint sourced, client-sourced, and curated marketplaces are housed in order to give users a comprehensive view into the full deal library and delivery details. PulsePoint also has strong relationships with all of our SP partners, which allows access to internal reporting that SSPs and publishers may have on their end to assist in any diagnostics, should there be additional information that clients are requesting."
+  },
+  {
+    "category": "Tech and AI/Automation",
+    "question": "Is your platform able to preset separate flights within a given period of time (month, week, days) to accommodate heavy-ups and budget reallocations?",
+    "answer": "PulsePoint is absolutely able to present separate flights within a given time period and able to accommodate any heavy-ups or budget reallocations. This functionality is a core part of ensuring that PulsePoint’s DSP is arming all activation specialists with the ability to make campaign delivery meaningful and providing tools to ensure trader strategy can come to life. Flighting can be done down to the minute, and all flights can accommodate heavy-ups, rollovers, etc."
+  },
+  {
+    "category": "Tech and AI/Automation",
+    "question": "For 3rd party audiences & deals, what is the turnaround time for data population? Can your platform process audience updates hourly/near real-time, or only via daily batches?",
+    "answer": "Custom onboarding and third-party audiences via LiveRamp, Throtle, and Datavant can be turned around within 48 hours typically, and depending on the audience can require subsequent time to fully populate. For 3rd-party audiences/deals specifically, refresh cadence is dependent on the 3PD partner rather than a guaranteed hourly turnaround from PulsePoint. Across PulsePoint's own audience products, refresh times vary: NPI Direct Match, Clinical/Specialty/Endemic Research Smart Lists, and Health/Keyword/OTC Populations refresh Daily/Weekly; engagement-based audiences like Clickers, Site Retargeting, Converters, and Engagement-based Pixel Smart Lists update in Real Time; Lookalike Audiences run \"real-time (almost) with 8-12 hour lag\"; Weather Signals refresh Hourly; and Forian (claims data) refreshes on a daily/weekly cadence. Near-real-time/hourly processing happens for several PulsePoint proprietary audience types, but 3rd-party partner data specifically follows that partner's own refresh cadence, not a fixed hourly guarantee."
+  },
+  {
+    "category": "Tech and AI/Automation",
+    "question": "Can your DSP optimize towards Audience Quality, Scripts, claims data?",
+    "answer": "PulsePoint has integrated technology in order to optimize towards Audience Quality, Scripts, claims data, and all clinical and digital health signals in various ways directly into the platform. PulsePoint's real-time bidding engine includes proprietary, health-specific optimization strategies that address all three of these inputs. PulsePoint’s Adaptive Optimization™ capabilities actively suggest and apply predictive optimizations at the tactic level. These optimizations are surfaced through the Optimization Strategy setting during tactic setup, where users can select factors related to audience quality, scripts, and claims data that orient around their brand goals and KPIs. These factors include but are not limited to Diagnosis claims data (Dx), Prescription data (Rx), procedure data (Px), and many more. Adaptive Optimization™ does not change your audience targeting. Instead, it applies PulsePoint’s high-value clinical and digital data to optimize bids in real time. By scoring and prioritizing audience cohorts based on clinical relevance and health behaviors, without altering your target audience, it focuses your budget on the people most relevant to the factors selected. This reduces wasted spend, improves campaign efficiency, and respects privacy. PulsePoint also has integrations with Crossix and IQVIA in order to properly optimize campaigns based on Crossix and IQVIA measurement - whichever the brand has a contract with. This allows campaigns to be automatically optimizing towards 3rd party Audience Quality values, so that PulsePoint remains agnostic to the way that clients measure campaigns. On top of that, PulsePoint has a series of dashboards and insights tools that allow clients to see near real-time reporting of Audience Quality, scripts, and claims analytics, so that users are both automatically and manually able to make optimizations within the platform."
+  },
+  {
+    "category": "Tech and AI/Automation",
+    "question": "Do you support automated log-level data (LLD) or event-level data exports back to client-managed cloud environments",
+    "answer": "PulsePoint's Report Builder allows users to export data on a per-report basis in standard formats (CSV/Excel), and our HCP365 offering includes a dedicated data feed capability that pushes data to S3."
+  },
+  {
+    "category": "Tech and AI/Automation",
+    "question": "When exporting performance logs, what deterministic user keys are included in the file? Can you append and pass back custom transaction IDs or hashed identifiers (like SHA-256 emails or UID2) that we originally injected",
+    "answer": "PulsePoint's platform includes deterministic identifiers on exported performance data by design, including a Visitor GUID and an Impression GUID that populate automatically on click-tracking and reporting URLs. We've also implemented SHA-256 hashed-identifier passback on a per-campaign basis*."
+  },
+  {
+    "category": "Tech and AI/Automation",
+    "question": "Can we pull reach against 1st party NPI lists in-platform or do we need request this information from your team?",
+    "answer": "NPI reporting is available directly in the platform, and NPI reach metrics are available at the Line Item level within our built-out visualization tools directly in the campaigns. Through the use of these exposed charts, clients can see NPI list reach directly in platform at multiple levels in the hierarchy, both at the line item for a comprehensive look, and also by tactic for specific tactic-level insights into reach. All NPI reporting can also be pulled directly in the DSP via our report builder at whatever granularity the client is looking for. This includes reach and frequency metrics, but also includes a full suite of NPI details that clients are able to pull and analyze for their custom or our off-the-shelf lists."
+  },
+  {
+    "category": "Tech and AI/Automation",
+    "question": "What AI-powered and agentic capabilities are currently available within your DSP, and what is your roadmap over the next 12–24 months? Please distinguish between generally available features, beta products, and future concepts.",
+    "answer": "PulsePoint combines real-time data, privacy-by-design infrastructure, and AI optimization in a platform purpose-built for healthcare marketing. Unlike generalist DSPs, we're rooted in proprietary, clinically relevant data, which lets campaigns stay privacy-compliant while still supporting precise HCP and DTC targeting across the health journey. AI isn't a layer added on top, it's built into how campaigns are planned, executed, and measured, and it's paired with curated data partnerships (Medscape, WebMD) that go beyond what traditional platforms offer.\n\nAvailable Today\n\n- Adaptive Optimization: our proprietary AI bidding engine, which goes beyond standard media optimization by incorporating real-time clinical signals and exclusive Medscape/WebMD behavioral data\n- LIFE Media Planner: uses AI to predict impression volume, spend, and opportunity windows through Forecasting Ranges, enabling audience sizing and scenario modeling before a campaign launches\n- STUDIO / HCP Explorer: includes an AI agent that turns open-ended research questions into tangible HCP audiences, which can then be explored further or activated directly within LIFE\n\nPilot Stage (Beyond Beta): Hatch\n\nHatch, unveiled at HealthNEXT in August 2026, is a step change beyond feature-level AI: a conversational, agentic platform where users describe what they need in plain language and Hatch interprets intent, configures itself, and acts, all in one continuous workflow. It unifies research and planning, audience intelligence, and measurement with programmatic activation, connected to the same proprietary data foundation behind Adaptive Optimization and HCP Explorer, with full transparency and source links for every answer. Current pilot capabilities (internal product and account teams only):\n\n- Open-ended research answered directly from live data (e.g., which specialties are shifting fastest toward a new treatment class)\n- Natural-language querying of delivery, pacing, budget, and performance\n- NPI-level visibility into which providers a campaign reached, by specialty, list membership, and channel engagement\n- Monitoring of bid funnel, win rates, creative performance, and flight schedules\n- Adaptive personalization to individual user preferences and working style over time\n\nRoadmap (Next 12–24 Months)\n\n- Hatch: expansion from internal pilot to a select group of alpha clients, followed by broader GA rollout, with the agentic feature set extending further into a complete \"act on campaign data\" workflow across the full research-to-activation-to-measurement lifecycle"
+  },
+  {
+    "category": "Tech and AI/Automation",
+    "question": "How do you provide transparency into AI-driven recommendations or optimizations? Can users understand why specific bid, budget, audience, or inventory decisions were made?",
+    "answer": "Transparency is built into both our audience-optimization and delivery-diagnosis tools. Adaptive Optimization, our healthcare-specific AI, is designed to give marketers unmatched transparency alongside the ability to control, customize, and scale their most critical KPIs — rather than acting as a black box, it surfaces the specific signals driving each decision, including geography, time, unit size, publisher, condition-based audience segments, condition prevalence, and engagement/site visits, so teams can see exactly why a given cohort is being prioritized. On the delivery side, our self-serve Debugger tool gives users real-time diagnostics into why a tactic or deal is under-delivering, letting traders drill into 90+ filters to identify precisely which one is creating a bottleneck to winning bid opportunities."
+  },
+  {
+    "category": "Tech and AI/Automation",
+    "question": "How does your AI infrastructure handle privacy signals (e.g., GPP, GDPR, TCF, state privacy laws) when making bidding, targeting, measurement, or optimization decisions?",
+    "answer": "PulsePoint is committed to operating in a privacy-by-design framework. Our AI solutions exclusively leverage de-identified claims data, never using personal health information (PHI) directly. We align our practices to HIPAA guidelines, are long-standing members of the NAI, and follow rigorous standards in accordance with state-specific privacy laws so that all audience targeting and AI processing respects both consumer privacy and regulatory obligations."
+  },
+  {
+    "category": "Tech and AI/Automation",
+    "question": "Do you support integrations with external AI agents or orchestration frameworks (specifically OMNI)?",
+    "answer": "Our suite of API tools allow for you, the business, to coordinate with your own AI Agents to facilitate your needs and push the output to the LIFE platform via the API."
+  },
+  {
+    "category": "Transparency",
+    "question": "Do you have any platform improvements or big projects on the roadmap?",
+    "answer": "Yes. We have a robust set of features recently launched.\n\n- Adaptive Optimization V2\n- Full EHR Suite\n- Sequential Messaging\n- DEALS Management Platform\n- STUDIO/HCP Explorer\n- HCP2DTC Influence\n- DTC Clinical Insights\n- HCP Clinical Insights V2\n- WebMD/Medscape Moments\n- Omnichannel Coordinator\n- In-Platform Delivery Insights\n- IQVIA Insights Dashboard"
+  },
+  {
+    "category": "Transparency",
+    "question": "How do you determine the data/deals, measurement, and the fees and the specific amount that will be charged?",
+    "answer": "PulsePoint has standard fees as a part of the rate card, and before anything is solidified in the platform, teams are walked through these fees and agree on them. Fees included within the platform and rate card include Platform Fee (LIFE DSP usage), Data CPM (PulsePoint proprietary or third-party audience), Deal Fee (for PMP activation, in lieu of Platform Fee), DoubleVerify verification fees, and HUMAN (previously White Ops). The determination of these fees are set by industry standards and are negotiable."
+  },
+  {
+    "category": "Transparency",
+    "question": "Do you offer 1st/2nd price auction? If yes for 1st price, do you allow for bid shading and other cost efficiency features?",
+    "answer": "PulsePoint’s platform is integrated with all major SSPs in the industry, and so can accommodate all auction types that are set forth by publishers in order to achieve the KPI goals set by clients. PulsePoint's platform includes built-in cost-efficiency optimization strategies that automatically work to achieve the lowest effective CPM for your targeting parameters, maximizing impressions at the lowest cost, while still keeping the KPIs and goals of the campaign top priority. PulsePoint does not take a cut of any of the CPM efficiency generating programs, and instead, those are considered key features in order for clients to avoid unnecessary costs. The money is automatically put back into the campaign for clients."
+  },
+  {
+    "category": "Transparency",
+    "question": "How often do you perform updates in your platform that affects 1\\) the aesthetics & user interface 2\\) the running of the campaigns and algorithms?",
+    "answer": "PulsePoint has monthly releases which consistently update both the UI and underlying data/algos used for the platforms, as well as tweaking and improving the aesthetics and usability of the platform. On top of these monthly releases, the PulsePoint leadership team is also committed to pushing out any updates that improve the general functionality of the platform on an ongoing basis. This may include improving the NPI reach algorithm to achieve 98% reach (up from 95% reach) within the first 48 hours of a campaign being deployed, or updated logic to find the latest supply that allows us to achieve scale on premium and quality publishers."
+  },
+  {
+    "category": "Support",
+    "question": "Aside from the usual email chain, does your team supply other means for real time support (Teams, DSP chat, etc.)?",
+    "answer": "We offer support via email, scheduled and ad hoc meetings, Teams/Slack, and any way that clients are hoping to engage with the team works for the PulsePoint team. Custom support is provided via a dedicated Account Executive, Account Manager, and Platform Solutions Manager for self service clients.  Along with all the support that is offered at any time to client teams, there is a full team of behind-the-scenes staff who analyze, review, maintain, and oversee all platform delivery to ensure that clients are fully covered and supported, and that client dollars are spent in the best way possible."
+  },
+  {
+    "category": "Support",
+    "question": "Is your team able to provide additional campaign management support over the weekend/holidays and when our full team is out?",
+    "answer": "Absolutely. The PulsePoint team is dedicated to covering any campaign requirements that come up, regardless of whether those happen during the work week or over the weekend or a holiday. While the Platform Solutions team works standard U.S. working hours and days, additional support is always available and the team will ensure there is a plan in place to approach any campaign management work necessary at any time."
+  },
+  {
+    "category": "Support",
+    "question": "How often do you send out DSP/industry memos that will inform us of changes within the DSP, new offerings, hot tips?",
+    "answer": "In terms of changes that relate to our product releases, PulsePoint sends out memos to clients monthly to communicate all of the official updates that users can expect to see in the platform. As it relates to hot tips and making the most out of PulsePoint’s DSP, the PulsePoint team is committed to communicating recommendations on an ongoing basis. There is a fully dedicated member of the staff that will be specifically scoped in order to ensure that the client team is fully consulted on these items. Changes within the DSP, new offerings, and hot tips are all covered on an ongoing basis via email outreach, a direct message, on office hours, and in any way that works for clients to consume information. Clients are welcome to request information from the team at whatever cadence and through whichever method works best for them. Additionally, clients have access to the “Knowledge Base,” a self-service learning portal that is constantly updated with user guides and FAQs for new releases."
+  },
+  {
+    "category": "Brand Suitability & Safety Customizations",
+    "question": "Which partners do you work with to monitor brand safety, fraud, viewability?",
+    "answer": "PulsePoint has prioritized relationships with leading brand safety, fraud, and viewability partners, including DoubleVerify, IAS, Pixalate, Jounce Media, Fou Analytics, HUMAN, and others, and applies these partners' metrics on an ongoing basis to automatically and manually vet suspicious traffic across campaigns. PulsePoint also has a dedicated Supply Quality Assurance team that specifically focuses on ensuring that our campaigns are only exposed to brand safe, no fraud and invalid traffic, and viewable bid opportunities. PulsePoint is also open to partnering with any partners that clients are hoping to work with, and happy to integrate on behalf of the client team."
+  },
+  {
+    "category": "Brand Suitability & Safety Customizations",
+    "question": "Are there any fees associated with these partners that we will have to take on?",
+    "answer": "DoubleVerify Media Quality fees (billed monthly on actuals), and HUMAN invalid traffic fees are pass-through costs to these partners. PulsePoint uses the DSP as the clearing house to manage all of these fees within the impression-level CPM that comes through in the platform, and they are automatically built into the cost of running media, so clients don’t need to proactively parse out any of the dollars or prepare anything in advance of running—PulsePoint takes that on entirely for clients."
+  },
+  {
+    "category": "Brand Suitability & Safety Customizations",
+    "question": "How are you vetting your partners for Header bidding, Ads.txt, fraud, viewability?",
+    "answer": "As a standard practice, PulsePoint has prioritized relationships with quality and brand safety premium partners in the space such as DoubleVerify, IAS, Pixalate, Jounce Media, HUMAN, Fou Analytics, etc. LIFE users are encouraged to look at these metrics on an ongoing basis in order to both automatically and manually vet any suspicious traffic.* *PulsePoint also has a dedicated Supply Quality Assurance team that specifically focuses on ensuring that our campaigns are only exposed to brand safe, no fraud and invalid traffic, and viewable bid opportunities. For Ads.txt, PulsePoint has internal filters to restrict sites without ads.txt, sellers.json, and supply chain object. For Fraud/Viewability after it passes through all the internal and 3p (HUMAN) checks, clients can select either DoubleVerify or IAS prebid filters to scrub the inventory in real-time."
+  },
+  {
+    "category": "Brand Suitability & Safety Customizations",
+    "question": "Of your brand safety partners, is there any automation between the DSP and the partners that will for automated refreshes of block lists/allow lists? (ex. Keyword partner updates a blocklist we have applied after a gun violence incident)",
+    "answer": "PulsePoint has automation in place between Jounce Media and the PulsePoint DSP, where sites and apps flagged as Made-for-Advertising (MFA) are automatically added to a platform-wide exclusion list. In the interim period before this was scheduled to go live, updates were applied manually to the exclusion dataset on a daily basis. Additionally, PulsePoint is integrated with API connections to our brand safety partners, so blueprints can be updated directly with them and are automatically synced to pre-bid settings within each tactic that uses this feature. PulsePoint also has a dedicated team to ensure that all real-time incidents are considered and applied to a platform-wide block, should this be required."
+  },
+  {
+    "category": "Brand Suitability & Safety Customizations",
+    "question": "Does your platform have a continuously managed Brand Safety blocklist that we can apply to campaigns?",
+    "answer": "PulsePoint has a variety of exclusion lists that we deploy in order to ensure campaign healthiness and brand safety. As well as having exclusion lists that are applied at the onset of a campaign, PulsePoint traders also manage a campaign-specific exclusion list that is driven by the campaign's performance on an ongoing basis.* *PulsePoint also has automation in place between Jounce Media and the PulsePoint DSP, where sites and apps flagged as Made-for-Advertising (MFA) are automatically added to a platform-wide exclusion list."
+  },
+  {
+    "category": "Brand Suitability & Safety Customizations",
+    "question": "Are you able to apply ABS from DoubleVerify?",
+    "answer": "Clients are able to apply ABS from DoubleVerify directly in the platform. An identical offering is available also with IAS, where users are able to append the ABS comparable feature built by IAS called “Quality Sync” directly in to the platform as well."
+  },
+  {
+    "category": "Brand Suitability & Safety Customizations",
+    "question": "Are we able to target/block certain categories/topics (ex. News)?",
+    "answer": "Yes, PulsePoint has the ability to target and/or block all kinds of categories and topics. These targets and blocks can happen in a multitude of ways, including but not limited to IAB category targeting/blocking, keyword targeting/blocking, etc. on top of DoubleVerify capabilities."
+  },
+  {
+    "category": "Brand Suitability & Safety Customizations",
+    "question": "Are you a part of any industry-lead brand safety committee?",
+    "answer": "Pulsepoint has priority partnerships with DoubleVerify, IAS, Pixelate, Jounce Media, HUMAN, etc. who are brand safety vendors, and our Supply Quality staff is a constant member of those company advisory boards in order to pull buyers and sellers together for the better of the programmatic marketplace, especially as it relates to healthcare and pharma."
+  },
+  {
+    "category": "Brand Suitability & Safety Customizations",
+    "question": "Do you have any built-in features to aid with the separation of branded and unbranded campaigns?",
+    "answer": "Yes, PulsePoint considers ensuring there are proper protocols in place to separate between campaigns part of the core functionality. Clients are able to identify campaigns that they’d like to separate against, and append those settings directly into the Campaign-level for use. PulsePoint's platform architecture supports clean separation between branded and unbranded messaging. Branded and unbranded creative run as distinct campaigns or line items, each with independent targeting, flighting, and budget, so the two never co-mingle within delivery. Keyword targeting and keyword-based audiences can be scoped separately by brand name versus condition/category terms, and IAB category and site/app exclusion lists provide additional control over where each type of messaging serves. Because reporting and conversion tracking live at the line-item level, branded and unbranded performance can be measured independently even within the same overall campaign. For clients looking to bridge the two intentionally, Sequential Messaging can journey a user from unbranded educational creative into branded creative based on real-time engagement triggers."
+  },
+  {
+    "category": "Measurement and Reporting",
+    "question": "Can we get real time data from your measurement partners (Crossix, IQVIA) within the DSP itself? Is there a lag?",
+    "answer": "Real-time data is available today through our Crossix DIFA integration, which provides direct, real-time physician-level data transfer within the DSP. This happens on a weekly basis, and allows clients to gain insights into the Crossix measurement without waiting for the 4-week reporting cycle, and at a tactic level instead of rolled up into buckets. PulsePoint's IQVIA Insights dashboard is also available to DTC campaigns, refreshing weekly with a 2-week data lag, following an initial 7-week ramp-up period before insights become available. This is available directly in the platform itself, and in conjunction with our partners at Crossix and IQVIA, PulsePoint is happy to continue building and innovating these products based on the requests of clients."
+  },
+  {
+    "category": "Measurement and Reporting",
+    "question": "What unique features does your DSP offer that we can use to measure high and low funnel audience/campaign success?",
+    "answer": "PulsePoint offers a comprehensive reporting suite that covers all insights clients may need in order to measure campaign success, from the top of the funnel all the way to the bottom. On top of all standard media and NPI metrics that are available to clients within our Report Builder tool, other unique products that PulsePoint has to expose insights and analytics to clients include but are not limited to: Script lift (TRx, NRx, NBRx, cost-per metrics) metrics, HCP Clinical Insights (prescribing behavior, top droppers, geo insights), Media Insights (brand site engagement, paid search terms), Verified patient reach and Audience Quality, DTC Dashboards (qualified audience, Rx change from competitor, geo), Direct Crossix DIFA integration for real-time physician-level data transfer, brand lift and advertising effectiveness study opportunities for qualifying campaigns, and more."
+  },
+  {
+    "category": "Measurement and Reporting",
+    "question": "Do you have off-the-shelf, condition specific inventory or specialty audience groups that we can apply?",
+    "answer": "PulsePoint has loads of off-the-shelf, condition specific inventory and specialty audiences that are available to be applied for all of our clients. In terms of inventory, PulsePoint has a full suite of endemic inventory options that are available for clients to apply to match brand needs. These are available to be reviewed in our inventory marketplace, and within the tactics themselves when users set up campaigns. In terms of audiences, we also have a full set of audiences that are ready and available for clients to use based on our NPI identity graph, MESH taxonomy, and all backed by the power of WebMD and Medscape. A few examples per audience cohort include but are not limited to—HCP: 1:1 NPI targeting (3.2M verified HCPs), specialty, clinical behavior (Rx/Dx/Px), practice/POC, SmartLists that consider all digital and health-related signals against our NPI graph, Endemic Research SmartLists, and HCP Social Audiences (Meta/LinkedIn). DTC: bespoke claims-based audience models (220MM+ patients, 3B annual pharmacy claims; ICD-10, NDC, J-Code, CPT), Health Pages (contextual), Health Populations, Health Populations+, OTC Populations, Keyword Populations, and so many more."
+  },
+  {
+    "category": "Measurement and Reporting",
+    "question": "Do you have path-to-conversion reporting capabilities?",
+    "answer": "PulsePoint is working on a series of conversion reports that will allow clients insights into the path-to-conversion that users take after an ad event, and the platform supports sequencing users through a defined series of actions, giving visibility into how audiences move through a campaign journey rather than a single-touch view. PulsePoint is open to partner with clients to walk through how this should be designed and tweaked in order to ensure excellence in this space. PulsePoint also has various conversion reports available within Report builder, as well as pixel assignments at all levels of the campaign hierarchy in order to serve insights into how audiences are engaging with brand ads and sites. Included in our Adaptive Optimization are factors called “Site Visitation” and “Engagement” which can automatically optimize towards audiences that have engaged with the brand ads or site content previously, which can be a helpful proxy to direct path-to-conversion reporting."
+  },
+  {
+    "category": "Measurement and Reporting",
+    "question": "What advanced reporting is available in-platform?",
+    "answer": "PulsePoint has tons of advanced reporting available in the platform in order to accommodate all backend KPis that clients need to be able to see on behalf of their brands within the healthcare space. Some of these include but are not limited to HCP Clinical Insights (prescribing behavior, top droppers, geo insights), DTC Dashboards (qualified audience, Rx change from competitor, geo), Verified patient reach and Audience Quality, brand lift and advertising effectiveness study opportunities for qualifying campaigns, HCP audience insights and a full AI-fueled workspace in order to understand all kinds of insights about our doctors, a DTC workspace that can understand all things about our patients digitally and clinically, audience expansion workspaces, a dashboard that covers all site analytics and how users are engaging with brand.coms, and so many more. The PulsePoint team would be happy to organize a demo where we can walk through all of these tools comprehensively at any time."
+  },
+  {
+    "category": "Measurement and Reporting",
+    "question": "Are there any AV opportunities or studies available in-platform?",
+    "answer": "PulsePoint is always open and willing to talk to priority clients about how we can achieve added value as a core function of our business and a key principle of efficiency in market. Cost avoidance features are inherently part of every campaign that runs through the PulsePoint platform as a part of the bidding algorithm, which allows all clients to reingest money back into their campaigns that may have otherwise paid out to publishers. Case study opportunities are regularly made available to agency and brand partners, and PulsePoint welcomes the opportunity to showcase the goals that we meet on behalf of clients."
+  },
+  {
+    "category": "Measurement and Reporting",
+    "question": "Do you have script-lift measurement capabilities?",
+    "answer": "PulsePoint is integrated with a claims data provider, and so are able to provide insights and dashboards that speak to script lift measurement across the entire platform and at multiple levels. This includes reporting such as Total prescriptions based on campaign exposure vs a control group, new prescriptions based on the same test/control, new to brand scripts, cost per script behavior, and so on. Clients are able to get a comprehensive understanding of how the campaigns are achieving script goals, and how much those have shifted since the campaign was live in the market."
+  },
+  {
+    "category": "Measurement and Reporting",
+    "question": "Can you provide NPI reach data per our campaign breakout? At what cadence? Can we pull these reports directly in the DSP?",
+    "answer": "NPI reporting is available directly in the platform, and NPI reach metrics are available at the Line Item level within our built-out visualization tools directly in the campaigns. Through the use of these exposed charts, clients can see NPI list reach directly in platform at multiple levels in the hierarchy, both at the line item for a comprehensive look, and also by tactic for specific tactic-level insights into reach. All NPI reporting can also be pulled directly in the DSP via our report builder at whatever granularity the client is looking for. This includes reach and frequency metrics, but also includes a full suite of NPI details that clients are able to pull and analyze for their custom or our off-the-shelf lists. Clients are able to pull and see NPI reach data per campaign breakout, or in any way clients want to see the data."
+  },
+  {
+    "category": "Measurement and Reporting",
+    "question": "What reporting can you provide to demonstrate compliance with state privacy laws at the impression level?",
+    "answer": "PulsePoint supports geo-level reporting across multiple levels of granularity, including DMA, state, zip code, and radius-based breakouts. This shows up directly in-platform: HCP Clinical Insights includes geo insights alongside prescribing behavior data, and DTC Dashboards report on qualified audience and Rx metrics by geo. Report Builder can pull reporting at the granularity a client needs, including by DMA, allowing performance to be broken out by market for both HCP and DTC campaigns. For campaigns using radius-based geofencing (e.g., around specialty targets or points of care), the DMA and specialty breakdown is available directly in reporting as well. The platform is also programmed to build restrictions into the platform where privacy laws are in place. For example, there are state mandates around creatives, state mandates around consumer targeting, and so on. Those are all a core part of how the PulsePoint legal team ensures that products are built compliantly and evolving as legislation changes."
+  },
+  {
+    "category": "Pricing",
+    "question": "Please share a comprehensive list of your fee structure, inclusive of platform fee, PMP and PG fee (if different), and all additional fees in platform. Please also include fees that are optional, automatically selected, and mandatory",
+    "answer": "PulsePoint's pricing model includes:\n- Platform fee: charged for using the DSP\n- Deal fee: applied when activating Private Marketplace (PMPs) — note that platform fees are waived when activating against deals\n- Data CPM: costs associated with PulsePoint proprietary audiences or third-party audiences\n- These data fees apply to all spend, including third-party audience activation\n- Media Quality fees: via DoubleVerify and HUMAN Security for brand safety, fraud detection, invalid traffic (IVT), and viewability (pre-bid)\n- Measurement costs for using 3rd party services\nAll fees are structured on a CPM basis as part of PulsePoint's overall pricing model, with a minimum spend requirement of $150k across all campaigns. Third-party data and brand safety targeting incur both media and platform fees on top of standard costs."
+  },
+  {
+    "category": "Pricing",
+    "question": "Do you have any existing agency relationships that allow for commercial advantages/incentives (Orion relationships, JBPs, etc.)?",
+    "answer": "PulsePoint is an Orion partner as of March 2025, and there is a full integration in place and is open to expanding this across new agency accounts and accounts not currently within the contract. PulsePoint also has JBPs in place on a client-by-client basis."
+  },
+  {
+    "category": "Pricing",
+    "question": "Do you offer any pricing incentives/added value for net new activations/testing opportunities?",
+    "answer": "Our HCP Clinical Dashboards include built-in Rx script measurement at no additional cost to the agency. Beyond that, testing opportunities and pricing incentives for net new activations are evaluated on a case-by-case basis.\n\n\n\n\n\n\n\n\n\n[image1]: <data:image/png;base64,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>"
+  }
+]

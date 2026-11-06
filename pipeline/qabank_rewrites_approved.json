@@ -1,0 +1,372 @@
+{
+ "upsert": [
+  {
+   "id": "qabank-SUP-004",
+   "text": "Do you support blocked categories (bcat), and which IAB category taxonomy version?\n\nYes. We support bcat and read IAB category taxonomy version 1.",
+   "metadata": {
+    "question": "Do you support blocked categories (bcat), and which IAB category taxonomy version?",
+    "answer_plain": "Yes. We support bcat and read IAB category taxonomy version 1.",
+    "stack_name": "RFI Q&A Bank v2 (unverified)",
+    "tags": [
+     "audience:supply",
+     "theme:company/overview",
+     "Needs SME Review",
+     "Unverified",
+     "Rewritten 2026-10-28"
+    ],
+    "last_updated_date": "2025-10-21",
+    "audience": "supply",
+    "theme": "company/overview",
+    "owner": "Matthew Katz (escalation: Jessica Hoffman) (proposed)",
+    "row_id": "SUP-004",
+    "source": "qabank",
+    "source_ref": "APPS-4999, 2025-10-21",
+    "stale": "N",
+    "route_to": "",
+    "rewritten_from": "SUP-004, SUP-015"
+   }
+  },
+  {
+   "id": "qabank-SUP-277",
+   "text": "Do you collect and store publisher information from bid requests, and who can access it?\n\nYes. We store publisher information such as app bundles, root domains and contextual information, from both bid requests and won impressions. It is available to DSP clients as well as to PulsePoint.",
+   "metadata": {
+    "question": "Do you collect and store publisher information from bid requests, and who can access it?",
+    "answer_plain": "Yes. We store publisher information such as app bundles, root domains and contextual information, from both bid requests and won impressions. It is available to DSP clients as well as to PulsePoint.",
+    "stack_name": "RFI Q&A Bank v2 (unverified)",
+    "tags": [
+     "audience:supply",
+     "theme:targeting & data",
+     "Needs SME Review",
+     "Unverified",
+     "Rewritten 2026-10-28"
+    ],
+    "last_updated_date": "2025-10-21",
+    "audience": "supply",
+    "theme": "targeting & data",
+    "owner": "",
+    "row_id": "SUP-277",
+    "source": "qabank",
+    "source_ref": "APPS-4999, 2025-10-21",
+    "stale": "N",
+    "route_to": "",
+    "rewritten_from": "SUP-277, SUP-052, SUP-228"
+   }
+  },
+  {
+   "id": "qabank-SUP-078",
+   "text": "Do you support GPID in imp.ext.gpid, and do you expect it in any other field?\n\nYes. We read GPID from imp.ext.gpid and don't support or expect it in any other field.",
+   "metadata": {
+    "question": "Do you support GPID in imp.ext.gpid, and do you expect it in any other field?",
+    "answer_plain": "Yes. We read GPID from imp.ext.gpid and don't support or expect it in any other field.",
+    "stack_name": "RFI Q&A Bank v2 (unverified)",
+    "tags": [
+     "audience:supply",
+     "theme:integration & OpenRTB/bid request specs",
+     "Needs SME Review",
+     "Unverified",
+     "Rewritten 2026-10-28"
+    ],
+    "last_updated_date": "2025-06-16",
+    "audience": "supply",
+    "theme": "integration & OpenRTB/bid request specs",
+    "owner": "TPM (escalation: Paul Bennett)",
+    "row_id": "SUP-078",
+    "source": "qabank",
+    "source_ref": "APPS-4944, 2025-06-16",
+    "stale": "N",
+    "route_to": "",
+    "rewritten_from": "SUP-078, SUP-077"
+   }
+  },
+  {
+   "id": "qabank-SUP-135",
+   "text": "Do you support pod bidding, and does it need additional processing time?\n\nYes. We support pod bidding, and it needs no additional processing time.",
+   "metadata": {
+    "question": "Do you support pod bidding, and does it need additional processing time?",
+    "answer_plain": "Yes. We support pod bidding, and it needs no additional processing time.",
+    "stack_name": "RFI Q&A Bank v2 (unverified)",
+    "tags": [
+     "audience:supply",
+     "theme:integration & OpenRTB/bid request specs",
+     "Needs SME Review",
+     "Unverified",
+     "Rewritten 2026-10-28"
+    ],
+    "last_updated_date": "2025-07-02",
+    "audience": "supply",
+    "theme": "integration & OpenRTB/bid request specs",
+    "owner": "TPM (escalation: Paul Bennett)",
+    "row_id": "SUP-135",
+    "source": "qabank",
+    "source_ref": "SLK-NEXXEN-2025, 2025-07-02",
+    "stale": "N",
+    "route_to": "",
+    "rewritten_from": "SUP-135, SUP-219, SUP-235, SUP-251"
+   }
+  },
+  {
+   "id": "qabank-SUP-165",
+   "text": "Do you run more than one LiveRamp sidecar instance?\n\nNo. We run a single LiveRamp sidecar instance.",
+   "metadata": {
+    "question": "Do you run more than one LiveRamp sidecar instance?",
+    "answer_plain": "No. We run a single LiveRamp sidecar instance.",
+    "stack_name": "RFI Q&A Bank v2 (unverified)",
+    "tags": [
+     "audience:supply",
+     "theme:identifiers & identity",
+     "Needs SME Review",
+     "Unverified",
+     "Rewritten 2026-10-28"
+    ],
+    "last_updated_date": "2025-10-21",
+    "audience": "supply",
+    "theme": "identifiers & identity",
+    "owner": "TPM (escalation: Paul Bennett) (proposed)",
+    "row_id": "SUP-165",
+    "source": "qabank",
+    "source_ref": "APPS-4999, 2025-10-21",
+    "stale": "N",
+    "route_to": "",
+    "rewritten_from": "SUP-165, SUP-164"
+   }
+  },
+  {
+   "id": "qabank-SUP-166",
+   "text": "Are you a RampID-enabled platform with a LiveRamp sidecar that decrypts LiveRamp envelopes?\n\nYes. We are a RampID-enabled platform and run a LiveRamp sidecar that decrypts LiveRamp envelopes.",
+   "metadata": {
+    "question": "Are you a RampID-enabled platform with a LiveRamp sidecar that decrypts LiveRamp envelopes?",
+    "answer_plain": "Yes. We are a RampID-enabled platform and run a LiveRamp sidecar that decrypts LiveRamp envelopes.",
+    "stack_name": "RFI Q&A Bank v2 (unverified)",
+    "tags": [
+     "audience:supply",
+     "theme:identifiers & identity",
+     "Needs SME Review",
+     "Unverified",
+     "Rewritten 2026-10-28"
+    ],
+    "last_updated_date": "2025-10-21",
+    "audience": "supply",
+    "theme": "identifiers & identity",
+    "owner": "TPM (escalation: Paul Bennett) (proposed)",
+    "row_id": "SUP-166",
+    "source": "qabank",
+    "source_ref": "APPS-4999, 2025-10-21",
+    "stale": "N",
+    "route_to": "",
+    "rewritten_from": "SUP-166, SUP-164"
+   }
+  },
+  {
+   "id": "qabank-SUP-187",
+   "text": "If a Deal sync API becomes available, can you pass buyer acceptance status for deals?\n\nNot yet. We don't currently have a Deal sync API; passing buyer acceptance status through one is work in progress.",
+   "metadata": {
+    "question": "If a Deal sync API becomes available, can you pass buyer acceptance status for deals?",
+    "answer_plain": "Not yet. We don't currently have a Deal sync API; passing buyer acceptance status through one is work in progress.",
+    "stack_name": "RFI Q&A Bank v2 (unverified)",
+    "tags": [
+     "audience:supply",
+     "theme:transaction types & deals/PMP/PG",
+     "Needs SME Review",
+     "Unverified",
+     "Rewritten 2026-10-28"
+    ],
+    "last_updated_date": "2025-10-21",
+    "audience": "supply",
+    "theme": "transaction types & deals/PMP/PG",
+    "owner": "Jay Irwin (deal strategy); Doug Richards (deal operations) (escalation: TPM (PG and deal-sync mechanics))",
+    "row_id": "SUP-187",
+    "source": "qabank",
+    "source_ref": "APPS-4999, 2025-10-21",
+    "stale": "N",
+    "route_to": "",
+    "rewritten_from": "SUP-187, SUP-186, SUP-200"
+   }
+  },
+  {
+   "id": "qabank-SUP-189",
+   "text": "Do your proprietary segments use publisher data signals attached to deals, such as age or gender?\n\nNo. Our proprietary segments are built from NPI data, LiveRamp, condition populations, patients and practice staff, among others we create in house \u2014 not from publisher data signals such as age or gender attached to deals.",
+   "metadata": {
+    "question": "Do your proprietary segments use publisher data signals attached to deals, such as age or gender?",
+    "answer_plain": "No. Our proprietary segments are built from NPI data, LiveRamp, condition populations, patients and practice staff, among others we create in house \u2014 not from publisher data signals such as age or gender attached to deals.",
+    "stack_name": "RFI Q&A Bank v2 (unverified)",
+    "tags": [
+     "audience:supply",
+     "theme:transaction types & deals/PMP/PG",
+     "Needs SME Review",
+     "Unverified",
+     "Rewritten 2026-10-28"
+    ],
+    "last_updated_date": "2025-10-21",
+    "audience": "supply",
+    "theme": "transaction types & deals/PMP/PG",
+    "owner": "Jay Irwin (deal strategy); Doug Richards (deal operations) (escalation: TPM (PG and deal-sync mechanics))",
+    "row_id": "SUP-189",
+    "source": "qabank",
+    "source_ref": "APPS-4999, 2025-10-21",
+    "stale": "N",
+    "route_to": "",
+    "rewritten_from": "SUP-189, SUP-278"
+   }
+  },
+  {
+   "id": "qabank-SUP-192",
+   "text": "For programmatic guaranteed (PG) campaigns via Magnite, should PG deals come in a separate request from open auction and PMP?\n\nSeparate requests. PG deals should be sent in their own request, not combined with open auction or PMP.",
+   "metadata": {
+    "question": "For programmatic guaranteed (PG) campaigns via Magnite, should PG deals come in a separate request from open auction and PMP?",
+    "answer_plain": "Separate requests. PG deals should be sent in their own request, not combined with open auction or PMP.",
+    "stack_name": "RFI Q&A Bank v2 (unverified)",
+    "tags": [
+     "audience:supply",
+     "theme:transaction types & deals/PMP/PG",
+     "Needs SME Review",
+     "Unverified",
+     "Rewritten 2026-10-28"
+    ],
+    "last_updated_date": "2025-10-21",
+    "audience": "supply",
+    "theme": "transaction types & deals/PMP/PG",
+    "owner": "Jay Irwin (deal strategy); Doug Richards (deal operations) (escalation: TPM (PG and deal-sync mechanics))",
+    "row_id": "SUP-192",
+    "source": "qabank",
+    "source_ref": "APPS-4999, 2025-10-21",
+    "stale": "N",
+    "route_to": "",
+    "rewritten_from": "SUP-192"
+   }
+  },
+  {
+   "id": "qabank-SUP-244",
+   "text": "Do you support VAST wrappers, and what is the maximum wrapper depth?\n\nYes. We support VAST wrappers up to a maximum depth of 5.",
+   "metadata": {
+    "question": "Do you support VAST wrappers, and what is the maximum wrapper depth?",
+    "answer_plain": "Yes. We support VAST wrappers up to a maximum depth of 5.",
+    "stack_name": "RFI Q&A Bank v2 (unverified)",
+    "tags": [
+     "audience:supply",
+     "theme:ad formats & CTV/podding",
+     "Needs SME Review",
+     "Unverified",
+     "Rewritten 2026-10-28"
+    ],
+    "last_updated_date": "2026-02-02",
+    "audience": "supply",
+    "theme": "ad formats & CTV/podding",
+    "owner": "TPM (escalation: Paul Bennett) (proposed)",
+    "row_id": "SUP-244",
+    "source": "qabank",
+    "source_ref": "SLK-HCX-2026, 2026-02-02",
+    "stale": "N",
+    "route_to": "",
+    "rewritten_from": "SUP-244, SUP-243"
+   }
+  },
+  {
+   "id": "qabank-SUP-279",
+   "text": "Do your proprietary segments use data about the type of content the publisher is associated with?\n\nNo. Our proprietary segments are built from NPI data, LiveRamp, condition populations, patients and practice staff \u2014 not from publisher content-type data.",
+   "metadata": {
+    "question": "Do your proprietary segments use data about the type of content the publisher is associated with?",
+    "answer_plain": "No. Our proprietary segments are built from NPI data, LiveRamp, condition populations, patients and practice staff \u2014 not from publisher content-type data.",
+    "stack_name": "RFI Q&A Bank v2 (unverified)",
+    "tags": [
+     "audience:supply",
+     "theme:targeting & data",
+     "Needs SME Review",
+     "Unverified",
+     "Rewritten 2026-10-28"
+    ],
+    "last_updated_date": "2025-10-21",
+    "audience": "supply",
+    "theme": "targeting & data",
+    "owner": "",
+    "row_id": "SUP-279",
+    "source": "qabank",
+    "source_ref": "APPS-4999, 2025-10-21",
+    "stale": "N",
+    "route_to": "",
+    "rewritten_from": "SUP-279, SUP-278"
+   }
+  },
+  {
+   "id": "qabank-SUP-281",
+   "text": "For always-on deals, can you return buyer acceptance status after a deal is synced, or sync targeting information?\n\nNo. Always-on deals are available to advertisers in the Deal Library, but we can't return buyer acceptance status or sync targeting information. Deal ID, floor and targeting (such as geo and domain) are entered manually.",
+   "metadata": {
+    "question": "For always-on deals, can you return buyer acceptance status after a deal is synced, or sync targeting information?",
+    "answer_plain": "No. Always-on deals are available to advertisers in the Deal Library, but we can't return buyer acceptance status or sync targeting information. Deal ID, floor and targeting (such as geo and domain) are entered manually.",
+    "stack_name": "RFI Q&A Bank v2 (unverified)",
+    "tags": [
+     "audience:supply",
+     "theme:targeting & data",
+     "Needs SME Review",
+     "Unverified",
+     "Rewritten 2026-10-28"
+    ],
+    "last_updated_date": "2025-10-21",
+    "audience": "supply",
+    "theme": "targeting & data",
+    "owner": "",
+    "row_id": "SUP-281",
+    "source": "qabank",
+    "source_ref": "APPS-4999, 2025-10-21",
+    "stale": "N",
+    "route_to": "",
+    "rewritten_from": "SUP-281, SUP-190, SUP-191"
+   }
+  },
+  {
+   "id": "qabank-DEM-114",
+   "text": "Do you offer a Deal sync API?\n\nNo. We don't have a Deal sync API.",
+   "metadata": {
+    "question": "Do you offer a Deal sync API?",
+    "answer_plain": "No. We don't have a Deal sync API.",
+    "stack_name": "RFI Q&A Bank v2 (unverified)",
+    "tags": [
+     "audience:demand",
+     "theme:transaction types & deals/PMP/PG",
+     "Needs SME Review",
+     "Unverified",
+     "Rewritten 2026-10-28"
+    ],
+    "last_updated_date": "2025-01-06",
+    "audience": "demand",
+    "theme": "transaction types & deals/PMP/PG",
+    "owner": "Jay Irwin (deal strategy); Doug Richards (deal operations) (escalation: TPM (PG and deal-sync mechanics))",
+    "row_id": "DEM-114",
+    "source": "qabank",
+    "source_ref": "APPS-4866, 2025-01-06",
+    "stale": "N",
+    "route_to": "",
+    "rewritten_from": "DEM-114, SUP-200"
+   }
+  },
+  {
+   "id": "qabank-DEM-208",
+   "text": "Can you upload reports daily to an AWS S3 folder if a reporting API isn't available?\n\nYes. We can upload reports daily to an AWS S3 folder. Reporting API access is possible but still needs confirmation.",
+   "metadata": {
+    "question": "Can you upload reports daily to an AWS S3 folder if a reporting API isn't available?",
+    "answer_plain": "Yes. We can upload reports daily to an AWS S3 folder. Reporting API access is possible but still needs confirmation.",
+    "stack_name": "RFI Q&A Bank v2 (unverified)",
+    "tags": [
+     "audience:demand",
+     "theme:reporting & billing",
+     "Needs SME Review",
+     "Unverified",
+     "Rewritten 2026-10-28"
+    ],
+    "last_updated_date": "2025-01-06",
+    "audience": "demand",
+    "theme": "reporting & billing",
+    "owner": "Erica Yard (escalation: Julie Maggio) (proposed)",
+    "row_id": "DEM-208",
+    "source": "qabank",
+    "source_ref": "APPS-4866, 2025-01-06",
+    "stale": "N",
+    "route_to": "",
+    "rewritten_from": "DEM-208, DEM-207"
+   }
+  }
+ ],
+ "delete": [
+  "qabank-SUP-052",
+  "qabank-SUP-228"
+ ]
+}

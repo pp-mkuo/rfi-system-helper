@@ -1,0 +1,225 @@
+{
+  "name": "RFI_Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "mode": "load",
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "loopio-library-2",
+          "mode": "list",
+          "cachedResultName": "loopio-library-2"
+        },
+        "prompt": "={{ $json.body.question }}",
+        "topK": 20,
+        "options": {
+          "metadata": {
+            "metadataValues": [
+              {
+                "name": "stack_name",
+                "value": "Client Strategy- Cleaned"
+              }
+            ]
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1.3,
+      "position": [
+        3680,
+        1056
+      ],
+      "id": "7db27551-52e1-425f-8948-84dd957678f7",
+      "name": "Pinecone Vector Store",
+      "credentials": {
+        "pineconeApi": {
+          "id": "QAezAI08qov3pQje",
+          "name": "Loopio Library"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "8860486a-0f70-4a60-8a62-6840ec22587f",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        3296,
+        1056
+      ],
+      "id": "4a98aa1c-cc39-4efd-9f99-7d4e4c3970bf",
+      "name": "Webhook",
+      "webhookId": "8860486a-0f70-4a60-8a62-6840ec22587f",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "options": {
+          "dimensions": 1536
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        3680,
+        1264
+      ],
+      "id": "7bba0403-d306-4516-9e59-48b2e5c89d4d",
+      "name": "Embeddings OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "FL0SyiHPRXjc0Fu9",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        4736,
+        1056
+      ],
+      "id": "ef1252cb-2479-43d4-845a-d1113713b2d1",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "const query = $('Webhook').first().json.body.question;\nconst results = $('Pinecone Vector Store').all();\n\nconst documents = results.map(item => ({\n  text: (item.json.document.metadata.question || '') + '\\n' + (item.json.document.metadata.answer_plain || '')\n}));\n\nconst response = await this.helpers.httpRequest({\n  method: 'POST',\n  url: 'https://api.pinecone.io/rerank',\n  headers: {\n    'Api-Key': 'REDACTED-set-PINECONE_API_KEY-env',\n    'Content-Type': 'application/json',\n    'X-Pinecone-API-Version': '2025-04'\n  },\n  body: {\n    model: 'bge-reranker-v2-m3',\n    query: query,\n    top_n: 5,\n    return_documents: false,\n    documents: documents\n  },\n  json: true\n});\n\nreturn response.data.map(item => ({\n  json: {\n    rerank_score: item.score,\n    vector_score: results[item.index].json.score,\n    question: results[item.index].json.document.metadata.question,\n    answer: results[item.index].json.document.metadata.answer_plain,\n    stack_name: results[item.index].json.document.metadata.stack_name,\n    tags: results[item.index].json.document.metadata.tags,\n    last_updated: results[item.index].json.document.metadata.last_updated_date\n  }\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4128,
+        1056
+      ],
+      "id": "497fc54f-22c5-40ff-b556-ba2075c6970f",
+      "name": "Pinecone Rerank + Map Results"
+    },
+    {
+      "parameters": {
+        "jsCode": "const query = $('Webhook').first().json.body.question;\nconst rerankedItems = $('Pinecone Rerank + Map Results').all();\n\nconst entries = rerankedItems.map((item, i) => {\n  const d = item.json;\n  const tags = Array.isArray(d.tags) ? d.tags.join(', ') : (d.tags || '');\n  return [\n    `--- Entry ${i + 1} ---`,\n    `Vector Score: ${d.vector_score}`,\n    `Rerank Score: ${d.rerank_score}`,\n    `Question: ${d.question}`,\n    `Tags: ${tags}`,\n    `Stack: ${d.stack_name}`,\n    `Last Updated: ${d.last_updated || 'unknown'}`,\n    `Answer:`,\n    d.answer\n  ].join('\\n');\n});\n\nconst context = entries.join('\\n\\n');\n\nconst systemPrompt = `You are a PulsePoint pre-sales assistant helping respond to RFI questions. You will be given retrieved entries from PulsePoint's internal Loopio library.\n\nRules:\n- Synthesize a single, complete answer from the retrieved entries.\n- Older entries may have stronger foundational detail -- use them as the base.\n- Newer entries may contain updated capabilities, stats, or product changes -- layer these in.\n- If an older and newer entry conflict, prefer the newer one and briefly note what changed.\n- Only use information from the provided entries. Do not make up facts.\n- At the end, list which entry numbers you drew from under a \"Sources\" heading.\n- Keep the tone professional and suitable for an RFP response.\n- If none of the retrieved entries are relevant, say so clearly.`;\n\nconst userMessage = `Retrieved and reranked library entries:\\n\\n${context}\\n\\n---\\n\\nRFI Question: ${query}\\n\\nPlease synthesize a complete answer using the entries above.`;\n\nconst response = await this.helpers.httpRequest({\n  method: 'POST',\n  url: 'https://us.api.openai.com/v1/chat/completions',\n  headers: {\n    'Authorization': 'Bearer REDACTED-set-OPENAI_API_KEY',\n    'Content-Type': 'application/json'\n  },\n  body: {\n    model: 'gpt-4o',\n    max_tokens: 2048,\n    messages: [\n      { role: 'system', content: systemPrompt },\n      { role: 'user', content: userMessage }\n    ]\n  },\n  json: true\n});\n\nreturn [{\n  json: {\n    question: query,\n    synthesized_answer: response.choices[0].message.content,\n    sources: rerankedItems.map((item, i) => ({\n      entry: i + 1,\n      rerank_score: item.json.rerank_score,\n      question: item.json.question\n    }))\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4416,
+        1056
+      ],
+      "id": "d2f9e995-46e9-45cd-b4ca-4de7d7349d0a",
+      "name": "Synthesize with GPT-4o"
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n-labs.pulsepoint.com",
+            "x-request-id": "f373a966729f366f7ece2c0a8a54a6df",
+            "x-real-ip": "10.29.122.145",
+            "x-forwarded-for": "10.29.122.145",
+            "x-forwarded-host": "n8n-labs.pulsepoint.com",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-scheme": "https",
+            "x-scheme": "https",
+            "content-length": "72",
+            "user-agent": "curl/8.7.1",
+            "accept": "*/*",
+            "content-type": "application/json"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "question": "Does your platform support HIPAA-compliant data handling?"
+          },
+          "webhookUrl": "http://n8n-labs.pulsepoint.com:5678/webhook-test/8860486a-0f70-4a60-8a62-6840ec22587f",
+          "executionMode": "test"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Pinecone Vector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pinecone Vector Store": {
+      "main": [
+        [
+          {
+            "node": "Pinecone Rerank + Map Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Pinecone Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pinecone Rerank + Map Results": {
+      "main": [
+        [
+          {
+            "node": "Synthesize with GPT-4o",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Synthesize with GPT-4o": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "4bb08e81-09c4-4552-8799-462e4651d406",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5289290700eb432c69e2bda8998429770ee13e27bf5feb1817f202133655abd6"
+  },
+  "id": "EBx2bMK5OjsqsnyP",
+  "tags": []
+}

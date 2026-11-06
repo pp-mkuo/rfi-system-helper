@@ -1,0 +1,124 @@
+#!/usr/bin/env python3
+"""Semantic search over the loopio-library-2 Pinecone index.
+
+Usage:
+  python3 query.py "your question" [topK] [--cleaned-only] [--raw]
+
+Default: prefers answers from the "Client Strategy- Cleaned" stack and falls
+back to "Client Strategy" only for questions that have no cleaned version,
+so duplicates collapse without losing the ~79 old-stack-only answers.
+  --cleaned-only  hard filter to the cleaned stack (drops those 79)
+  --raw           no dedupe, no preference — every match as stored
+Reads keys from keys.env in this folder. Never prints key values.
+"""
+import json, os, sys, urllib.request
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+INDEX_HOST = "https://loopio-library-2-rme8ns3.svc.aped-4627-b74a.pinecone.io"
+EMBED_MODEL = "text-embedding-3-small"
+# us.api first: our OpenAI org enforces US data residency.
+OPENAI_HOSTS = ("https://us.api.openai.com", "https://api.openai.com")
+CLEANED = "Client Strategy- Cleaned"
+NAMESPACE = ""  # this index uses the empty namespace, not __default__
+
+
+def load_keys():
+    keys = {}
+    with open(os.path.join(HERE, "keys.env")) as fh:
+        for line in fh:
+            line = line.strip()
+            if line and not line.startswith("#") and "=" in line:
+                k, v = line.split("=", 1)
+                keys[k.strip()] = v.strip().strip('"').strip("'")
+    missing = [k for k in ("PINECONE_API_KEY", "OPENAI_API_KEY") if not keys.get(k)]
+    if missing:
+        sys.exit("Missing in keys.env: " + ", ".join(missing))
+    return keys
+
+
+def post(url, payload, headers):
+    req = urllib.request.Request(url, data=json.dumps(payload).encode(),
+                                 headers={"Content-Type": "application/json", **headers})
+    with urllib.request.urlopen(req, timeout=90) as r:
+        return json.load(r)
+
+
+def embed(text, key):
+    last = None
+    for host in OPENAI_HOSTS:
+        try:
+            out = post(host + "/v1/embeddings",
+                       {"model": EMBED_MODEL, "input": text},
+                       {"Authorization": "Bearer " + key})
+            return out["data"][0]["embedding"]
+        except Exception as e:
+            last = e
+    raise last
+
+
+def search(vec, key, top_k, stack=None):
+    payload = {"vector": vec, "topK": top_k, "includeMetadata": True, "namespace": NAMESPACE}
+    if stack:
+        payload["filter"] = {"stack_name": {"$eq": stack}}
+    return post(INDEX_HOST + "/query", payload,
+                {"Api-Key": key, "X-Pinecone-API-Version": "2025-04"}).get("matches", [])
+
+
+def norm(s):
+    return " ".join(str(s or "").lower().split())
+
+
+def collapse(matches, want):
+    """One row per question: cleaned version wins, else newest old-stack row."""
+    best = {}
+    for m in matches:
+        md = m.get("metadata") or {}
+        k = norm(md.get("question")) or m["id"]
+        cur = best.get(k)
+        if cur is None:
+            best[k] = m
+            continue
+        cm, cmd = cur, (cur.get("metadata") or {})
+        new_clean = md.get("stack_name") == CLEANED
+        cur_clean = cmd.get("stack_name") == CLEANED
+        if new_clean and not cur_clean:
+            best[k] = m
+        elif new_clean == cur_clean:
+            if str(md.get("last_updated_date", "")) > str(cmd.get("last_updated_date", "")):
+                best[k] = m
+    rows = sorted(best.values(), key=lambda m: m.get("score", 0), reverse=True)
+    return rows[:want]
+
+
+def main():
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    flags = {a for a in sys.argv[1:] if a.startswith("--")}
+    if not args:
+        sys.exit('Usage: python3 query.py "your question" [topK] [--cleaned-only] [--raw]')
+    q = args[0]
+    want = int(args[1]) if len(args) > 1 else 5
+    keys = load_keys()
+    vec = embed(q, keys["OPENAI_API_KEY"])
+
+    if "--cleaned-only" in flags:
+        rows, mode = search(vec, keys["PINECONE_API_KEY"], want, stack=CLEANED), "cleaned-only"
+    elif "--raw" in flags:
+        rows, mode = search(vec, keys["PINECONE_API_KEY"], want), "raw"
+    else:
+        # over-fetch so duplicates collapsing doesn't shrink the result set
+        rows = collapse(search(vec, keys["PINECONE_API_KEY"], max(want * 4, 20)), want)
+        mode = "prefer-cleaned"
+
+    out = {"query": q, "mode": mode, "results": [{
+        "score": round(m.get("score", 0), 4),
+        "stack": (m.get("metadata") or {}).get("stack_name"),
+        "updated": str((m.get("metadata") or {}).get("last_updated_date", ""))[:10],
+        "tags": (m.get("metadata") or {}).get("tags", []),
+        "question": (m.get("metadata") or {}).get("question"),
+        "answer": (m.get("metadata") or {}).get("answer_plain"),
+    } for m in rows]}
+    print(json.dumps(out, indent=2))
+
+
+if __name__ == "__main__":
+    main()
