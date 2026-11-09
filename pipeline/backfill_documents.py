@@ -164,6 +164,8 @@ def create_index(name, location):
             break
         except RuntimeError as e:
             print(f"processing_location={loc} refused: {e}")
+            if "401" in str(e) or "UNAUTHENTICATED" in str(e):
+                sys.exit("API key rejected; check PINECONE_API_KEY (not a plan-tier problem)")
             if loc == locations[-1]:
                 sys.exit("could not create index")
             print("  -> plan is Starter/Builder (us needs Standard+); falling back to global")
