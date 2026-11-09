@@ -168,6 +168,7 @@ button:disabled { opacity: 0.5; cursor: default; }
 // ---------------------------------------------------------------------------
 // Maggie Kuo's rules, ported from skill/SKILL.md (2026-11). Workflow is hers; keep edits in sync with the skill.
 // ---------------------------------------------------------------------------
+const SNAPSHOT_URL = "library-snapshot.json";   // ponytail: offline/demo fallback, lexical search over a bundled snapshot when the connector is absent
 const LIBRARY_SERVER = "RFI Library";           // the claude.ai connector's display name, exactly
 const LIBRARY_TOOL = "search_library";
 const SCORE_FLOOR = 0.45;
@@ -234,7 +235,7 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 const uid = () => (crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2) + Date.now().toString(36));
 
 const caps = { sample: null, db: null, user: null, downloads: null, mcp: null };
-const state = { run: null, rows: [], roles: {}, userId: null, filter: "all", running: false, ctl: null, libraryOk: null };
+const state = { run: null, rows: [], roles: {}, userId: null, filter: "all", running: false, ctl: null, libraryOk: null, demo: false, snapshot: null };
 let parsedUpload = null;
 
 // --- capabilities -----------------------------------------------------------
@@ -253,7 +254,14 @@ let parsedUpload = null;
       setChip("chip-lib", state.libraryOk ? "ok" : "bad", state.libraryOk ? `Library: ${s.authStatus === "connected" ? "connected" : "will ask on first search"}` : "Library connector missing");
     } catch (e) { setChip("chip-lib", "warn", "Library: " + (e.code || "unknown")); }
   } else setChip("chip-lib", "bad", "Library connector unavailable");
-  if (!state.libraryOk) showNotice(`Add the "${LIBRARY_SERVER}" connector in claude.ai Settings → Connectors (an admin can add it for the organization). Without it, questions are triaged and routed but nothing is drafted.`);
+  if (!state.libraryOk) {
+    const snap = await fetch(SNAPSHOT_URL).then(r => r.ok ? r.json() : null).catch(() => null);
+    if (snap?.records?.length) {
+      state.snapshot = indexSnapshot(snap.records); state.demo = true; state.libraryOk = true;
+      setChip("chip-lib", "warn", `Library: demo snapshot (${snap.records.length} records, ${snap.built})`);
+      showNotice(`Demo mode: the "${LIBRARY_SERVER}" connector is not set up here, so answers are drawn from a bundled snapshot of the library (${snap.records.length} records as of ${snap.built}) using keyword matching, not the live index. Triage, routing and export are the real thing.`);
+    } else showNotice(`Add the "${LIBRARY_SERVER}" connector in claude.ai Settings → Connectors (an admin can add it for the organization). Without it, questions are triaged and routed but nothing is drafted.`);
+  }
   if (!caps.downloads) $("exportnote").textContent = "Export is unavailable in this view.";
   loadRuns();
 })();
@@ -326,7 +334,7 @@ async function startRun() {
   if (!qs.length) return showNotice("Paste at least one question or upload a questionnaire.", true);
   showNotice("");
   state.roles = { ae: $("ae").value.trim(), am: $("am").value.trim(), psm: $("psm").value.trim() };
-  state.run = { id: uid(), name: $("runname").value.trim() || `Run ${new Date().toLocaleString()}`, createdAt: new Date().toISOString(), total: qs.length, roles: state.roles, status: "running", libraryAvailable: !!state.libraryOk };
+  state.run = { id: uid(), name: $("runname").value.trim() || `Run ${new Date().toLocaleString()}`, createdAt: new Date().toISOString(), total: qs.length, roles: state.roles, status: "running", libraryAvailable: !!state.libraryOk, demo: state.demo };
   state.rows = qs.map(x => ({ id: uid(), n: x.n, question: x.q, lane: null, topic: null, route: "", esc: "", sources: [], topScore: null, draft: "", finalDraft: "", flags: [], stitched: false, uncovered: "", feedback: null, accepted: false, status: "pending", error: "" }));
   await dbRun("set", state.run);
   $("summary").hidden = false; $("rowspanel").hidden = false;
@@ -441,8 +449,12 @@ async function processRow(r) {
   if (state.libraryOk && !r.sources.length) {
     r.status = "retrieving"; renderRow(r);
     try {
-      const res = await caps.mcp.callTool(LIBRARY_SERVER, LIBRARY_TOOL, { question: r.question, topK: 5 }, { signal: state.ctl.signal });
-      const payload = res.payload && typeof res.payload === "object" ? res.payload : safeJson(res.content?.[0]?.text);
+      let payload;
+      if (state.demo) payload = { results: snapshotSearch(r.question, 5) };
+      else {
+        const res = await caps.mcp.callTool(LIBRARY_SERVER, LIBRARY_TOOL, { question: r.question, topK: 5 }, { signal: state.ctl.signal });
+        payload = res.payload && typeof res.payload === "object" ? res.payload : safeJson(res.content?.[0]?.text);
+      }
       r.sources = (payload?.results || []).map(s => ({ id: s.id, score: s.score, stack: s.stack, updated: s.updated, source: s.source, legal: !!s.legal_approved, tags: s.tags || [], question: s.question, answer: s.answer }));
       r.topScore = r.sources[0]?.score ?? 0;
     } catch (e) {
@@ -475,6 +487,22 @@ async function processRow(r) {
     if (fatal.has(e.code)) { state.ctl.abort(); showNotice(`Claude stopped answering: ${e.code}.`, true); }
   }
   dbRow("update", r);
+}
+// --- demo snapshot search (IDF-weighted keyword overlap; exact question match scores 1.0) -----
+const STOP = new Set("the a an and or of to in for on with is are be do does your you our we how what which can please describe provide any that this it as by from at".split(" "));
+const toks = t => [...new Set(String(t || "").toLowerCase().replace(/[^a-z0-9]+/g, " ").split(" ").filter(w => w.length > 2 && !STOP.has(w)))];
+function indexSnapshot(records) {
+  const df = new Map(), docs = records.map(r => { const q = toks(r.question), a = toks(r.answer); const all = new Set([...q, ...a]); all.forEach(t => df.set(t, (df.get(t) || 0) + 1)); return { r, q: new Set(q), all }; });
+  const idf = t => Math.log(1 + records.length / (df.get(t) || 1));
+  return { docs, idf };
+}
+function snapshotSearch(question, k) {
+  const { docs, idf } = state.snapshot, qt = toks(question), denom = qt.reduce((s, t) => s + idf(t), 0) || 1;
+  const scored = docs.map(d => { let s = 0; for (const t of qt) if (d.all.has(t)) s += idf(t) * (d.q.has(t) ? 1 : 0.6); return { d, score: Math.round(s / denom * 1000) / 1000 }; })
+    .filter(x => x.score > 0).sort((a, b) => b.score - a.score || (b.d.r.updated > a.d.r.updated ? 1 : -1));
+  const seen = new Set(), out = [];   // prefer-newest dedupe on normalised question
+  for (const x of scored) { const key = toks(x.d.r.question).join(" "); if (seen.has(key)) continue; seen.add(key); out.push({ ...x.d.r, score: x.score }); if (out.length >= k) break; }
+  return out;
 }
 function demote(r, why) { r.lane = "AMBER"; r.why = why; r.draft = r.finalDraft = ""; route(r); r.flags = [...new Set([...r.flags, "no library match"])]; r.status = "routed"; }
 function safeJson(s) { try { return JSON.parse(s); } catch { return null; } }
