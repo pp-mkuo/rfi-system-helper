@@ -42,7 +42,7 @@ The export spec requires red/amber/green cell fills. SheetJS Community Edition c
 1. **Caedon:** place a write-capable Pinecone key for the same project as `loopio-library-2` at `~/.config/rfi-system-helper/keys.env` (`chmod 600`, line `PINECONE_API_KEY=...`). Run `gcloud auth login` for project `agent-system-cmgibson`.
 2. **Agent:** `python3 pipeline/backfill_documents.py --create-index` and report the processing location that took (`us` needs Standard/Enterprise; Starter/Builder get `global`). PP's OpenAI org enforced US residency, so if `global` is what the plan allows, that is a decision for Caedon, not a default to accept silently.
 3. **Agent:** `--commit`, then `query_documents.py` spot checks (the HIPAA control question scored 0.899 on the old index; expect similar).
-4. **Agent:** `RFI_TOKEN=<long random> app/endpoint/deploy.sh`. Record the Cloud Run URL.
+4. **Agent:** `RFI_TOKEN=<long random> app/endpoint/deploy.sh`. Record the Cloud Run URL. Hosting project is `pp-ai-connectors` (created 2026-11-09 by Caedon as the shared home for Claude-to-data connector services; Ezra attaches billing). The first attempt in `agent-system-cmgibson` failed for lack of a billing account. The service runs as a dedicated service account with no roles.
 5. **Caedon (org owner):** add the custom connector `RFI Library` at `<url>/mcp/<token>` **org-wide**. Fallback if org-wide add is unavailable: each user adds it once under Settings → Connectors with the same name.
 6. **Agent:** open the artifact, run a sample questionnaire end to end, confirm rows in `db` under `logs/<viewer>/runs/...`, fix, republish to the same URL.
 7. **Caedon:** share the artifact to the PulsePoint org.
