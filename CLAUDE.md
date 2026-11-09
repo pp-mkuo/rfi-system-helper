@@ -51,6 +51,8 @@ Items 1 to 4 are per-user friction that scales badly. Item 5 is one-time.
 | **Retrieval behind a webhook** (n8n or small service) doing embed + query server-side | Yes | Centralised | Medium | Removes items 2 and 3 too. One domain to allowlist. Central query log feeds library gap analysis. PP already runs n8n (`n8n-labs.pulsepoint.com`), and `legacy/.../n8n_RFI_Workflow.json` is a starting point. Caveat from Caedon's memory: the n8n labs → prod migration is blocked on KUBE-1136. |
 | Fabric ADK tool (legacy `SPEC.md`) | Yes | Centralised | High (eng) | Needs `pulsepointinc/bi-services` PR access. |
 
+**Build status 2026-11-09:** the shape below is built on branch `productionise-artifact` (`pipeline/backfill_documents.py`, `pipeline/query_documents.py`, `app/endpoint/`, `app/rfi-system-helper.html`) and the artifact is published privately; index, service and connector were not yet live. One correction to the plan: **artifact pages cannot `fetch()` any external host** (CSP), so the page does not call a REST URL. The service is also an MCP server and the page reaches it through the `mcp` capability via a claude.ai custom connector named exactly `RFI Library`. Details in `docs/rfi-system-helper-status-2026-11-09.md`.
+
 **Likely shape (revised 2026-11-06, Caedon):** a **Claude artifact** shared to the PulsePoint org, plus one tiny hosted retrieval endpoint. The artifact's `sample` capability makes Claude the generation layer on the viewer's seat (no account skill, no desktop link, no Anthropic key); `db` logs every question, retrieved record IDs, draft and feedback per viewer; `downloads` + SheetJS produce the xlsx. The page cannot hold a secret, so retrieval goes through one URL that holds the Pinecone key. With a `text-embedding-3-small` document index, that endpoint is a pure pass-through to Pinecone's Documents search (no OpenAI call, no OpenAI key). Caedon's call 2026-11-06: endpoint auth is a later concern; Claude org sign-in is the gate for now, an org-visible token in the page is acceptable. Pinecone's own MCP is a local `npx` stdio server with an API key (not OAuth, not a hosted connector) and targets legacy Records-API indexes, so it is not a path for the artifact. The earlier plugin option remains the fallback.
 
 ## Open decisions that block "production"
@@ -70,7 +72,8 @@ Items 1 to 4 are per-user friction that scales badly. Item 5 is one-time.
 | Retrieval script | `pipeline/query.py` |
 | Index facts, blockers, embedding recipe | `docs/loopio-library-2-access.md`, `pipeline/SETUP-2026-09-02.md` |
 | Triage rules | `docs/rfi-scope-triage.md` |
-| Status, rollout plan, deployment options | `docs/rfi-system-helper-status-2026-09-14.md` |
+| Status, rollout plan, deployment options | `docs/rfi-system-helper-status-2026-11-09.md` (current), `docs/rfi-system-helper-status-2026-09-14.md` (skill-only phase) |
+| Shared path: index build, service, artifact | `pipeline/backfill_documents.py`, `app/endpoint/server.js`, `app/rfi-system-helper.html` |
 | Repo-level summary and review questions | `README.md` |
 | Previous build (Fabric / n8n / Weaviate) | `legacy/fabric-weaviate-autoresponder/SPEC.md` |
 | Meeting source | `~/IDE Files/shade-os/agents/meet-source/data/transcripts/2026-11-06-maggie-caedon-maggie-catch-up.md` |

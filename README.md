@@ -24,6 +24,24 @@ skill/SKILL.md ── 3. Draft from retrieved records only, with sources, dates,
 
 The skill runs inside Claude with the user's computer linked. It calls `query.py` from `~/Desktop/pinecone-loopio/`, which reads `keys.env` from the same folder (Pinecone + OpenAI keys; not in this repo — see `pipeline/keys.env.example`).
 
+## Shared path (Nov 2026, branch `productionise-artifact`)
+
+A second way to run the same workflow, for anyone in the PulsePoint Claude org, with no desktop link and no personal keys. Built 2026-11-06/09; see `docs/rfi-system-helper-status-2026-11-09.md` for state and go-live steps.
+
+```
+Claude artifact (app/rfi-system-helper.html)
+  triage → retrieve → draft (sample) → review → export (.xlsx) · logs every run to db
+        │ mcp capability, connector "RFI Library"
+        ▼
+Retrieval service (app/endpoint/server.js, Cloud Run)   POST /search · POST /mcp/<token>
+        │ holds the only secret: the Pinecone key
+        ▼
+Pinecone document index `rfi-answer-library` — embeds on write and on query with
+text-embedding-3-small (same model as the library), so no OpenAI key anywhere
+```
+
+Build the index from this repo's backups with `pipeline/backfill_documents.py` (dry run by default, `--create-index`, `--commit` writes a rollback file). Query it from a shell with `pipeline/query_documents.py`. The legacy `loopio-library-2` index is untouched by all of this.
+
 ## Repo layout
 
 | Path | What it is |
@@ -34,6 +52,10 @@ The skill runs inside Claude with the user's computer linked. It calls `query.py
 | `pipeline/ingest_rfi_2026.py` + `records.json` | Sept 16 ingest: 202 answers from three 2026 RFIs, IDs `rfi2026-*`. Dry run by default; `--commit`, `--rollback`. |
 | `pipeline/ingest_qabank.py` + `qabank_records.json` | Oct 23 ingest: the supply team's RFI Q&A Bank (Supply / Demand / Agency-Client), IDs `qabank-*`, tagged `Unverified` / `Needs SME Review`. |
 | `pipeline/apply_rewrites.py` + `qabank_rewrites_approved.json` | Oct 28: applies 16 human-approved fixes to Q&A Bank records (14 rewrites, 2 deletions/merges). `qabank_records.json` reflects the post-rewrite state (586 records). |
+| `pipeline/backfill_documents.py` | Nov 2026: creates the `rfi-answer-library` document index (hosted `text-embedding-3-small`, 1536, cosine) and backfills 2,297 records from the CSV + JSONs below. Dry run by default; `--create-index`, `--commit`, `--rollback`, `--delete-index`. |
+| `pipeline/query_documents.py` | Nov 2026: text-in search against the document index, same output shape and dedupe as `query.py`; `--eval file.json` for the Dentsu top-1 check. |
+| `app/endpoint/` | Nov 2026: zero-dependency Node service (REST + MCP) for Cloud Run; `deploy.sh`, `test.js`. |
+| `app/rfi-system-helper.html` | Nov 2026: the Claude artifact. Triage rules, routing table and drafting rules from `skill/SKILL.md` ported as data. |
 | `pipeline/SETUP-2026-09-02.md` | Original setup notes from when the pipeline first worked. Record counts and the duplicate note are out of date. |
 | `data/loopio_library_export_updated.csv` | Plain-file export of the Loopio library. **Loopio is retired**, so this is the only full plain-file copy of the original library outside Pinecone. 1,591 rows: `Client Strategy- Cleaned` 808, `Client Strategy` 783. The index's cleaned stack has 726 — the extra 82 look like RFI rows added by `legacy/.../append_rfi_to_csv.py`; worth confirming. |
 | `docs/` | Design notes: scope triage rules, index access and data issues, Sept status and rollout plan. |
@@ -59,12 +81,13 @@ The skill runs inside Claude with the user's computer linked. It calls `query.py
 
 **Not yet**
 - No one other than Maggie has run it.
-- No frozen eval set checked in (the 14 Dentsu questions + correct records).
+- No frozen eval set checked in (the 14 Dentsu questions + correct records). Requested from Maggie 2026-11-07; slot in `docs/rfi-system-helper-status-2026-11-09.md`.
+- The shared path (artifact + service + new index) is built and locally tested but was not live as of 2026-11-09.
 - Auto-triggering on a natural request is untested.
 
 ## Review questions for Caedon
 
-1. **Sharing / deployment.** Today each user needs their own Pinecone + OpenAI keys and a linked desktop with this folder at a hardcoded path. Is the n8n-webhook option (retrieval server-side, keys centralised, query logging) the right next step, or a plugin first? See `docs/rfi-system-helper-status-2026-09-14.md`.
+1. **Sharing / deployment.** ~~n8n webhook or plugin first?~~ Decided 2026-11-06/07: Claude artifact + one hosted retrieval service (see "Shared path" above). Plugin stays as the fallback.
 2. **System of record.** With Loopio retired, Pinecone is the only live copy of the answer library: no editing UI, no version history. Full backups exist only as `data/loopio_library_export_updated.csv` + the two ingest JSONs. What should own the library going forward?
 3. **Ingest scripts.** `ingest_*.py` and `apply_rewrites.py` write to the live index. Are the dry-run / `--rollback` patterns sound?
 4. **Retrieval.** Dense-only. A sparse/hybrid test for acronym-heavy queries (NPI, Rx/Dx/Px) is the one configuration not tried.
