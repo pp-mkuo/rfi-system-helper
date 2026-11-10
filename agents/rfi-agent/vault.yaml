@@ -1,0 +1,6 @@
+# Container only. Credentials are added in the Console, never in this repo:
+#   PINECONE_API_KEY  environment variable, header only,
+#                     allowed host loopio-library-2-yxxbxim.svc.gcp-us-central1-4a9f.pinecone.io
+#   OPENAI_API_KEY    environment variable, header only, allowed host us.api.openai.com
+type: vault
+display_name: rfi-agent

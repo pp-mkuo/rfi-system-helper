@@ -19,12 +19,15 @@ Ranking is by date rather than by stack membership, so:
   --cleaned-only  shorthand for --stack "Client Strategy- Cleaned".
                   NOTE: this excludes the RFI 2026 batch. Prefer the default.
 
-Reads keys from keys.env in this folder. Never prints key values.
+Reads keys from keys.env in this folder, else from the environment.
+Never prints key values.
 """
 import json, os, sys, urllib.request
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-INDEX_HOST = "https://loopio-library-2-rme8ns3.svc.aped-4627-b74a.pinecone.io"
+# The managed agent sets PINECONE_INDEX_HOST to its own project's copy of the index.
+INDEX_HOST = os.environ.get("PINECONE_INDEX_HOST",
+                            "https://loopio-library-2-rme8ns3.svc.aped-4627-b74a.pinecone.io")
 EMBED_MODEL = "text-embedding-3-small"
 # us.api first: our OpenAI org enforces US data residency.
 OPENAI_HOSTS = ("https://us.api.openai.com", "https://api.openai.com")
@@ -35,16 +38,19 @@ NAMESPACE = ""  # this index uses the empty namespace, not __default__
 
 
 def load_keys():
-    keys = {}
-    with open(os.path.join(HERE, "keys.env")) as fh:
-        for line in fh:
-            line = line.strip()
-            if line and not line.startswith("#") and "=" in line:
-                k, v = line.split("=", 1)
-                keys[k.strip()] = v.strip().strip('"').strip("'")
+    # keys.env on a laptop; environment variables in a managed agent (vault placeholders).
+    keys = {k: os.environ.get(k) for k in ("PINECONE_API_KEY", "OPENAI_API_KEY")}
+    path = os.path.join(HERE, "keys.env")
+    if os.path.exists(path):
+        with open(path) as fh:
+            for line in fh:
+                line = line.strip()
+                if line and not line.startswith("#") and "=" in line:
+                    k, v = line.split("=", 1)
+                    keys[k.strip()] = v.strip().strip('"').strip("'")
     missing = [k for k in ("PINECONE_API_KEY", "OPENAI_API_KEY") if not keys.get(k)]
     if missing:
-        sys.exit("Missing in keys.env: " + ", ".join(missing))
+        sys.exit("Missing in keys.env or environment: " + ", ".join(missing))
     return keys
 
 

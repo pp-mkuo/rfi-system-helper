@@ -1,0 +1,59 @@
+---
+provenance: agent-generated
+last-verified: never
+---
+
+# RFI managed agent: the frame
+
+Point-in-time plan, written 2026-11-10 by Caedon's agent. The design is the Paper file "RFI managed agent — puzzle pieces" (two boards: the pieces, and where they go). Managed Agents is in beta, so check field names against current docs before reusing this.
+
+## Goal
+
+A working agent built only from pieces that exist today, so the missing ones can be added afterwards.
+
+## Decisions (Caedon, 2026-11-10)
+
+- Library: today's `loopio-library-2`, the scored one. Needs the OpenAI key as well as the Pinecone key. The agent uses the copy in Caedon's Pinecone project (`loopio-library-2-yxxbxim.svc.gcp-us-central1-4a9f.pinecone.io`), not Maggie's (`...-rme8ns3.svc.aped-4627-b74a...`): keys only work inside their own project. `query.py` takes the host from `PINECONE_INDEX_HOST`, defaulting to Maggie's.
+- Files live in this repo under `agents/rfi-agent/`, synced with `ant apply`.
+- Workspace: the Anthropic workspace pp-joke's key reaches ("Default").
+- Keys: Caedon adds them to the vault in the Console. They never go in this repo or a chat.
+
+## What's in the frame
+
+| File | What it creates |
+|---|---|
+| `agents/rfi-agent/environment.yaml` | Workspace with limited networking: the index host and `us.api.openai.com` only |
+| `agents/rfi-agent/vault.yaml` | Empty vault. Credentials are added in the Console |
+| `agents/rfi-agent/agent.md` | The agent: Claude Opus 5.5, web tools off, three skills |
+| `agents/rfi-agent/skills/rfi-system-helper/` | Maggie's skill, with the desktop-only parts removed (setup, keys, path) |
+| `agents/rfi-agent/skills/library-search/` | `pipeline/query.py` plus instructions |
+
+`pipeline/query.py` now reads keys from the environment when `keys.env` is missing, so it runs unchanged on a laptop and in the agent.
+
+## Steps
+
+1. Upgrade `ant` to 1.34 or later (1.8.0 is installed; `apply` needs 1.30, vaults 1.34).
+2. Point `ant` at pp-joke's workspace. The current CLI key reaches a different workspace (the presales agents).
+3. `ant apply --dry-run -v agents/rfi-agent/agent.md agents/rfi-agent/environment.yaml agents/rfi-agent/vault.yaml`, review, then apply. Commit `claude-lock.json`.
+4. In the Console, add two environment-variable credentials to the `rfi-agent` vault, header only:
+   - `PINECONE_API_KEY`, allowed host `loopio-library-2-yxxbxim.svc.gcp-us-central1-4a9f.pinecone.io`
+   - `OPENAI_API_KEY`, allowed host `us.api.openai.com`
+5. Test with a CLI session that attaches the vault (`--vault-ids`), starting with the HIPAA check question (expect ~0.89), then a green, an amber and a red question.
+
+## Result (2026-11-10)
+
+Applied to pp-joke's workspace; IDs are in `claude-lock.json`. Tested from the CLI with the vault attached:
+
+- The vault adds both keys at egress (OpenAI in `Authorization`, Pinecone in `Api-Key`).
+- HIPAA check: top match 0.8993, as expected.
+- Green (HCP targeting by specialty): answered from the library. Amber (last quarter's IVT rate): no library match, routed to Divyang / Matt Katz. Red (SOC 2 report): routed to the security team, no draft.
+
+## Known gaps after the frame
+
+- **Caedon's index copy has 1,509 vectors** (the Loopio export only). Maggie's has ~2,297, adding the RFI 2026 batch (202) and the Q&A Bank (586). Load them, or move to `rfi-answer-library`.
+
+- **pp-joke can't reach the keys yet.** It creates sessions with only the agent, environment and title (`server/index.js:142`), and vaults attach per session. pp-joke needs a vault setting before people can use the agent through it.
+- Routing directory, ad specs and library upkeep skills.
+- The helper page still calls the "RFI Library" connector.
+- The library choice waits on the 14 Dentsu test questions.
+- `rfp-builder` (referenced by Maggie's skill) isn't in this repo.
