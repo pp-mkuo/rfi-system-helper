@@ -58,7 +58,7 @@ Re-tested with the vault attached. Both questions matched `RFI 2026` records at 
 
 ## Known gaps after the frame
 
-- **pp-joke can't reach the keys yet.** It creates sessions with only the agent, environment and title (`server/index.js:142`), and vaults attach per session. pp-joke needs a vault setting before people can use the agent through it.
+- **pp-joke vault support: built, not yet installed (2026-11-11).** pp-joke 0.2.4 reads `environment_id` and `vault_ids` from the agent's `metadata`, which `agent.md` now sets. Tested by driving the connector directly: the session opened with the vault, and the HIPAA search returned a top match of 0.8596. The plugin build still has to be installed and given out to people.
 - Routing directory, ad specs and library upkeep skills.
 - The helper page still calls the "RFI Library" connector.
 - The library choice waits on the 14 Dentsu test questions.

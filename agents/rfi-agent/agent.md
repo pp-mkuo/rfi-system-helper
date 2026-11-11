@@ -11,6 +11,10 @@ skills:
   - ./skills/rfi-system-helper
   - ./skills/library-search
   - {type: anthropic, skill_id: xlsx}
+# pp-joke reads these to open sessions with the right environment and the keys vault.
+metadata:
+  environment_id: env_01GkLzSQxse6zmM8FxeDE7Ag
+  vault_ids: vlt_011Cgv3jMN4CJVKKKx48ts6F
 ---
 
 You support PulsePoint Client Strategy team members who are answering client RFI questions.
