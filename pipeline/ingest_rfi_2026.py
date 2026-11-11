@@ -23,7 +23,9 @@ import urllib.error
 import urllib.request
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-HOST = 'https://loopio-library-2-rme8ns3.svc.aped-4627-b74a.pinecone.io'
+# Set PINECONE_INDEX_HOST to load another project's copy of the index.
+HOST = os.environ.get('PINECONE_INDEX_HOST',
+                      'https://loopio-library-2-rme8ns3.svc.aped-4627-b74a.pinecone.io')
 NAMESPACE = ''          # this index uses the empty namespace
 EMBED_MODEL = 'text-embedding-3-small'
 EMBED_URL = 'https://us.api.openai.com/v1/embeddings'   # US data residency
@@ -32,17 +34,18 @@ UPSERT_BATCH = 50
 
 
 def load_keys():
-    keys = {}
-    with open(os.path.join(HERE, 'keys.env')) as f:
-        for line in f:
-            line = line.strip()
-            if line.startswith('#') or '=' not in line:
-                continue
-            k, v = line.split('=', 1)
-            keys[k.strip()] = v.strip().strip('"').strip("'")
+    # keys.env if present, else environment variables
+    keys = {k: os.environ.get(k) for k in ('PINECONE_API_KEY', 'OPENAI_API_KEY')}
+    path = os.path.join(HERE, 'keys.env')
+    for line in (open(path) if os.path.exists(path) else []):
+        line = line.strip()
+        if line.startswith('#') or '=' not in line:
+            continue
+        k, v = line.split('=', 1)
+        keys[k.strip()] = v.strip().strip('"').strip("'")
     missing = [k for k in ('PINECONE_API_KEY', 'OPENAI_API_KEY') if not keys.get(k)]
     if missing:
-        sys.exit(f'keys.env is missing: {", ".join(missing)}')
+        sys.exit(f'Missing in keys.env or environment: {", ".join(missing)}')
     return keys
 
 

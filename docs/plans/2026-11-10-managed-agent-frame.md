@@ -48,9 +48,15 @@ Applied to pp-joke's workspace; IDs are in `claude-lock.json`. Tested from the C
 - HIPAA check: top match 0.8993, as expected.
 - Green (HCP targeting by specialty): answered from the library. Amber (last quarter's IVT rate): no library match, routed to Divyang / Matt Katz. Red (SOC 2 report): routed to the security team, no draft.
 
-## Known gaps after the frame
+## Index filled (2026-11-11)
 
-- **Caedon's index copy has 1,509 vectors** (the Loopio export only). Maggie's has ~2,297, adding the RFI 2026 batch (202) and the Q&A Bank (586). Load them, or move to `rfi-answer-library`.
+Caedon's copy started with 1,509 vectors (the Loopio export only). Loaded the RFI 2026 batch (202) and the Q&A Bank (586, approved rewrites already in `qabank_records.json`) with the existing ingest scripts, which now take `PINECONE_INDEX_HOST` and environment keys like `query.py`. Count went 1,509 → 1,711 → 2,297, the same as Maggie's index. `--rollback` on either script removes its batch.
+
+The vault's Pinecone key is read-only, which is all the agent needs. Loading needed a separate ReadWrite key, typed into a terminal and not stored. A read-only key passes `describe_index_stats` but shows up on upsert as `BrokenPipeError`, not a 403.
+
+Re-tested with the vault attached. Both questions matched `RFI 2026` records at the top: audience quality and claims optimization at 0.7519, and SSPs at 0.5924. On the SSP question, the agent skipped a higher-scoring `RFI Q&A Bank v2 (unverified)` answer (0.792) and flagged it for the supply team to check.
+
+## Known gaps after the frame
 
 - **pp-joke can't reach the keys yet.** It creates sessions with only the agent, environment and title (`server/index.js:142`), and vaults attach per session. pp-joke needs a vault setting before people can use the agent through it.
 - Routing directory, ad specs and library upkeep skills.
