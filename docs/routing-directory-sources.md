@@ -7,6 +7,34 @@ last-verified: never
 
 Point-in-time snapshot, 2026-11-12. Written by an agent session while drafting `agents/rfi-agent/skills/routing-directory/SKILL.md`. Contacts and org charts change; re-check against the live sources before relying on any name here.
 
+## Decisions for Maggie
+
+The agent routes RFI questions to named owners. The sources below disagree, so the draft skill cannot be final until you answer. Reply on AF-40 with the question number and letter, for example "Q1 A, Q2 Julie left". "Don't know" is a fine answer; say who would know. The conflict numbers (C1, C2 ...) point to the reference table further down.
+
+**Terms.** *How-To Doc* = the Google Doc "How-To: Completing an RFI". *WIP table* = the contact table in that Doc headed "Point of Contact - WIP". *Q&A Bank* = the RFI Q&A Bank sheet, Owners tab. *IB RFI alias* = the shared mailbox rfi@internetbrands.com. *TPM* = the technical contact the Q&A Bank lists for integration and platform questions.
+
+| # | Question | Options | Your answer |
+|---|---|---|---|
+| Q1 | The How-To Doc has two contact tables, an older one and the WIP one. They name different people for platform, inventory and data questions (C1). The draft follows the WIP table. Is that the current one? | A: WIP is current. B: The older one is current. C: Neither fully; tell me what to mix. | |
+| Q2 | We could not find these four in Slack, so they may have left (C2): Johnson Lin, Jordan Brickman, Chris Schaal, Julie Maggio. Only Julie Maggio is in the draft (escalation for reporting and billing). Which have left or moved? | For each name: still here / left / not sure. If Julie left, who is the reporting and billing escalation? | |
+| Q3 | Marjorie Kazin (Account Director, Supply) is in the older table for exchange and supply scale, but not in the WIP table. She is still active (C3). Should she be a contact for exchange and supply-scale questions? | A: Yes, add her. B: No, leave her out. | |
+| Q4 | In the Q&A Bank, Michael Pessis confirmed owners for supply and demand RFIs on 2026-10-21. For agency/client RFIs, which is what this agent answers, the Bank still says "proposed" (C5). Should the draft show those owners as confirmed? Affected rows: tech integrations, OpenRTB, deals/PMP, brand safety/IVT. | A: Keep "confirmed". B: Mark them "owner unconfirmed" for agency RFIs. | |
+| Q5 | Nobody is named for HR, DE&I or company-policy questions. The draft sends them to the IB RFI alias, but a Confluence page says that alias only handles security and compliance (C7). Who should get these? | A: The IB RFI alias is fine. B: A named person (give the name). C: There is no owner; flag it as a gap. | |
+| Q6 | Two topics have no owner (C11): (a) data process, data foundation and targeting methodology; (b) supply path, schain, sellers.json and ads.txt. The Q&A Bank suggests Matt Katz for the policy side and the TPM for the technical side of (b). Who owns each? | Give a name for (a) and for (b), or "none yet". | |
+
+**Quick confirms** (a yes or a correction is enough):
+
+| # | Check | Your answer |
+|---|---|---|
+| Q7 | Brand safety lists "Divyang / Matt Katz" in the How-To Doc. Are they two people, and who is first? (C4) | |
+| Q8 | Erica Yard is on the Supply team. Should she be a reporting and billing contact for agency/client RFIs? (C10) | |
+| Q9 | Jessica Hoffman (legal) is listed as email or gchat only, at jhhoffman@webmd.net, not Slack. Still right? (C9) | |
+| Q10 | A Confluence page ("RFI Process") names "Mirian" for security and data. We could not find that person and left them out. Who is it, and should they be added? (C8) | |
+
+Not asking: C6 (legal and privacy lists both Jessica Hoffman and the IB RFI team; no change needed).
+
+Once answered, the skill rows are updated and the draft PR moves out of draft.
+
 ## Where the list is
 
 **"How-To: Completing an RFI"** is a Google Doc, not a message.
