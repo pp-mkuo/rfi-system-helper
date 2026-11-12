@@ -1,0 +1,1086 @@
+{
+ "_about": "AF-49 retrieval test set, built 2026-11-12. A point-in-time snapshot of loopio-library-2 (2,297 records); record ids may drift if the library is re-ingested. expected_ids = primary_id plus every record with the same question text or the same answer text (the library holds duplicates across stacks), plus hand-added near-duplicates. written_by: 'client' = stored RFI 2026 wording, used verbatim (leaks the stored text, so treat as a ceiling); 'claude' = paraphrase written by Claude with the stored wording held out; 'rfi-system-helper skill' = the skill's HIPAA verify question.",
+ "items": [
+  {
+   "id": "af49-001",
+   "source": "loopio",
+   "origin": "hipaa-check",
+   "written_by": "rfi-system-helper skill",
+   "question": "How does PulsePoint maintain HIPAA compliance?",
+   "primary_id": "13131320",
+   "expected_ids": [
+    "11344268",
+    "13131320"
+   ]
+  },
+  {
+   "id": "af49-002",
+   "source": "rfi2026",
+   "origin": "rfi2026-verbatim",
+   "written_by": "client",
+   "question": "How do your controls handle data encryption (at rest and in transit), secure deletion, and data masking?",
+   "primary_id": "rfi2026-cmi0826-028",
+   "expected_ids": [
+    "rfi2026-cmi0826-028"
+   ]
+  },
+  {
+   "id": "af49-003",
+   "source": "rfi2026",
+   "origin": "rfi2026-verbatim",
+   "written_by": "client",
+   "question": "Do you have any solutions to pull in ad server creative information?",
+   "primary_id": "rfi2026-kso-029",
+   "expected_ids": [
+    "13276578",
+    "rfi2026-kso-029"
+   ]
+  },
+  {
+   "id": "af49-004",
+   "source": "rfi2026",
+   "origin": "rfi2026-verbatim",
+   "written_by": "client",
+   "question": "What is your escalation process for critical issues?",
+   "primary_id": "rfi2026-cmi2025-060",
+   "expected_ids": [
+    "rfi2026-cmi2025-060"
+   ]
+  },
+  {
+   "id": "af49-005",
+   "source": "rfi2026",
+   "origin": "rfi2026-verbatim",
+   "written_by": "client",
+   "question": "Can you activate endemically on newer channels against a specific NPI list?",
+   "primary_id": "rfi2026-kso-013",
+   "expected_ids": [
+    "11344496",
+    "13131125",
+    "13276559",
+    "13276568",
+    "rfi2026-kso-013"
+   ]
+  },
+  {
+   "id": "af49-006",
+   "source": "rfi2026",
+   "origin": "rfi2026-verbatim",
+   "written_by": "client",
+   "question": "What e-Newsletter (eNL) inventory do you have?",
+   "primary_id": "rfi2026-kso-012",
+   "expected_ids": [
+    "13276558",
+    "qabank-AGC-012",
+    "rfi2026-kso-012"
+   ]
+  },
+  {
+   "id": "af49-007",
+   "source": "rfi2026",
+   "origin": "rfi2026-verbatim",
+   "written_by": "client",
+   "question": "Can you provide NPI reach data per our campaign breakout? At what cadence? Can we pull these reports directly in the DSP?",
+   "primary_id": "rfi2026-kso-071",
+   "expected_ids": [
+    "11344467",
+    "13130583",
+    "13276622",
+    "rfi2026-kso-071"
+   ]
+  },
+  {
+   "id": "af49-008",
+   "source": "rfi2026",
+   "origin": "rfi2026-verbatim",
+   "written_by": "client",
+   "question": "What identity graphs are integrated with your platform? (LiveRamp, Axciom, etc.)",
+   "primary_id": "rfi2026-cmi2025-007",
+   "expected_ids": [
+    "rfi2026-cmi2025-007"
+   ]
+  },
+  {
+   "id": "af49-009",
+   "source": "rfi2026",
+   "origin": "rfi2026-verbatim",
+   "written_by": "client",
+   "question": "Does your healthcare data support targeting oncology related conditions? If so, how specific would we be able to get to i.e.: breast cancer vs. HER2+, CLL, CML, AML vs. blood cancer, hence at more condition specific disease state?",
+   "primary_id": "rfi2026-cmi0826-052",
+   "expected_ids": [
+    "rfi2026-cmi0826-052"
+   ]
+  },
+  {
+   "id": "af49-010",
+   "source": "rfi2026",
+   "origin": "rfi2026-verbatim",
+   "written_by": "client",
+   "question": "Please provide details on how PLD data is QA'd before being shared with CMI.",
+   "primary_id": "rfi2026-cmi2025-022",
+   "expected_ids": [
+    "rfi2026-cmi2025-022"
+   ]
+  },
+  {
+   "id": "af49-011",
+   "source": "rfi2026",
+   "origin": "rfi2026-verbatim",
+   "written_by": "client",
+   "question": "What is your opt-out reporting procedures",
+   "primary_id": "rfi2026-cmi0826-025",
+   "expected_ids": [
+    "rfi2026-cmi0826-025"
+   ]
+  },
+  {
+   "id": "af49-012",
+   "source": "rfi2026",
+   "origin": "rfi2026-verbatim",
+   "written_by": "client",
+   "question": "Can we get real time data from your measurement partners (Crossix, IQVIA) within the DSP itself? Is there a lag?",
+   "primary_id": "rfi2026-kso-064",
+   "expected_ids": [
+    "11344473",
+    "13131141",
+    "13276615",
+    "rfi2026-kso-064"
+   ]
+  },
+  {
+   "id": "af49-013",
+   "source": "rfi2026",
+   "origin": "rfi2026-verbatim",
+   "written_by": "client",
+   "question": "Please explain how you maintain Audience Quality across various destination points for media activation.",
+   "primary_id": "rfi2026-cmi0826-031",
+   "expected_ids": [
+    "13276591",
+    "rfi2026-cmi0826-031",
+    "rfi2026-kso-041"
+   ]
+  },
+  {
+   "id": "af49-014",
+   "source": "rfi2026",
+   "origin": "rfi2026-verbatim",
+   "written_by": "client",
+   "question": "What are your frequency capping capabilities? (Campaign level frequency caps, limitations, etc. Across channels, campaigns, PGs, etc.)",
+   "primary_id": "rfi2026-cmi2025-036",
+   "expected_ids": [
+    "rfi2026-cmi2025-036"
+   ]
+  },
+  {
+   "id": "af49-015",
+   "source": "rfi2026",
+   "origin": "rfi2026-verbatim",
+   "written_by": "client",
+   "question": "What % of the HCP universe can your platform reach?",
+   "primary_id": "rfi2026-kso-006",
+   "expected_ids": [
+    "11344503",
+    "13130913",
+    "13276552",
+    "rfi2026-kso-006"
+   ]
+  },
+  {
+   "id": "af49-016",
+   "source": "rfi2026",
+   "origin": "rfi2026-verbatim",
+   "written_by": "client",
+   "question": "How current is PulsePoint HCP data? What is the typical data age and refresh trigger for each HCP data element?",
+   "primary_id": "rfi2026-kso-078",
+   "expected_ids": [
+    "rfi2026-kso-078"
+   ]
+  },
+  {
+   "id": "af49-017",
+   "source": "rfi2026",
+   "origin": "rfi2026-verbatim",
+   "written_by": "client",
+   "question": "Does your organization have an integration with WPP's AmeriLINK Activate?",
+   "primary_id": "rfi2026-cmi0826-020",
+   "expected_ids": [
+    "rfi2026-cmi0826-020"
+   ]
+  },
+  {
+   "id": "af49-018",
+   "source": "rfi2026",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Can our agency team log in and run campaigns ourselves, or is it managed service only?",
+   "primary_id": "rfi2026-cmi0826-011",
+   "expected_ids": [
+    "rfi2026-cmi0826-011"
+   ]
+  },
+  {
+   "id": "af49-019",
+   "source": "rfi2026",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "What should we know about retargeting pixels? Do you offer a universal pixel?",
+   "primary_id": "rfi2026-cmi2025-009",
+   "expected_ids": [
+    "rfi2026-cmi0826-033",
+    "rfi2026-cmi2025-009"
+   ]
+  },
+  {
+   "id": "af49-020",
+   "source": "rfi2026",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Can you predict which patients are likely to develop a condition and target them before diagnosis?",
+   "primary_id": "rfi2026-cmi0826-053",
+   "expected_ids": [
+    "rfi2026-cmi0826-053"
+   ]
+  },
+  {
+   "id": "af49-021",
+   "source": "rfi2026",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Do you have your own contextual targeting product?",
+   "primary_id": "rfi2026-cmi2025-056",
+   "expected_ids": [
+    "rfi2026-cmi2025-056"
+   ]
+  },
+  {
+   "id": "af49-022",
+   "source": "rfi2026",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "How long does it take for a third-party segment to populate and be ready to use?",
+   "primary_id": "rfi2026-kso-040",
+   "expected_ids": [
+    "13276590",
+    "rfi2026-kso-040"
+   ]
+  },
+  {
+   "id": "af49-023",
+   "source": "rfi2026",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Which media channels can we buy through you: CTV, online video, display, others?",
+   "primary_id": "rfi2026-cmi2025-029",
+   "expected_ids": [
+    "rfi2026-cmi2025-029"
+   ]
+  },
+  {
+   "id": "af49-024",
+   "source": "rfi2026",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Will we be charged any partner fees on top of media?",
+   "primary_id": "rfi2026-kso-057",
+   "expected_ids": [
+    "11344817",
+    "13130636",
+    "13276607",
+    "qabank-AGC-124",
+    "rfi2026-kso-057"
+   ]
+  },
+  {
+   "id": "af49-025",
+   "source": "rfi2026",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "How do you connect consumer and HCP campaigns so they reinforce each other?",
+   "primary_id": "rfi2026-cmi2025-014",
+   "expected_ids": [
+    "rfi2026-cmi2025-014"
+   ]
+  },
+  {
+   "id": "af49-026",
+   "source": "rfi2026",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Ballpark, what's the data CPM for your first-party audiences?",
+   "primary_id": "rfi2026-kso-008",
+   "expected_ids": [
+    "11344502",
+    "13130912",
+    "13276554",
+    "rfi2026-kso-008"
+   ]
+  },
+  {
+   "id": "af49-027",
+   "source": "rfi2026",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Besides email, can we reach your support team in real time, like on Teams or Slack?",
+   "primary_id": "rfi2026-kso-053",
+   "expected_ids": [
+    "11344478",
+    "13131146",
+    "13276603",
+    "qabank-AGC-015",
+    "rfi2026-kso-053"
+   ]
+  },
+  {
+   "id": "af49-028",
+   "source": "rfi2026",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "How fresh are the numbers in your reporting dashboard? What's the lag?",
+   "primary_id": "rfi2026-cmi2025-025",
+   "expected_ids": [
+    "rfi2026-cmi2025-025"
+   ]
+  },
+  {
+   "id": "af49-029",
+   "source": "rfi2026",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "How far back can we pull delivery and performance data?",
+   "primary_id": "rfi2026-cmi2025-026",
+   "expected_ids": [
+    "rfi2026-cmi2025-026"
+   ]
+  },
+  {
+   "id": "af49-030",
+   "source": "rfi2026",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Do you support dynamic creative optimization?",
+   "primary_id": "rfi2026-cmi2025-038",
+   "expected_ids": [
+    "rfi2026-cmi2025-038"
+   ]
+  },
+  {
+   "id": "af49-031",
+   "source": "rfi2026",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Can you ingest daily trigger files of HCPs or patients and act on them quickly?",
+   "primary_id": "rfi2026-cmi0826-034",
+   "expected_ids": [
+    "rfi2026-cmi0826-034",
+    "rfi2026-cmi2025-010"
+   ]
+  },
+  {
+   "id": "af49-032",
+   "source": "rfi2026",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Does your identity graph include social determinants of health?",
+   "primary_id": "rfi2026-cmi0826-048",
+   "expected_ids": [
+    "rfi2026-cmi0826-048"
+   ]
+  },
+  {
+   "id": "af49-033",
+   "source": "rfi2026",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Can we build campaigns in bulk from a spreadsheet upload?",
+   "primary_id": "rfi2026-cmi2025-031",
+   "expected_ids": [
+    "rfi2026-cmi2025-031"
+   ]
+  },
+  {
+   "id": "af49-034",
+   "source": "rfi2026",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Can we schedule separate flights inside one campaign, say by week or month?",
+   "primary_id": "rfi2026-kso-039",
+   "expected_ids": [
+    "11344813",
+    "13130666",
+    "13276589",
+    "rfi2026-kso-039"
+   ]
+  },
+  {
+   "id": "af49-035",
+   "source": "rfi2026",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Do you append any personal information to the de-identified HIPAA data your models use?",
+   "primary_id": "rfi2026-cmi2025-006",
+   "expected_ids": [
+    "rfi2026-cmi2025-006"
+   ]
+  },
+  {
+   "id": "af49-036",
+   "source": "rfi2026",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Which SSPs do you partner with?",
+   "primary_id": "rfi2026-kso-014",
+   "expected_ids": [
+    "13276560",
+    "rfi2026-kso-014"
+   ]
+  },
+  {
+   "id": "af49-037",
+   "source": "loopio",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "What breakouts can we see in your reports?",
+   "primary_id": "13130785",
+   "expected_ids": [
+    "11344653",
+    "13130785"
+   ]
+  },
+  {
+   "id": "af49-038",
+   "source": "loopio",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Where does your physician-level targeting data come from?",
+   "primary_id": "13130485",
+   "expected_ids": [
+    "13024569",
+    "13130485"
+   ]
+  },
+  {
+   "id": "af49-039",
+   "source": "loopio",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Once an audience is built, how quickly does it go live?",
+   "primary_id": "13131293",
+   "expected_ids": [
+    "11344306",
+    "13131293"
+   ]
+  },
+  {
+   "id": "af49-040",
+   "source": "loopio",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Do you offer green or carbon-reduced deal IDs?",
+   "primary_id": "13130681",
+   "expected_ids": [
+    "11344794",
+    "13130681"
+   ]
+  },
+  {
+   "id": "af49-041",
+   "source": "loopio",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Does every employee and contractor get their own unique login to your systems?",
+   "primary_id": "13131164",
+   "expected_ids": [
+    "11344456",
+    "13131164"
+   ]
+  },
+  {
+   "id": "af49-042",
+   "source": "loopio",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "How do you handle frequency caps and keep competing ads from showing together?",
+   "primary_id": "13130712",
+   "expected_ids": [
+    "11344760",
+    "13130712"
+   ]
+  },
+  {
+   "id": "af49-043",
+   "source": "loopio",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "After someone opts out, do you still collect anything about them?",
+   "primary_id": "13130897",
+   "expected_ids": [
+    "11344528",
+    "13130897"
+   ]
+  },
+  {
+   "id": "af49-044",
+   "source": "loopio",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "How will you target HCPs once third-party cookies are gone?",
+   "primary_id": "13130744",
+   "expected_ids": [
+    "11344693",
+    "13130744"
+   ]
+  },
+  {
+   "id": "af49-045",
+   "source": "loopio",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Can we keep target-list HCPs out of our non-target tactics?",
+   "primary_id": "13130650",
+   "expected_ids": [
+    "11344831",
+    "13130650"
+   ]
+  },
+  {
+   "id": "af49-046",
+   "source": "loopio",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Do you rely on tokenization or an outside identity resolution vendor?",
+   "primary_id": "13130497",
+   "expected_ids": [
+    "12865757",
+    "13024536",
+    "13130497"
+   ]
+  },
+  {
+   "id": "af49-047",
+   "source": "loopio",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "What digital out-of-home options do you have?",
+   "primary_id": "13131259",
+   "expected_ids": [
+    "11344334",
+    "13131259"
+   ]
+  },
+  {
+   "id": "af49-048",
+   "source": "loopio",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "How do you attribute conversions across devices and channels?",
+   "primary_id": "13130544",
+   "expected_ids": [
+    "12500943",
+    "13130544"
+   ]
+  },
+  {
+   "id": "af49-049",
+   "source": "loopio",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Describe your compliance program around the FDCA and anti-kickback rules.",
+   "primary_id": "13130928",
+   "expected_ids": [
+    "11344518",
+    "13130928"
+   ]
+  },
+  {
+   "id": "af49-050",
+   "source": "loopio",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "How do you keep our ads off made-for-advertising sites?",
+   "primary_id": "13130826",
+   "expected_ids": [
+    "11344618",
+    "13130826"
+   ]
+  },
+  {
+   "id": "af49-051",
+   "source": "loopio",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Can we run and report on social campaigns inside your DSP?",
+   "primary_id": "13130465",
+   "expected_ids": [
+    "13024548",
+    "13130465"
+   ]
+  },
+  {
+   "id": "af49-052",
+   "source": "loopio",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Can you bid based on the predicted value of each impression?",
+   "primary_id": "13131188",
+   "expected_ids": [
+    "11344403",
+    "13131188"
+   ]
+  },
+  {
+   "id": "af49-053",
+   "source": "loopio",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Roughly what do your data sets cost? Are any free?",
+   "primary_id": "13131184",
+   "expected_ids": [
+    "11344439",
+    "13131184"
+   ]
+  },
+  {
+   "id": "af49-054",
+   "source": "loopio",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Do you use bid shading?",
+   "primary_id": "13130556",
+   "expected_ids": [
+    "11344484",
+    "12254616",
+    "13130556",
+    "13130934",
+    "qabank-AGC-067"
+   ]
+  },
+  {
+   "id": "af49-055",
+   "source": "loopio",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "How do you stop anyone from re-identifying the de-identified data?",
+   "primary_id": "13130899",
+   "expected_ids": [
+    "11344530",
+    "13130899"
+   ]
+  },
+  {
+   "id": "af49-056",
+   "source": "loopio",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Can reports be exported automatically, and in what file formats?",
+   "primary_id": "13130473",
+   "expected_ids": [
+    "13024557",
+    "13130473"
+   ]
+  },
+  {
+   "id": "af49-057",
+   "source": "loopio",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Which SSPs have named you a preferred DSP?",
+   "primary_id": "13130622",
+   "expected_ids": [
+    "11344838",
+    "13130622"
+   ]
+  },
+  {
+   "id": "af49-058",
+   "source": "loopio",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "How do you prevent device ID spoofing?",
+   "primary_id": "13131228",
+   "expected_ids": [
+    "11344371",
+    "13131228"
+   ]
+  },
+  {
+   "id": "af49-059",
+   "source": "loopio",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Is your methodology the same in every region?",
+   "primary_id": "13130534",
+   "expected_ids": [
+    "13024502",
+    "13130534"
+   ]
+  },
+  {
+   "id": "af49-060",
+   "source": "loopio",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Which IAB content taxonomy version do you support?",
+   "primary_id": "13130735",
+   "expected_ids": [
+    "11344722",
+    "13130735"
+   ]
+  },
+  {
+   "id": "af49-061",
+   "source": "loopio",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "What brand safety controls do you offer specifically for CTV?",
+   "primary_id": "13130624",
+   "expected_ids": [
+    "11344840",
+    "13130624"
+   ]
+  },
+  {
+   "id": "af49-062",
+   "source": "loopio",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "How big is your ACR footprint?",
+   "primary_id": "13130632",
+   "expected_ids": [
+    "11344848",
+    "13130632"
+   ]
+  },
+  {
+   "id": "af49-063",
+   "source": "loopio",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Which social platforms do you integrate with?",
+   "primary_id": "13130669",
+   "expected_ids": [
+    "11344779",
+    "13130669"
+   ]
+  },
+  {
+   "id": "af49-064",
+   "source": "loopio",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Can we target independent pharmacists?",
+   "primary_id": "13130847",
+   "expected_ids": [
+    "11344599",
+    "13130847"
+   ]
+  },
+  {
+   "id": "af49-065",
+   "source": "loopio",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Do you have documented information security policies?",
+   "primary_id": "13131331",
+   "expected_ids": [
+    "11344249",
+    "13131331"
+   ]
+  },
+  {
+   "id": "af49-066",
+   "source": "loopio",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Which premium CTV publishers can we access through you?",
+   "primary_id": "13130470",
+   "expected_ids": [
+    "13024554",
+    "13130470"
+   ]
+  },
+  {
+   "id": "af49-067",
+   "source": "loopio",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Can you target by medical condition and still stay HIPAA compliant?",
+   "primary_id": "13131332",
+   "expected_ids": [
+    "11344250",
+    "13131332"
+   ]
+  },
+  {
+   "id": "af49-068",
+   "source": "qabank",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Do you want bid requests in JSON or protobuf?",
+   "primary_id": "qabank-SUP-037",
+   "expected_ids": [
+    "qabank-DEM-047",
+    "qabank-SUP-037"
+   ]
+  },
+  {
+   "id": "af49-069",
+   "source": "qabank",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Are you registered in the IAB TCF vendor list for GDPR?",
+   "primary_id": "qabank-DEM-190",
+   "expected_ids": [
+    "qabank-DEM-190",
+    "qabank-SUP-291"
+   ]
+  },
+  {
+   "id": "af49-070",
+   "source": "qabank",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Which OpenRTB version are you on?",
+   "primary_id": "qabank-SUP-126",
+   "expected_ids": [
+    "qabank-SUP-126"
+   ]
+  },
+  {
+   "id": "af49-071",
+   "source": "qabank",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Is there an API we can use to pull seat IDs for setting up deals?",
+   "primary_id": "qabank-SUP-188",
+   "expected_ids": [
+    "qabank-SUP-188"
+   ]
+  },
+  {
+   "id": "af49-072",
+   "source": "qabank",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "What do you do to keep low-quality and MFA supply out?",
+   "primary_id": "qabank-SUP-330",
+   "expected_ids": [
+    "qabank-SUP-330"
+   ]
+  },
+  {
+   "id": "af49-073",
+   "source": "qabank",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "How much of your inventory supports audio ads?",
+   "primary_id": "qabank-DEM-147",
+   "expected_ids": [
+    "qabank-DEM-147"
+   ]
+  },
+  {
+   "id": "af49-074",
+   "source": "qabank",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Can we get reporting through a dashboard or an API?",
+   "primary_id": "qabank-SUP-341",
+   "expected_ids": [
+    "qabank-DEM-210",
+    "qabank-SUP-341"
+   ]
+  },
+  {
+   "id": "af49-075",
+   "source": "qabank",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Which exchanges do you buy from?",
+   "primary_id": "qabank-DEM-024",
+   "expected_ids": [
+    "qabank-DEM-024",
+    "qabank-SUP-001"
+   ]
+  },
+  {
+   "id": "af49-076",
+   "source": "qabank",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Should the SSP convert currency before sending bid requests?",
+   "primary_id": "qabank-SUP-054",
+   "expected_ids": [
+    "qabank-SUP-054"
+   ]
+  },
+  {
+   "id": "af49-077",
+   "source": "qabank",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Can you accept gzip-compressed requests?",
+   "primary_id": "qabank-SUP-047",
+   "expected_ids": [
+    "qabank-SUP-047",
+    "qabank-SUP-071"
+   ]
+  },
+  {
+   "id": "af49-078",
+   "source": "qabank",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Do you support IPv6?",
+   "primary_id": "qabank-SUP-133",
+   "expected_ids": [
+    "qabank-SUP-133"
+   ]
+  },
+  {
+   "id": "af49-079",
+   "source": "qabank",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "How many VAST wrapper levels do you allow?",
+   "primary_id": "qabank-SUP-244",
+   "expected_ids": [
+    "qabank-SUP-244"
+   ]
+  },
+  {
+   "id": "af49-080",
+   "source": "qabank",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Is your bid price net or gross?",
+   "primary_id": "qabank-SUP-349",
+   "expected_ids": [
+    "qabank-SUP-349"
+   ]
+  },
+  {
+   "id": "af49-081",
+   "source": "qabank",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Which time zone are your reports in?",
+   "primary_id": "qabank-SUP-348",
+   "expected_ids": [
+    "qabank-DEM-205",
+    "qabank-SUP-348"
+   ]
+  },
+  {
+   "id": "af49-082",
+   "source": "qabank",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Can you bid on ad pods?",
+   "primary_id": "qabank-SUP-235",
+   "expected_ids": [
+    "qabank-SUP-135",
+    "qabank-SUP-235"
+   ]
+  },
+  {
+   "id": "af49-083",
+   "source": "qabank",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Do you support MRAID ads?",
+   "primary_id": "qabank-DEM-006",
+   "expected_ids": [
+    "qabank-DEM-006"
+   ]
+  },
+  {
+   "id": "af49-084",
+   "source": "qabank",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Can one bid request carry more than one imp object?",
+   "primary_id": "qabank-SUP-018",
+   "expected_ids": [
+    "qabank-SUP-018"
+   ]
+  },
+  {
+   "id": "af49-085",
+   "source": "qabank",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Do you honor the bapp blocked-apps list?",
+   "primary_id": "qabank-DEM-054",
+   "expected_ids": [
+    "qabank-DEM-054",
+    "qabank-SUP-049"
+   ]
+  },
+  {
+   "id": "af49-086",
+   "source": "qabank",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Have you signed the MSPA?",
+   "primary_id": "qabank-SUP-297",
+   "expected_ids": [
+    "qabank-SUP-297"
+   ]
+  },
+  {
+   "id": "af49-087",
+   "source": "qabank",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Are you planning to support Google's Topics API?",
+   "primary_id": "qabank-SUP-302",
+   "expected_ids": [
+    "qabank-SUP-302"
+   ]
+  },
+  {
+   "id": "af49-088",
+   "source": "qabank",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "What would it cost you to build for the Protected Audience API?",
+   "primary_id": "qabank-SUP-307",
+   "expected_ids": [
+    "qabank-SUP-307"
+   ]
+  },
+  {
+   "id": "af49-089",
+   "source": "qabank",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "When do you count an impression: on render or on cache?",
+   "primary_id": "qabank-SUP-093",
+   "expected_ids": [
+    "qabank-SUP-093"
+   ]
+  },
+  {
+   "id": "af49-090",
+   "source": "qabank",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "Do you read GPID from imp.ext.gpid?",
+   "primary_id": "qabank-SUP-077",
+   "expected_ids": [
+    "qabank-SUP-077"
+   ]
+  },
+  {
+   "id": "af49-091",
+   "source": "qabank",
+   "origin": "paraphrase",
+   "written_by": "claude",
+   "question": "How do you handle CCPA opt-outs in the bid request?",
+   "primary_id": "qabank-DEM-194",
+   "expected_ids": [
+    "qabank-DEM-194"
+   ]
+  }
+ ]
+}
