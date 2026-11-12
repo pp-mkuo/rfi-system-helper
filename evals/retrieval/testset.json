@@ -1,5 +1,5 @@
 {
- "_about": "AF-49 retrieval test set, built 2026-11-12. A point-in-time snapshot of loopio-library-2 (2,297 records); record ids may drift if the library is re-ingested. expected_ids = primary_id plus every record with the same question text or the same answer text (the library holds duplicates across stacks), plus hand-added near-duplicates. written_by: 'client' = stored RFI 2026 wording, used verbatim (leaks the stored text, so treat as a ceiling); 'claude' = paraphrase written by Claude with the stored wording held out; 'rfi-system-helper skill' = the skill's HIPAA verify question.",
+ "_about": "AF-49 retrieval test set, built 2026-11-12. A point-in-time snapshot of loopio-library-2 (2,297 records); record ids may drift if the library is re-ingested. expected_ids = primary_id plus every record with the same question text or the same answer text (the library holds duplicates across stacks), plus hand-added near-duplicates. added_on_review = ids accepted after reading the answers of first-run misses (an answer to the same question, verified or not). written_by: 'client' = stored RFI 2026 wording, used verbatim (leaks the stored text, so treat as a ceiling); 'claude' = paraphrase written by Claude with the stored wording held out; 'rfi-system-helper skill' = the skill's HIPAA verify question.",
  "items": [
   {
    "id": "af49-001",
@@ -11,7 +11,8 @@
    "expected_ids": [
     "11344268",
     "13131320"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-002",
@@ -22,7 +23,8 @@
    "primary_id": "rfi2026-cmi0826-028",
    "expected_ids": [
     "rfi2026-cmi0826-028"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-003",
@@ -34,7 +36,8 @@
    "expected_ids": [
     "13276578",
     "rfi2026-kso-029"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-004",
@@ -45,7 +48,8 @@
    "primary_id": "rfi2026-cmi2025-060",
    "expected_ids": [
     "rfi2026-cmi2025-060"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-005",
@@ -60,7 +64,8 @@
     "13276559",
     "13276568",
     "rfi2026-kso-013"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-006",
@@ -73,7 +78,8 @@
     "13276558",
     "qabank-AGC-012",
     "rfi2026-kso-012"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-007",
@@ -87,7 +93,8 @@
     "13130583",
     "13276622",
     "rfi2026-kso-071"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-008",
@@ -98,7 +105,8 @@
    "primary_id": "rfi2026-cmi2025-007",
    "expected_ids": [
     "rfi2026-cmi2025-007"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-009",
@@ -109,7 +117,8 @@
    "primary_id": "rfi2026-cmi0826-052",
    "expected_ids": [
     "rfi2026-cmi0826-052"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-010",
@@ -120,7 +129,8 @@
    "primary_id": "rfi2026-cmi2025-022",
    "expected_ids": [
     "rfi2026-cmi2025-022"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-011",
@@ -131,7 +141,8 @@
    "primary_id": "rfi2026-cmi0826-025",
    "expected_ids": [
     "rfi2026-cmi0826-025"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-012",
@@ -145,7 +156,8 @@
     "13131141",
     "13276615",
     "rfi2026-kso-064"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-013",
@@ -158,7 +170,8 @@
     "13276591",
     "rfi2026-cmi0826-031",
     "rfi2026-kso-041"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-014",
@@ -169,7 +182,8 @@
    "primary_id": "rfi2026-cmi2025-036",
    "expected_ids": [
     "rfi2026-cmi2025-036"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-015",
@@ -183,7 +197,8 @@
     "13130913",
     "13276552",
     "rfi2026-kso-006"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-016",
@@ -194,7 +209,8 @@
    "primary_id": "rfi2026-kso-078",
    "expected_ids": [
     "rfi2026-kso-078"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-017",
@@ -205,7 +221,8 @@
    "primary_id": "rfi2026-cmi0826-020",
    "expected_ids": [
     "rfi2026-cmi0826-020"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-018",
@@ -215,7 +232,11 @@
    "question": "Can our agency team log in and run campaigns ourselves, or is it managed service only?",
    "primary_id": "rfi2026-cmi0826-011",
    "expected_ids": [
+    "rfi2026-cmi0826-010",
     "rfi2026-cmi0826-011"
+   ],
+   "added_on_review": [
+    "rfi2026-cmi0826-010"
    ]
   },
   {
@@ -228,7 +249,8 @@
    "expected_ids": [
     "rfi2026-cmi0826-033",
     "rfi2026-cmi2025-009"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-020",
@@ -238,7 +260,11 @@
    "question": "Can you predict which patients are likely to develop a condition and target them before diagnosis?",
    "primary_id": "rfi2026-cmi0826-053",
    "expected_ids": [
+    "rfi2026-cmi0826-043",
     "rfi2026-cmi0826-053"
+   ],
+   "added_on_review": [
+    "rfi2026-cmi0826-043"
    ]
   },
   {
@@ -249,7 +275,13 @@
    "question": "Do you have your own contextual targeting product?",
    "primary_id": "rfi2026-cmi2025-056",
    "expected_ids": [
+    "13131329",
+    "rfi2026-cmi2025-055",
     "rfi2026-cmi2025-056"
+   ],
+   "added_on_review": [
+    "rfi2026-cmi2025-055",
+    "13131329"
    ]
   },
   {
@@ -260,8 +292,12 @@
    "question": "How long does it take for a third-party segment to populate and be ready to use?",
    "primary_id": "rfi2026-kso-040",
    "expected_ids": [
+    "13130665",
     "13276590",
     "rfi2026-kso-040"
+   ],
+   "added_on_review": [
+    "13130665"
    ]
   },
   {
@@ -272,7 +308,11 @@
    "question": "Which media channels can we buy through you: CTV, online video, display, others?",
    "primary_id": "rfi2026-cmi2025-029",
    "expected_ids": [
+    "qabank-DEM-124",
     "rfi2026-cmi2025-029"
+   ],
+   "added_on_review": [
+    "qabank-DEM-124"
    ]
   },
   {
@@ -288,7 +328,8 @@
     "13276607",
     "qabank-AGC-124",
     "rfi2026-kso-057"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-025",
@@ -299,7 +340,8 @@
    "primary_id": "rfi2026-cmi2025-014",
    "expected_ids": [
     "rfi2026-cmi2025-014"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-026",
@@ -313,7 +355,8 @@
     "13130912",
     "13276554",
     "rfi2026-kso-008"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-027",
@@ -328,7 +371,8 @@
     "13276603",
     "qabank-AGC-015",
     "rfi2026-kso-053"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-028",
@@ -338,7 +382,13 @@
    "question": "How fresh are the numbers in your reporting dashboard? What's the lag?",
    "primary_id": "rfi2026-cmi2025-025",
    "expected_ids": [
+    "13130560",
+    "13130691",
     "rfi2026-cmi2025-025"
+   ],
+   "added_on_review": [
+    "13130560",
+    "13130691"
    ]
   },
   {
@@ -350,7 +400,8 @@
    "primary_id": "rfi2026-cmi2025-026",
    "expected_ids": [
     "rfi2026-cmi2025-026"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-030",
@@ -361,7 +412,8 @@
    "primary_id": "rfi2026-cmi2025-038",
    "expected_ids": [
     "rfi2026-cmi2025-038"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-031",
@@ -373,7 +425,8 @@
    "expected_ids": [
     "rfi2026-cmi0826-034",
     "rfi2026-cmi2025-010"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-032",
@@ -384,7 +437,8 @@
    "primary_id": "rfi2026-cmi0826-048",
    "expected_ids": [
     "rfi2026-cmi0826-048"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-033",
@@ -395,7 +449,8 @@
    "primary_id": "rfi2026-cmi2025-031",
    "expected_ids": [
     "rfi2026-cmi2025-031"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-034",
@@ -409,7 +464,8 @@
     "13130666",
     "13276589",
     "rfi2026-kso-039"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-035",
@@ -420,7 +476,8 @@
    "primary_id": "rfi2026-cmi2025-006",
    "expected_ids": [
     "rfi2026-cmi2025-006"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-036",
@@ -430,8 +487,16 @@
    "question": "Which SSPs do you partner with?",
    "primary_id": "rfi2026-kso-014",
    "expected_ids": [
+    "13131334",
     "13276560",
+    "qabank-AGC-002",
+    "qabank-SUP-001",
     "rfi2026-kso-014"
+   ],
+   "added_on_review": [
+    "13131334",
+    "qabank-SUP-001",
+    "qabank-AGC-002"
    ]
   },
   {
@@ -443,7 +508,11 @@
    "primary_id": "13130785",
    "expected_ids": [
     "11344653",
+    "13130474",
     "13130785"
+   ],
+   "added_on_review": [
+    "13130474"
    ]
   },
   {
@@ -456,7 +525,8 @@
    "expected_ids": [
     "13024569",
     "13130485"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-039",
@@ -468,7 +538,8 @@
    "expected_ids": [
     "11344306",
     "13131293"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-040",
@@ -480,7 +551,8 @@
    "expected_ids": [
     "11344794",
     "13130681"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-041",
@@ -492,7 +564,8 @@
    "expected_ids": [
     "11344456",
     "13131164"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-042",
@@ -504,7 +577,8 @@
    "expected_ids": [
     "11344760",
     "13130712"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-043",
@@ -516,7 +590,8 @@
    "expected_ids": [
     "11344528",
     "13130897"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-044",
@@ -528,7 +603,8 @@
    "expected_ids": [
     "11344693",
     "13130744"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-045",
@@ -540,7 +616,8 @@
    "expected_ids": [
     "11344831",
     "13130650"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-046",
@@ -553,7 +630,8 @@
     "12865757",
     "13024536",
     "13130497"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-047",
@@ -564,7 +642,11 @@
    "primary_id": "13131259",
    "expected_ids": [
     "11344334",
+    "13130649",
     "13131259"
+   ],
+   "added_on_review": [
+    "13130649"
    ]
   },
   {
@@ -576,7 +658,11 @@
    "primary_id": "13130544",
    "expected_ids": [
     "12500943",
-    "13130544"
+    "13130544",
+    "13130597"
+   ],
+   "added_on_review": [
+    "13130597"
    ]
   },
   {
@@ -587,8 +673,17 @@
    "question": "Describe your compliance program around the FDCA and anti-kickback rules.",
    "primary_id": "13130928",
    "expected_ids": [
+    "11344266",
     "11344518",
+    "11344519",
+    "11344520",
     "13130928"
+   ],
+   "added_on_review": [
+    "11344518",
+    "11344519",
+    "11344520",
+    "11344266"
    ]
   },
   {
@@ -600,7 +695,11 @@
    "primary_id": "13130826",
    "expected_ids": [
     "11344618",
+    "13130825",
     "13130826"
+   ],
+   "added_on_review": [
+    "13130825"
    ]
   },
   {
@@ -613,7 +712,8 @@
    "expected_ids": [
     "13024548",
     "13130465"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-052",
@@ -625,7 +725,8 @@
    "expected_ids": [
     "11344403",
     "13131188"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-053",
@@ -636,7 +737,11 @@
    "primary_id": "13131184",
    "expected_ids": [
     "11344439",
+    "13130890",
     "13131184"
+   ],
+   "added_on_review": [
+    "13130890"
    ]
   },
   {
@@ -651,7 +756,13 @@
     "12254616",
     "13130556",
     "13130934",
-    "qabank-AGC-067"
+    "13131289",
+    "qabank-AGC-067",
+    "rfi2026-cmi2025-049"
+   ],
+   "added_on_review": [
+    "13131289",
+    "rfi2026-cmi2025-049"
    ]
   },
   {
@@ -664,7 +775,8 @@
    "expected_ids": [
     "11344530",
     "13130899"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-056",
@@ -676,7 +788,8 @@
    "expected_ids": [
     "13024557",
     "13130473"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-057",
@@ -688,7 +801,8 @@
    "expected_ids": [
     "11344838",
     "13130622"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-058",
@@ -700,7 +814,8 @@
    "expected_ids": [
     "11344371",
     "13131228"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-059",
@@ -712,7 +827,8 @@
    "expected_ids": [
     "13024502",
     "13130534"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-060",
@@ -723,7 +839,11 @@
    "primary_id": "13130735",
    "expected_ids": [
     "11344722",
-    "13130735"
+    "13130735",
+    "qabank-SUP-027"
+   ],
+   "added_on_review": [
+    "qabank-SUP-027"
    ]
   },
   {
@@ -736,7 +856,8 @@
    "expected_ids": [
     "11344840",
     "13130624"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-062",
@@ -748,7 +869,8 @@
    "expected_ids": [
     "11344848",
     "13130632"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-063",
@@ -760,7 +882,8 @@
    "expected_ids": [
     "11344779",
     "13130669"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-064",
@@ -772,7 +895,8 @@
    "expected_ids": [
     "11344599",
     "13130847"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-065",
@@ -784,7 +908,8 @@
    "expected_ids": [
     "11344249",
     "13131331"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-066",
@@ -795,7 +920,11 @@
    "primary_id": "13130470",
    "expected_ids": [
     "13024554",
-    "13130470"
+    "13130470",
+    "13130627"
+   ],
+   "added_on_review": [
+    "13130627"
    ]
   },
   {
@@ -808,7 +937,8 @@
    "expected_ids": [
     "11344250",
     "13131332"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-068",
@@ -820,7 +950,8 @@
    "expected_ids": [
     "qabank-DEM-047",
     "qabank-SUP-037"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-069",
@@ -830,8 +961,12 @@
    "question": "Are you registered in the IAB TCF vendor list for GDPR?",
    "primary_id": "qabank-DEM-190",
    "expected_ids": [
+    "13130902",
     "qabank-DEM-190",
     "qabank-SUP-291"
+   ],
+   "added_on_review": [
+    "13130902"
    ]
   },
   {
@@ -842,7 +977,13 @@
    "question": "Which OpenRTB version are you on?",
    "primary_id": "qabank-SUP-126",
    "expected_ids": [
+    "13130738",
+    "qabank-SUP-028",
     "qabank-SUP-126"
+   ],
+   "added_on_review": [
+    "qabank-SUP-028",
+    "13130738"
    ]
   },
   {
@@ -854,7 +995,8 @@
    "primary_id": "qabank-SUP-188",
    "expected_ids": [
     "qabank-SUP-188"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-072",
@@ -865,7 +1007,8 @@
    "primary_id": "qabank-SUP-330",
    "expected_ids": [
     "qabank-SUP-330"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-073",
@@ -876,7 +1019,8 @@
    "primary_id": "qabank-DEM-147",
    "expected_ids": [
     "qabank-DEM-147"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-074",
@@ -888,7 +1032,8 @@
    "expected_ids": [
     "qabank-DEM-210",
     "qabank-SUP-341"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-075",
@@ -900,7 +1045,8 @@
    "expected_ids": [
     "qabank-DEM-024",
     "qabank-SUP-001"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-076",
@@ -911,7 +1057,8 @@
    "primary_id": "qabank-SUP-054",
    "expected_ids": [
     "qabank-SUP-054"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-077",
@@ -923,7 +1070,8 @@
    "expected_ids": [
     "qabank-SUP-047",
     "qabank-SUP-071"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-078",
@@ -934,7 +1082,8 @@
    "primary_id": "qabank-SUP-133",
    "expected_ids": [
     "qabank-SUP-133"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-079",
@@ -945,7 +1094,8 @@
    "primary_id": "qabank-SUP-244",
    "expected_ids": [
     "qabank-SUP-244"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-080",
@@ -956,7 +1106,8 @@
    "primary_id": "qabank-SUP-349",
    "expected_ids": [
     "qabank-SUP-349"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-081",
@@ -968,7 +1119,8 @@
    "expected_ids": [
     "qabank-DEM-205",
     "qabank-SUP-348"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-082",
@@ -978,8 +1130,14 @@
    "question": "Can you bid on ad pods?",
    "primary_id": "qabank-SUP-235",
    "expected_ids": [
+    "13130732",
+    "qabank-DEM-131",
     "qabank-SUP-135",
     "qabank-SUP-235"
+   ],
+   "added_on_review": [
+    "13130732",
+    "qabank-DEM-131"
    ]
   },
   {
@@ -991,7 +1149,8 @@
    "primary_id": "qabank-DEM-006",
    "expected_ids": [
     "qabank-DEM-006"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-084",
@@ -1002,7 +1161,8 @@
    "primary_id": "qabank-SUP-018",
    "expected_ids": [
     "qabank-SUP-018"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-085",
@@ -1014,7 +1174,8 @@
    "expected_ids": [
     "qabank-DEM-054",
     "qabank-SUP-049"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-086",
@@ -1025,7 +1186,8 @@
    "primary_id": "qabank-SUP-297",
    "expected_ids": [
     "qabank-SUP-297"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-087",
@@ -1036,7 +1198,8 @@
    "primary_id": "qabank-SUP-302",
    "expected_ids": [
     "qabank-SUP-302"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-088",
@@ -1047,7 +1210,8 @@
    "primary_id": "qabank-SUP-307",
    "expected_ids": [
     "qabank-SUP-307"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-089",
@@ -1058,7 +1222,8 @@
    "primary_id": "qabank-SUP-093",
    "expected_ids": [
     "qabank-SUP-093"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-090",
@@ -1069,7 +1234,8 @@
    "primary_id": "qabank-SUP-077",
    "expected_ids": [
     "qabank-SUP-077"
-   ]
+   ],
+   "added_on_review": []
   },
   {
    "id": "af49-091",
@@ -1080,7 +1246,8 @@
    "primary_id": "qabank-DEM-194",
    "expected_ids": [
     "qabank-DEM-194"
-   ]
+   ],
+   "added_on_review": []
   }
  ]
 }

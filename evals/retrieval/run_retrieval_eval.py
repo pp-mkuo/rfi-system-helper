@@ -61,15 +61,13 @@ def grade(item, rows):
     rank = next((i + 1 for i, r in enumerate(rows) if r["id"] in want), None)
     right = rows[rank - 1]["score"] if rank else None
     wrong = next((r["score"] for r in rows if r["id"] not in want), None)
-    # unverified Q&A Bank record above the best verified correct record
+    # an unverified Q&A Bank record (right or wrong) ranked above the best verified correct record
     outrank = None
-    if not item["primary_id"].startswith("qabank-"):
-        best_ok = next((i for i, r in enumerate(rows) if r["id"] in want and not unverified(r)), None)
-        above = [r for r in rows[:best_ok if best_ok is not None else 5]
-                 if unverified(r) and r["id"] not in want]
-        if above:
-            outrank = {"unverified": above[0], "verified_rank": best_ok + 1 if best_ok is not None else None,
-                       "verified_score": rows[best_ok]["score"] if best_ok is not None else None}
+    best_ok = next((i for i, r in enumerate(rows) if r["id"] in want and not unverified(r)), None)
+    above = [r for r in rows[:best_ok or 0] if unverified(r)]
+    if above:
+        outrank = {"unverified": above[0], "unverified_is_correct": above[0]["id"] in want,
+                   "verified_rank": best_ok + 1, "verified_score": rows[best_ok]["score"]}
     return {"rank": rank, "right_score": right, "best_wrong_score": wrong,
             "gap": round(right - wrong, 4) if right is not None and wrong is not None else None,
             "under_floor": right is None or right < FLOOR, "unverified_outranks": outrank}
