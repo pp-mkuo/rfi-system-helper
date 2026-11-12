@@ -92,7 +92,8 @@ The run log (`db`), the 👍/👎 feedback and the Excel export work as before.
 - The agent's flags are full sentences, not the page's short labels, so the chips run long and the "flagged" count is right but not grouped. A short flag vocabulary in the skill would help.
 - The reply doesn't include source answer text, so the matches drawer shows only source questions.
 - "Stop" stops polling but not the agent's current batch.
-- The app may ask the viewer to confirm each pp-joke call. Whether `get_reply` polling prompts every time hasn't been checked.
+- pp-joke 0.2.4 marks `list_agents` and `get_reply` read-only, so polling shouldn't ask for approval. Only `send_message` may ask, once per batch.
 - Testers need Contributor access or higher for their runs to be logged, because of the `logs/{self}` write rule.
 - A long questionnaire takes a few minutes per 10 questions. The batch size isn't tuned.
 - **Server name.** In an Artifact the server is `host:pp-joke`, which is the desktop app's name for the org plugin. Claude Code's internal name `plugin_pp-joke_pp-joke` returns `server_not_connected`, which Caedon's first probe click showed.
+- **Personal accounts.** The org plugin only reaches pages opened under the PulsePoint enterprise account. To test from a personal claude.ai account, install `pp-joke-0.2.4.mcpb` as a desktop extension. It was built on 2026-11-12 from the 0.2.4 plugin zip's server and the 0.2.2 `.mcpb` manifest, and it is also named `pp-joke`.
