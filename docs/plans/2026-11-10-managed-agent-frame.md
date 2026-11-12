@@ -83,7 +83,7 @@ The run log (`db`), the 👍/👎 feedback and the Excel export work as before.
 **Who can use it.** On PulsePoint's enterprise account pp-joke is force-loaded on every device, so any org member can link it to the page. That means one shared page works for everyone, even though the runtime docs say host servers are "owner-only for now". It works only in the Claude desktop app. In a browser tab the page says so, and it can still reopen past runs and export them.
 
 **Tested.**
-- Caedon's probe page called the agent from inside an Artifact.
+- On 2026-11-12 Caedon's probe page reached rfi-agent through `host:pp-joke`, using the 0.2.4 `.mcpb` on his personal account.
 - A 3-question batch (green HIPAA targeting, red SOC 2, amber CPM) sent through pp-joke with the page's exact prompt came back as the JSON the page expects.
 - `app/check-agent-reply.js` checks the reply parsing.
 
