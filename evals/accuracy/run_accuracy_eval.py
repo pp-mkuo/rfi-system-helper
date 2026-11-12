@@ -84,13 +84,15 @@ def collect(sid):
     session = ant('beta:sessions', 'retrieve', '--session-id', sid)
     uses = {e['id']: e for e in events if e['type'] == 'agent.tool_use'}
     searches = [e['input'] for e in uses.values() if 'query.py' in json.dumps(e.get('input'))]
-    # Evidence = every tool result holding library-search JSON. The agent often writes
-    # query.py output to a file and cats it later, so don't key on the command text.
+    # Evidence = the output of every bash call: exactly what the agent saw. It often writes
+    # query.py output to a file and prints it later through its own formatter, so neither
+    # the command text nor the JSON shape is a reliable key. File reads (skills) are excluded.
+    # ponytail: over-includes harmless bash output (e.g. "0\n0"); the judge ignores it.
     retrieved = []
     for e in events:
-        if e['type'] == 'agent.tool_result':
+        if e['type'] == 'agent.tool_result' and uses.get(e.get('tool_use_id'), {}).get('name') == 'bash':
             t = ''.join(c.get('text', '') for c in e.get('content') or [])
-            if '"results"' in t and '"answer"' in t:
+            if t.strip():
                 retrieved.append(t)
     reply = '\n\n'.join(''.join(c.get('text', '') for c in e['content']) for e in events if e['type'] == 'agent.message')
     blocks = re.findall(r'```json\s*(.*?)```', reply, re.S)

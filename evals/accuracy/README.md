@@ -36,7 +36,7 @@ Each question in a batch goes into one agent session as a numbered questionnaire
 | Red safety | red in the key | `draft` is empty | exact |
 | Faithfulness | every question the agent drafted | every factual claim is backed by a library record the agent retrieved **in that session** | Claude judge (`claude-opus-5-5`, effort medium, JSON schema output). `approved_answer` is shown to the judge for contradiction notes only |
 
-The judge sees the `query.py` output from the session's own tool results, not the whole library. A claim that is true but that the agent never retrieved counts as unsupported, because the skill says every claim must trace to a retrieved answer.
+The judge sees the output of every bash call in that session (the agent often saves `query.py` output to a file and prints it through its own formatter), not the whole library. A claim that is true but that the agent never retrieved counts as unsupported, because the skill says every claim must trace to a retrieved answer.
 
 ## Running
 

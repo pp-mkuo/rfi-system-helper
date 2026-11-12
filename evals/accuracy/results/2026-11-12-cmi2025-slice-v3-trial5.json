@@ -170,69 +170,69 @@
     "claims": [
      {
       "claim": "Audiences start from first-party and clinical data, not modeled inference",
-      "evidence": "Sources support a first-party and claims foundation ('PulsePoint leverages a first party data foundation'). But they also say DTC seeds are 'further modeled out', so 'not modeled inference' is not supported.",
+      "evidence": "Records support a first-party foundation (\"PulsePoint leverages a first party data foundation\"), but they describe DTC audiences as modeled (\"modeled audiences derived from health claims data\", \"further modeled out\"). No record says audiences avoid modeled inference.",
       "supported": false
      },
      {
-      "claim": "For HCP, Medscape's physician member database is used to authenticate 3.2 million NPIs",
-      "evidence": "'uses the power of Medscape's physician member database to authenticate 3.2 million NPI numbers'",
+      "claim": "Medscape's physician member database is used to authenticate 3.2 million NPIs",
+      "evidence": "\"uses the power of Medscape's physician member database to authenticate 3.2 million NPI numbers\"",
       "supported": true
      },
      {
       "claim": "NPIs are translated to digital IDs through a proprietary identity system and 4x verified onboarders",
-      "evidence": "'translated into online IDs within a proprietary identity infrastructure and through the use of 4x verified onboarders'",
+      "evidence": "\"translated into online IDs within a proprietary identity infrastructure and through the use of 4x verified onboarders\"",
       "supported": true
      },
      {
       "claim": "HCP targeting is 1:1 NPI with no modeling needed",
-      "evidence": "'For HCP, we operate in a 1-1 NPI based targeting manor with no modeling needed'",
+      "evidence": "\"we operate in a 1-1 NPI based targeting manor with no modeling needed\"",
       "supported": true
      },
      {
       "claim": "Addressability rate of 90%+ on average",
-      "evidence": "'NPI graph that has an addressability rate of 90%+ on average'",
+      "evidence": "\"NPI graph that has an addressability rate of 90%+ on average\"",
       "supported": true
      },
      {
       "claim": "HCP lookalikes are seeded from a known NPI list",
-      "evidence": "'Lookalike (LAL) modeling for HCP audiences seeded from a known NPI list'",
+      "evidence": "\"Lookalike (LAL) modeling for HCP audiences seeded from a known NPI list\"",
       "supported": true
      },
      {
       "claim": "DTC custom models are seeded with claims signals (ICD-10, J-Codes, NDC, CPT codes)",
-      "evidence": "'claims data signals such as ICD-10 codes, J-Codes, NDC Codes, and CPT codes to develop a seed'",
+      "evidence": "\"claims data signals such as ICD-10 codes, J-Codes, NDC Codes, and CPT codes to develop a seed\"",
       "supported": true
      },
      {
-      "claim": "DTC seeds are modeled by diagnosis and treatment propensity by age, gender and zip code",
-      "evidence": "'further modeled out based on diagnosis and treatment propensity by age, gender and zip code'",
+      "claim": "Models are built on diagnosis and treatment propensity by age, gender and zip code",
+      "evidence": "\"further modeled out based on diagnosis and treatment propensity by age, gender and zip code\"",
       "supported": true
      },
      {
-      "claim": "Models use a database of 220MM+ patients and 3BB annual pharmacy claims powered by a Forian claims data API",
-      "evidence": "'database of 220MM+ Patients and 3BB annual pharmacy claims powered by a Forian data claims data API'",
+      "claim": "Database of 220MM+ patients and 3BB annual pharmacy claims powered by a Forian claims data API",
+      "evidence": "\"220MM+ Patients and 3BB annual pharmacy claims powered by a Forian data claims data API\"",
       "supported": true
      },
      {
-      "claim": "Signals from a patented contextual engine mapped to the National Library of Medicine's taxonomy enrich the models",
-      "evidence": "CMI Agency RFI 2025: 'enriched with engagement and content consumption signals using our patented contextual engine mapped to National Library of Medicine's taxonomy'",
+      "claim": "Signals from a patented contextual engine mapped to the National Library of Medicine's taxonomy add to these models",
+      "evidence": "\"enriched with engagement and content consumption signals using our patented contextual engine mapped to National Library of Medicine's taxonomy\"",
       "supported": true
      },
      {
       "claim": "Advertisers can seed lookalikes from a conversion event or retargeting pixel",
-      "evidence": "'choose a conversion event or retargeting pixel to be the seed of the model'",
+      "evidence": "\"choose a conversion event or retargeting pixel to be the seed of the model\"",
       "supported": true
      },
      {
       "claim": "All data is HIPAA- and NAI-compliant",
-      "evidence": "CMI Agency RFI 2025: 'All data is HIPAA- and NAI-compliant'",
+      "evidence": "\"All data is HIPAA- and NAI-compliant and refreshed continuously\"",
       "supported": true
      }
     ],
     "faithful": false,
-    "notes": "One claim is unsupported. The opening line 'not modeled inference' goes beyond the sources, which say DTC audiences are 'further modeled out' from claims seeds. The draft also contradicts itself by later describing DTC modeling. 'No modeling' is supported only for HCP 1:1 NPI targeting. APPROVED does not say audiences are unmodeled, so this framing departs from the submitted answer. No other claim contradicts APPROVED. The draft omits APPROVED's Medscape CRM consent rationale and its 'refreshed continuously' claim."
+    "notes": "The opening claim that audiences come 'not from modeled inference' is unsupported. The records describe DTC audiences as modeled, and the draft itself goes on to describe DTC modeling, so it is internally inconsistent. APPROVED never says audiences are not modeled, so this opening framing goes beyond what was submitted. No other claims contradict APPROVED. The draft adds detail from other records that APPROVED does not include: 3.2M NPIs, 90%+ addressability, Forian, and the 220MM/3BB figures. APPROVED says 'millions of annual claims', which is consistent with those figures."
    },
-   "judge_cost_cents": 6.96,
+   "judge_cost_cents": 6.99,
    "faithful": false
   },
   {
@@ -264,34 +264,34 @@
     "claims": [
      {
       "claim": "The company operates its own proprietary identity graph.",
-      "evidence": "\"PulsePoint operates its own proprietary identity graph.\" (Does your organization maintain it's own proprietary identity graph)",
+      "evidence": "'Does your organization maintain it's own proprietary identity graph.': \"PulsePoint operates its own proprietary identity graph.\"",
       "supported": true
      },
      {
-      "claim": "The platform integrates with external identity partners LiveRamp/RampID, UID2 and ID5.",
-      "evidence": "\"integrated with external partners such as LiveRamp/RampID and other privacy-compliant ID solutions, including UID2 and ID5\"",
+      "claim": "The platform integrates with external ID partners LiveRamp/RampID, UID2 and ID5.",
+      "evidence": "\"We also are integrated with external partners such as LiveRamp/RampID and other privacy-compliant ID solutions, including UID2 and ID5.\"",
       "supported": true
      },
      {
       "claim": "The platform integrates with Throtle and LiveIntent for data onboarding and identity resolution.",
-      "evidence": "Data Onboarders/Identity Resolution record: \"LiveRamp, Throtle, UID, ID5, LiveIntent\"",
+      "evidence": "'Do you have integrations with solutions below? Data Onboarders/ Identity Resolution': \"LiveRamp, Throtle, UID, ID5, LiveIntent\"",
       "supported": true
      },
      {
-      "claim": "The company prioritizes LiveRamp because it is deterministic, which its HCP business requires.",
-      "evidence": "\"We are focusing on LiveRamp because it has good scale and is deterministic, which is needed for our HCP business.\"",
+      "claim": "The company prioritizes LiveRamp because it is deterministic, which the HCP business requires.",
+      "evidence": "'How have cookie updates impacted your processes?': \"We are focusing on LiveRamp because it has good scale and is deterministic, which is needed for our HCP business.\"",
       "supported": true
      },
      {
       "claim": "The company's graph links these IDs together, so clients do not have to commit to a single ID provider.",
-      "evidence": "\"using our existing graph to manage a seamless crosswalk so you don't have to choose a single ID provider\"",
+      "evidence": "'How have cookie updates impacted your processes?': \"using our existing graph to manage a seamless crosswalk so you don't have to choose a single ID provider\"",
       "supported": true
      }
     ],
     "faithful": true,
-    "notes": "Every claim is supported by RETRIEVED records, and none contradicts APPROVED. The draft goes beyond APPROVED in two places. First, it adds Throtle and LiveIntent. Second, it adds the LiveRamp-prioritization and crosswalk rationale. Both come from a 2025-10-07 Client Strategy record about cookie updates, which uses forward-looking language (\"We are integrating\", \"committed to integrating\"). The draft restates this in the present tense, which is a minor tense drift."
+    "notes": "Every claim is supported by RETRIEVED. Nothing in the draft contradicts APPROVED. The draft does go beyond APPROVED in two places. First, it adds Throtle and LiveIntent. Second, it adds the LiveRamp prioritization and the crosswalk statement. Both come from the 'Client Strategy- Cleaned' records, which are not in the approved answer. One caveat: the cookie-updates record is written in forward-looking terms (\"We are integrating...\", \"committed to integrating\"). The draft restates that as a present-tense capability, which slightly hardens the source's wording."
    },
-   "judge_cost_cents": 5.21,
+   "judge_cost_cents": 5.36,
    "faithful": true
   },
   {
@@ -319,8 +319,8 @@
    "judge": {
     "claims": [
      {
-      "claim": "Geographic targeting at the ZIP code level is supported",
-      "evidence": "CMI Agency RFI - 2025: \"supports geographic targeting at ZIP levels\"; also \"Can we target down to the zip code level?\" — \"Yes\"",
+      "claim": "Geographic targeting is supported at the ZIP code level",
+      "evidence": "CMI Agency RFI - 2025: \"supports geographic targeting at ZIP levels\"; \"Can we target down to the zip code level?\" -> \"Yes\"",
       "supported": true
      },
      {
@@ -329,15 +329,15 @@
       "supported": true
      },
      {
-      "claim": "Household-level targeting is supported, based on the company's identity graph",
+      "claim": "Household-level targeting is supported based on PulsePoint's identity graph",
       "evidence": "CMI Agency RFI - 2025: \"We also support household-level targeting based on our identity graph.\"",
       "supported": true
      }
     ],
     "faithful": true,
-    "notes": "The draft matches the approved answer almost word for word. The only differences are reordering and \"ZIP code level\" in place of \"ZIP levels\". Every claim is supported by the top retrieved record, and nothing contradicts APPROVED. Neither the draft nor the sources address the specific Zip11, Zip9 or H3 granularities named in the question."
+    "notes": "The draft matches the approved answer and the top retrieved record almost word for word. There are two small differences. First, the draft says \"ZIP code level\" where the record says \"ZIP levels\". Second, the draft drops the company name. Neither difference changes the meaning or contradicts APPROVED. The draft does not claim support for any specific ZIP granularity named in the question, such as Zip11 or Zip9, or for H3."
    },
-   "judge_cost_cents": 3.96,
+   "judge_cost_cents": 4.01,
    "faithful": true
   }
  ],
