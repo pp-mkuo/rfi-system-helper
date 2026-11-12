@@ -1,0 +1,4 @@
+{
+ "_about": "Slot for Maggie's 14 Dentsu test questions (pending as of 2026-11-12). Add one item per question in the same shape as testset.json items: id, source, origin \"dentsu14\", written_by \"client\", question (verbatim from the RFI), primary_id, and expected_ids (every record that correctly answers it). The runner picks this file up when items is non-empty and checks top-1 against today's bar of 13 of 14.",
+ "items": []
+}
