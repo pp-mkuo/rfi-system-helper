@@ -70,7 +70,7 @@ This is a point-in-time note. The Artifact runtime was at contract 0.2.96.
 
 **Route.** The page is `app/rfi-system-helper.html`, published at https://claude.ai/artifact/9XvbBfgCXD7gxCWumZWCzm with the same link as before. It reaches the agent like this:
 
-1. The page declares `mcp` with the host server `host:plugin_pp-joke_pp-joke` and three tools: `list_agents`, `send_message` and `get_reply`.
+1. The page declares `mcp` with the host server `host:pp-joke` and three tools: `list_agents`, `send_message` and `get_reply`.
 2. It finds `rfi-agent` with `list_agents`.
 3. It sends questions 10 at a time in one agent session per run, along with the AE, AM and PSM/CM names.
 4. It polls `get_reply` every 10 seconds, for up to 30 minutes per batch.
@@ -95,3 +95,4 @@ The run log (`db`), the 👍/👎 feedback and the Excel export work as before.
 - The app may ask the viewer to confirm each pp-joke call. Whether `get_reply` polling prompts every time hasn't been checked.
 - Testers need Contributor access or higher for their runs to be logged, because of the `logs/{self}` write rule.
 - A long questionnaire takes a few minutes per 10 questions. The batch size isn't tuned.
+- **Server name.** In an Artifact the server is `host:pp-joke`, which is the desktop app's name for the org plugin. Claude Code's internal name `plugin_pp-joke_pp-joke` returns `server_not_connected`, which Caedon's first probe click showed.
