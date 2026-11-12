@@ -1,0 +1,11 @@
+# The agent's workspace. Only these two hosts are reachable; the vault keys are
+# scoped to the same hosts. Add a host here AND on the credential, or the call fails.
+name: rfi-agent-env
+config:
+  type: cloud
+  networking:
+    type: limited
+    allow_mcp_servers: false
+    allowed_hosts:
+      - loopio-library-2-yxxbxim.svc.gcp-us-central1-4a9f.pinecone.io
+      - us.api.openai.com

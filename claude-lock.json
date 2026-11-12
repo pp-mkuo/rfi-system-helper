@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "origin": {
+    "base_url": "https://api.anthropic.com",
+    "organization_id": "8da37709-12f9-480d-aea8-937f00021ab9",
+    "workspace_id": "wrkspc_011wRRWPbejEjn3r2uoWBVzQ"
+  },
+  "resources": {
+    "./agents/rfi-agent/agent.md": {
+      "kind": "agent",
+      "id": "agent_018cUnLHJKgSVrFqY346wgTs",
+      "version": "3",
+      "hash": "e57822914341a92fc2b8dd5028dc57d8",
+      "remote_hash": "7b573d6c67320a2107f6bfd2943d9a6b",
+      "stamp": "3"
+    },
+    "./agents/rfi-agent/environment.yaml": {
+      "kind": "environment",
+      "id": "env_01GkLzSQxse6zmM8FxeDE7Ag",
+      "hash": "5d3af554e8e56cbd1ef268b1211b8b38",
+      "remote_hash": "4777f0c2611f3f12eddbd6f5be28dffb",
+      "stamp": "2026-11-10T23:16:03.370442Z"
+    },
+    "./agents/rfi-agent/skills/library-search": {
+      "kind": "skill",
+      "id": "skill_01Df8Z39rd5sdRaTrYL6q2Ej",
+      "version": "skver_01Vx3H7fEy5yVjCug6ErGR6i",
+      "hash": "941a5a4f5b5a7bd1055b4644b31118fb",
+      "stamp": "skver_01Vx3H7fEy5yVjCug6ErGR6i"
+    },
+    "./agents/rfi-agent/skills/rfi-system-helper": {
+      "kind": "skill",
+      "id": "skill_01AaFB187tRbFATFZrk6zssT",
+      "version": "skver_01NjoW6WErrns8Nzg8dH47B2",
+      "hash": "c0eb173190629c991f8dcfbc67903ecf",
+      "stamp": "skver_01NjoW6WErrns8Nzg8dH47B2"
+    },
+    "./agents/rfi-agent/vault.yaml": {
+      "kind": "vault",
+      "id": "vlt_011Cgv3jMN4CJVKKKx48ts6F",
+      "hash": "7473e020da44e9f539dbae079ca3bdce",
+      "remote_hash": "7473e020da44e9f539dbae079ca3bdce",
+      "stamp": "2026-11-10T22:37:10.609416Z"
+    }
+  }
+}
