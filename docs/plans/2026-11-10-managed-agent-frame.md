@@ -86,9 +86,10 @@ The run log (`db`), the 👍/👎 feedback and the Excel export work as before.
 - On 2026-11-12 Caedon's probe page reached rfi-agent through `host:pp-joke`, using the 0.2.4 `.mcpb` on his personal account.
 - A 3-question batch (green HIPAA targeting, red SOC 2, amber CPM) sent through pp-joke with the page's exact prompt came back as the JSON the page expects.
 - `app/check-agent-reply.js` checks the reply parsing.
+- On 2026-11-13 Caedon ran a 3-question questionnaire through the published page and exported it. #1 came back green with a draft and a flag that the regulatory language isn't approved. #2 came back red and was routed to Security/privacy (rfi@internetbrands.com). #3 came back amber and was routed to the AE, with the AE's VP as escalation. In that export, a reopened run lost its source details. The fix stores each source's question, date, stack, Legal Approved flag and used flag in the run log.
 
 **Gaps.**
-- `library-search` output has no record IDs, so `sources[].id` comes back blank. The run log's `retrievedIds` are therefore empty, though scores and source questions still show. Adding IDs to `query.py` output would fix it.
+- `library-search` output has no record IDs, so `sources[].id` comes back blank. Source questions, dates and scores still show and are kept in the run log. Adding IDs to `query.py` output would fix it.
 - The agent's flags are full sentences, not the page's short labels, so the chips run long and the "flagged" count is right but not grouped. A short flag vocabulary in the skill would help.
 - The reply doesn't include source answer text, so the matches drawer shows only source questions.
 - "Stop" stops polling but not the agent's current batch.

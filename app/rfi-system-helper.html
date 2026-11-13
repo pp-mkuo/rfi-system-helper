@@ -403,7 +403,7 @@ const rowWrites = new Map();
 function dbRow(op, r) {
   const ref = runRef(); if (!ref) return;
   const body = { n: r.n, question: r.question, lane: r.lane, why: r.why || "", route: r.route, esc: r.esc,
-    retrievedIds: r.sources.map(s => s.id), scores: r.sources.map(s => s.score), topScore: r.topScore,
+    sources: r.sources.map(({ id, score, stack, updated, legal, question, used }) => ({ id, score, stack: stack || "", updated: updated || "", legal: !!legal, question: question || "", used: !!used })), topScore: r.topScore,
     draft: r.draft, finalDraft: r.finalDraft, flags: r.flags, stitched: r.stitched, uncovered: r.uncovered,
     feedback: r.feedback, accepted: r.accepted, status: r.status, error: r.error, updatedAt: new Date().toISOString() };
   const prev = rowWrites.get(r.id) || Promise.resolve();   // one write at a time per document
@@ -431,10 +431,10 @@ async function openRun(id, run) {
   if (state.running) return;
   state.run = { ...run, id }; state.roles = run.roles || {};
   const snap = await caps.db.collection(`logs/${state.userId}/runs/${id}/rows`).get();
-  state.rows = snap.docs.map(d => { const x = d.data(); return { id: d.id, ...x, sources: (x.retrievedIds || []).map((sid, i) => ({ id: sid, score: x.scores?.[i], question: "(reopen: source text not stored)", answer: "" })), flags: x.flags || [] }; });
+  state.rows = snap.docs.map(d => { const x = d.data(); return { id: d.id, ...x, sources: (x.sources || (x.retrievedIds || []).map((sid, i) => ({ id: sid, score: x.scores?.[i], question: "(source not stored in older runs)" }))).map(s => ({ ...s, answer: "" })), flags: x.flags || [] }; });
   state.rows.sort((a, b) => String(a.n).localeCompare(String(b.n), undefined, { numeric: true }));
   $("summary").hidden = false; $("rowspanel").hidden = false; renderAll();
-  showNotice(`Opened "${run.name}". Source texts are not kept in the log; re-run a row to see them again.`);
+  showNotice(`Opened "${run.name}".`);
 }
 
 // --- render -------------------------------------------------------------------
