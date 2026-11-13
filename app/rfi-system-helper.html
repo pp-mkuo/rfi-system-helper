@@ -169,7 +169,7 @@ button:disabled { opacity: 0.5; cursor: default; }
 // rfi-system-helper skill (agents/rfi-agent/skills/rfi-system-helper/SKILL.md), not here (AF-35, 2026-11).
 // The page sends questions plus the account team, and renders, logs and exports what the agent returns.
 // ---------------------------------------------------------------------------
-const HOST = "host:pp-joke";   // pp-joke on the viewer's device, reached through the Claude desktop app
+const HOST = "host:plugin_pp-joke_pp-joke";   // the org pp-joke plugin on the viewer's device, reached through the Claude desktop app (the personal .mcpb extension is "host:pp-joke")
 const AGENT_NAME = "rfi-agent";
 const BATCH = 10;                              // ponytail: fixed batch; tune if the agent times out on long questionnaires
 const POLL_MS = 10000, BATCH_TIMEOUT_MS = 30 * 60000;
