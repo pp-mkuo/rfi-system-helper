@@ -24,7 +24,7 @@ A value is **amber** when any of these holds:
 
 Items under "Not covered by the source" in `specs.md` are always amber.
 
-Route amber values per rfi-system-helper's routing table, row "Ad formats, CTV, ad podding, VAST": Route `SME: TPM (owner unconfirmed)`, Escalation `Paul Bennett`. Split a question whose values are partly green and partly amber, as rfi-system-helper splits a straddle. Questions that are not about spec values (for example, whether PulsePoint supports a channel at all) go back to rfi-system-helper's library search.
+Route amber values per rfi-system-helper's routing table, row "Ad formats, CTV, ad podding, VAST", using that row's Route and Escalation and its unconfirmed-owner rule (as of 2026-11-17: Route `SME: TPM (owner unconfirmed)`, Escalation `Paul Bennett`). Split a question whose values are partly green and partly amber, as rfi-system-helper splits a straddle. Questions that are not about spec values (for example, whether PulsePoint supports a channel at all) go back to rfi-system-helper's library search.
 
 ## Step 3: Write the answer
 
