@@ -13,9 +13,9 @@ Questions are verbatim from past client RFIs in the RFI Q&A Bank (rows AGC-077, 
 
 All four are green.
 
-1. A short table by channel: display (970x250, 728x90, 970x90, 300x250, 300x600, 160x600, 300x1050, 320x50, 300x50), native (1000x600 main image, 1:1 logo), video (1920x1080 or 1440x1080), CTV (1920x1080) and eNL (300x250 most common). No KB limits, since the question didn't ask for them. Closes with the source disclaimer.
-2. Online video: :90 or less is best practice, and :120 is the recommended max. CTV: :30 recommended, with :60 and :90 on request. Display animation is capped at :15, or :30 on the leaderboard.
-3. Video: MOV, MP4, AVI, FLV, VAST/VPAID, max 200 MB. Display: initial load by unit (e.g. 150 KB for 300x250 and 728x90, 200 KB for 300x600), and in-banner video is 3rd-party served only. Native image max 1 MB. Audio: MP3, MPEG, AAC, OGG or VAST.
-4. MP4 or VAST 2.0, 1920x1080, :30 recommended (:60 and :90 on request), max 200 MB. **No bitrate.**
+1. A short table by channel: display (970x250, 728x90, 970x90, 300x250, 300x600, 160x600, 180x150), mobile (320x50, 300x50), native (1000x600 main image, 1x1 logo), video (1920x1080 or 1440x1080 recommended), CTV (1920x1080), eNL (300x250 most used) and EHR (160x600, 728x90, 300x250). No KB limits, since the question didn't ask for them. Closes with the source disclaimer.
+2. Online video: :90 or less recommended, :120 max. CTV: :30 or less recommended, with :60 and :90 accepted through the account team. Audio: :15 and :30, with :60 and :90 on request. Display animation: :15 max on standard units; the Billboard allows :30 video.
+3. Video: MOV, MP4, AVI, FLV or VPAID/VAST, max 200 MB. CTV: MP4 or VAST, max 250 MB. Display: 200 KB initial load for standard IAB units (80 KB for 180x150); in-banner video is 3rd-party served only. Native image max 1 MB. Audio: MP3 or WAV, max 50 MB (1 MB on Katz Media).
+4. MP4 or VAST 2.0/3.0 (3rd-party served), 1920x1080, :30 or less recommended (:60 and :90 accepted), max 250 MB. No bitrate, since the question didn't ask for one.
 
-Export cells: Route `CS — answered`. Source `Ad specs: <section>`. Date 2026-11-04. Legal Approved `No`. Flag `internal spec source (WIP)`.
+Export cells: Route `CS — answered`. Source `Ad specs: <section>`. Date 2026-11-02. Legal Approved `No`. No flag.
