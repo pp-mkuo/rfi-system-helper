@@ -1,4 +1,167 @@
 {
- "_about": "Slot for Maggie's 14 Dentsu test questions (pending as of 2026-11-12). Add one item per question in the same shape as testset.json items: id, source, origin \"dentsu14\", written_by \"client\", question (verbatim from the RFI), primary_id, and expected_ids (every record that correctly answers it). The runner picks this file up when items is non-empty and checks top-1 against today's bar of 13 of 14.",
+ "_about": "Rebuilt Dentsu set (2026-11-17). The original 14 questions from the Sept 2026 A/B test were not saved; only 5 answerable ones are recorded in the rfi-system-helper SKILL.md score-band notes (from_sept_test=true). The other 9 are new picks from the same RFI's DSP tab: 'Dentsu US 26-27 Integrated RFI_Template' (Drive id 1YcyBhxs-ngkRJOdTVdo_yJW5CzKD3UtF). Questions are verbatim (title / question). None of this RFI is in the index's RFI 2026 stack (KSO 2027, CMI 2025, CMI Aug 2026). Because the set differs from the original, the 13/14 bar is a reference point, not a like-for-like comparison: this run sets a new baseline. Workflow: run propose_dentsu_candidates.py, Maggie confirms primary_id/expected_ids per question, then move the labeled entries from pending_items into items.",
+ "negative_checks": [
+  {
+   "rfi_ref": "Demand Side Platform (DSPs) DSP23",
+   "question": "MCP/Agent Integrations / Which MCP-compatible interfaces are available?",
+   "expect": "no record at or above the 0.45 floor (Sept test topped out at 0.355)"
+  }
+ ],
+ "pending_items": [
+  {
+   "id": "dentsu-dsp30",
+   "source": "dentsu-26-27",
+   "origin": "dentsu14",
+   "written_by": "client",
+   "rfi_ref": "Demand Side Platform (DSPs) DSP30",
+   "from_sept_test": true,
+   "question": "Conversion Tracking / Do you have conversion API (CAPI) capabilities and/or pixel based tracking for on-site activities?",
+   "primary_id": null,
+   "expected_ids": []
+  },
+  {
+   "id": "dentsu-dsp33",
+   "source": "dentsu-26-27",
+   "origin": "dentsu14",
+   "written_by": "client",
+   "rfi_ref": "Demand Side Platform (DSPs) DSP33",
+   "from_sept_test": true,
+   "question": "Cross-Device Targeting Capabilities / Please detail your cross-channel tracking and attribution methodology. Is it deterministic or probabilistc?",
+   "primary_id": null,
+   "expected_ids": []
+  },
+  {
+   "id": "dentsu-dsp38",
+   "source": "dentsu-26-27",
+   "origin": "dentsu14",
+   "written_by": "client",
+   "rfi_ref": "Demand Side Platform (DSPs) DSP38",
+   "from_sept_test": true,
+   "question": "Log Level Reporting / Can we have access to log level reporting? Are there any limitations?",
+   "primary_id": null,
+   "expected_ids": []
+  },
+  {
+   "id": "dentsu-dsp59",
+   "source": "dentsu-26-27",
+   "origin": "dentsu14",
+   "written_by": "client",
+   "rfi_ref": "Demand Side Platform (DSPs) DSP59",
+   "from_sept_test": true,
+   "question": "Buyer Control Compliance for Ads.TXT / (web + App inventory) / If we wanted to only deliver to publishers that have adopted ads.txt, and have appropriate files in place, is there an easy way to select only that inventory? Please specify for web and app.",
+   "primary_id": null,
+   "expected_ids": []
+  },
+  {
+   "id": "dentsu-dsp70",
+   "source": "dentsu-26-27",
+   "origin": "dentsu14",
+   "written_by": "client",
+   "rfi_ref": "Demand Side Platform (DSPs) DSP70",
+   "from_sept_test": true,
+   "question": "Third Party Verification / What third party verification partners do you work with? Are there any whose tags you do not accept?",
+   "primary_id": null,
+   "expected_ids": []
+  },
+  {
+   "id": "dentsu-dsp7",
+   "source": "dentsu-26-27",
+   "origin": "dentsu14",
+   "written_by": "client",
+   "rfi_ref": "Demand Side Platform (DSPs) DSP7",
+   "from_sept_test": false,
+   "question": "Optimization Algorithms & Bid Multipliers / What tools are available within the DSP to optimize? Are there bid multipliers available? Please list out all levers available.",
+   "primary_id": null,
+   "expected_ids": []
+  },
+  {
+   "id": "dentsu-dsp12",
+   "source": "dentsu-26-27",
+   "origin": "dentsu14",
+   "written_by": "client",
+   "rfi_ref": "Demand Side Platform (DSPs) DSP12",
+   "from_sept_test": false,
+   "question": "Geo-Granularity / How does geo targeting get applied? How granular can we get?",
+   "primary_id": null,
+   "expected_ids": []
+  },
+  {
+   "id": "dentsu-dsp14",
+   "source": "dentsu-26-27",
+   "origin": "dentsu14",
+   "written_by": "client",
+   "rfi_ref": "Demand Side Platform (DSPs) DSP14",
+   "from_sept_test": false,
+   "question": "Buying Methodologies / What buying methodologies are available within the DSP? (CPM, CPV, CPA, CPI, CPC, Etc.)",
+   "primary_id": null,
+   "expected_ids": []
+  },
+  {
+   "id": "dentsu-dsp15",
+   "source": "dentsu-26-27",
+   "origin": "dentsu14",
+   "written_by": "client",
+   "rfi_ref": "Demand Side Platform (DSPs) DSP15",
+   "from_sept_test": false,
+   "question": "Frequency Management / At what levels are frequency caps available? Advertiser, Campaign, Line Item/Ad Order, etc.",
+   "primary_id": null,
+   "expected_ids": []
+  },
+  {
+   "id": "dentsu-dsp46",
+   "source": "dentsu-26-27",
+   "origin": "dentsu14",
+   "written_by": "client",
+   "rfi_ref": "Demand Side Platform (DSPs) DSP46",
+   "from_sept_test": false,
+   "question": "Programmatic Guaranteed / Do you support PG? Are there additional technology fees associated? Is there a negotiation tool for buyers within the platform?",
+   "primary_id": null,
+   "expected_ids": []
+  },
+  {
+   "id": "dentsu-dsp60",
+   "source": "dentsu-26-27",
+   "origin": "dentsu14",
+   "written_by": "client",
+   "rfi_ref": "Demand Side Platform (DSPs) DSP60",
+   "from_sept_test": false,
+   "question": "Viewability / What tools do you use to measure viewability in platform? What level of reporting can be provided for viewability?",
+   "primary_id": null,
+   "expected_ids": []
+  },
+  {
+   "id": "dentsu-dsp63",
+   "source": "dentsu-26-27",
+   "origin": "dentsu14",
+   "written_by": "client",
+   "rfi_ref": "Demand Side Platform (DSPs) DSP63",
+   "from_sept_test": false,
+   "question": "100% Transparent Domains / Are you able to provide exact domains that each impression is activated on? (i.e. when we pull reporting, no unclassified or masked domains will be reported) If no, please explain in greater detail in the notes section.",
+   "primary_id": null,
+   "expected_ids": []
+  },
+  {
+   "id": "dentsu-dsp65",
+   "source": "dentsu-26-27",
+   "origin": "dentsu14",
+   "written_by": "client",
+   "rfi_ref": "Demand Side Platform (DSPs) DSP65",
+   "from_sept_test": false,
+   "question": "Fraud Detection / What types of fraud can your platform detect? Please list with as much detail as possible. Please also describe any limitations with your fraud detection (e.g. mobile web, mobile app, video, other)",
+   "primary_id": null,
+   "expected_ids": []
+  },
+  {
+   "id": "dentsu-dsp71",
+   "source": "dentsu-26-27",
+   "origin": "dentsu14",
+   "written_by": "client",
+   "rfi_ref": "Demand Side Platform (DSPs) DSP71",
+   "from_sept_test": false,
+   "question": "Blocking Tags / Do you accept blocking tags across all applicable inventory? If any limitations, please note.",
+   "primary_id": null,
+   "expected_ids": []
+  }
+ ],
  "items": []
 }
