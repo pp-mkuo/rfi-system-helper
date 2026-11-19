@@ -85,7 +85,7 @@ button:disabled { opacity: 0.5; cursor: default; }
   <header>
     <div>
       <h1>RFI System Helper</h1>
-      <p class="sub">Triage a client RFI, draft green answers from the PulsePoint answer library, route the rest.</p>
+      <p class="sub">Triage a client RFI, draft green answers from the PulsePoint answer library, route the rest. <span class="mono" title="Page build: bump this on every republish">build 2026-11-19 · AF-126/127</span></p>
     </div>
     <div class="chips" id="chips">
       <span class="chip" id="chip-agent">rfi-agent</span>
@@ -178,7 +178,7 @@ const POLL_MS = 10000, BATCH_TIMEOUT_MS = 30 * 60000;
 // ---------------------------------------------------------------------------
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-const sleep = ms => new Promise(r => setTimeout(r, ms));
+const sleep = (ms, signal) => new Promise(r => { const t = setTimeout(r, ms); signal?.addEventListener("abort", () => { clearTimeout(t); r(); }, { once: true }); });
 const uid = () => (crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2) + Date.now().toString(36));
 
 const caps = { db: null, user: null, downloads: null, mcp: null };
@@ -190,8 +190,11 @@ let parsedUpload = null;
   const use = n => (window.claude?.use ? window.claude.use(n) : Promise.resolve(null)).catch(() => null);
   [caps.db, caps.user, caps.downloads, caps.mcp] = await Promise.all(["db", "user", "downloads", "mcp"].map(use));
   if (caps.user) state.userId = await caps.user.id().catch(() => null);
-  const dbOk = caps.db && state.userId;
-  setChip("chip-db", dbOk ? "ok" : "warn", dbOk ? "Run log on" : "Run log off (not saved)");
+  // Viewers and Commenters can never write the db, whatever rules the page declares (AF-127); null = not told, let a write decide.
+  state.canLog = caps.user ? await caps.user.can("data.write").catch(() => null) : null;
+  const dbOk = caps.db && state.userId && state.canLog !== false;
+  setChip("chip-db", dbOk ? "ok" : "warn", dbOk ? "Run log on" : state.canLog === false ? "Run log off: needs Contributor access" : "Run log off (not saved)");
+  if (state.canLog === false) $("runs-empty").textContent = "Your runs aren't saved: saving a run needs Contributor access to this page. Ask the page owner for it, or export the workbook to keep a run.";
   if (!caps.mcp) { setChip("chip-agent", "bad", "rfi-agent unavailable here"); showNotice(NO_HOST); }
   else {
     try {
@@ -265,7 +268,7 @@ function questionsFromUpload() {
 
 // --- run ----------------------------------------------------------------------
 $("start").addEventListener("click", startRun);
-$("stop").addEventListener("click", () => { state.ctl?.abort(); $("stop").disabled = true; });
+$("stop").addEventListener("click", () => { state.ctl?.abort(); $("stop").disabled = true; $("status").textContent = "Stopping: keeping the questions rfi-agent has finished…"; });
 $("retry").addEventListener("click", () => askAgent(state.rows.filter(r => r.status === "failed")));
 
 async function startRun() {
@@ -289,12 +292,13 @@ function setRunning(on) {
 function progress(done, total, text) { $("bar").style.width = total ? (100 * done / total) + "%" : "0"; $("status").textContent = text || ""; }
 const fatal = new Set(["server_not_connected", "not_granted", "not_declared", "capability_disabled", "session_expired", "cancelled", "agent_missing"]);
 
-async function call(tool, input) {
+async function call(tool, input, signal = state.ctl.signal) {
   for (let attempt = 0; ; attempt++) {
-    try { return (await caps.mcp.callTool(HOST, tool, input, { cache: false, signal: state.ctl.signal })).payload; }
-    catch (e) { if (e.retryable && attempt < 3 && !state.ctl.signal.aborted) { await sleep(5000 * (attempt + 1)); continue; } throw e; }
+    try { return (await caps.mcp.callTool(HOST, tool, input, { cache: false, ...(signal ? { signal } : {}) })).payload; }
+    catch (e) { if (e.retryable && attempt < 3 && !signal?.aborted) { await sleep(5000 * (attempt + 1), signal); continue; } throw e; }
   }
 }
+const STOPPED = "stopped before rfi-agent finished it";
 
 function roleLine() {
   const r = state.roles, v = (k, x) => `${k}: ${x || "not named"}`;
@@ -307,15 +311,17 @@ ${roleLine()}
 Questions (JSON):
 ${JSON.stringify(batch.map(r => ({ n: r.n, q: r.question })))}
 
-Reply with ONLY a JSON array, no prose before or after. One object per question, or per part if you split a question that straddles lanes (number parts 1a, 1b…):
+Reply in JSON only, no prose. As soon as you finish each question, post its result as a message of its own holding just that one JSON object, so finished questions are kept if the run is stopped. Don't repost them as an array at the end. One object per question, or per part if you split a question that straddles lanes (number parts 1a, 1b…):
 {"n":"<#>","question":"<verbatim question or part>","lane":"GREEN"|"AMBER"|"RED","route":"<Route cell from your routing table; \\"CS — answered\\" for green>","esc":"<escalation, or empty>","why":"<at most 12 words>","draft":"<green answer, else empty>","sources":[{"id":"<id>","score":0.0,"stack":"","updated":"","legal_approved":true,"question":"<source question>","used":true}],"stitched":false,"uncovered":"<part with no source, or empty>","flags":["<flag>"]}
 Leave sources empty for red. Do not write a workbook.`;
 }
 
-// One agent session per run; batches go to it in turn. Stop ends polling, not the agent's current batch.
+// One agent session per run; batches go to it in turn. Stop (AF-126) ends the batch here at once, interrupts rfi-agent's
+// turn through pp-joke, keeps the questions the agent has already posted, marks the rest stopped and sends no more.
 async function askAgent(rows) {
   if (!rows.length) { setRunning(false); renderAll(); return; }
-  setRunning(true); state.ctl = new AbortController();
+  setRunning(true); state.ctl = new AbortController(); state.halted = null;
+  const sig = state.ctl.signal;
   rows.forEach(r => { r.status = "pending"; r.error = ""; });
   let done = 0;
   try {
@@ -324,27 +330,40 @@ async function askAgent(rows) {
       state.agentId = (l?.agents || []).find(a => a.name === AGENT_NAME)?.id;
       if (!state.agentId) throw Object.assign(new Error(`${AGENT_NAME} is not listed by pp-joke`), { code: "agent_missing" });
     }
-    for (let i = 0; i < rows.length && !state.ctl.signal.aborted; i += BATCH) {
+    for (let i = 0; i < rows.length && !sig.aborted; i += BATCH) {
       const batch = rows.slice(i, i + BATCH);
       batch.forEach(r => { r.status = "working"; }); renderAll();
       const label = `rfi-agent: questions ${i + 1}–${i + batch.length} of ${rows.length}`;
       progress(done, rows.length, `${label}, sending…`);
       try {
-        const s = await call("send_message", { agent_id: state.agentId, message: agentPrompt(batch), title: state.run.name, ...(state.run.sessionId ? { session_id: state.run.sessionId } : {}) });
+        // ponytail: no signal on the send, an aborted send may still land and would be sent twice on retry
+        const s = await call("send_message", { agent_id: state.agentId, message: agentPrompt(batch), title: state.run.name, ...(state.run.sessionId ? { session_id: state.run.sessionId } : {}) }, null);
         if (!state.run.sessionId) { state.run.sessionId = s.session_id; dbRun("update", { sessionId: s.session_id }); }
+        const read = signal => call("get_reply", { agent_id: state.agentId, session_id: s.session_id, user_event_id: s.user_event_id }, signal);
         const t0 = Date.now(); let g;
         do {
-          await sleep(POLL_MS);
-          if (state.ctl.signal.aborted) break;
-          g = await call("get_reply", { agent_id: state.agentId, session_id: s.session_id, user_event_id: s.user_event_id });
+          await sleep(POLL_MS, sig);
+          if (sig.aborted) break;
+          g = await read(sig).catch(e => { if (sig.aborted) return g; throw e; });
           progress(done, rows.length, `${label}, ${g?.state || "working"} (${Math.round((Date.now() - t0) / 60000)} min)…`);
-        } while (!g?.done && Date.now() - t0 < BATCH_TIMEOUT_MS);
-        if (state.ctl.signal.aborted) { batch.forEach(r => { r.status = "failed"; r.error = "stopped"; }); break; }
+        } while (!sig.aborted && !g?.done && Date.now() - t0 < BATCH_TIMEOUT_MS);
+        if (sig.aborted) {
+          // pp-joke 0.2.5+ interrupts the turn: the agent finishes the step it is on, then goes idle. Older pp-joke
+          // rejects the call, and the agent then runs the batch out server-side. Either way, keep what it has posted.
+          $("status").textContent = "Stopping rfi-agent…";
+          const halted = await call("interrupt", { agent_id: state.agentId, session_id: s.session_id }, null).then(() => true, e => (console.warn("interrupt", e), false));
+          g = await read(null).catch(() => g);
+          for (const t1 = Date.now(); halted && !g?.done && Date.now() - t1 < 60000; ) { await sleep(2000); g = await read(null).catch(() => g); }
+          state.halted = halted && !!g?.done;
+          applyAgent(batch, replyRows(g?.messages), STOPPED);
+          break;
+        }
         if (!g?.done) throw Object.assign(new Error("no reply after 30 min"), { code: "timeout" });
-        const out = (g.messages || []).slice().reverse().map(parseReply).find(Boolean);   // the agent may post a prose status line before the JSON
-        if (!out) throw Object.assign(new Error("reply was not the JSON asked for"), { code: "bad_reply" });
+        const out = replyRows(g.messages);   // the agent may post prose status lines between the JSON
+        if (!out.length) throw Object.assign(new Error("reply was not the JSON asked for"), { code: "bad_reply" });
         applyAgent(batch, out);
       } catch (e) {
+        if (sig.aborted) break;
         if (fatal.has(e.code)) throw e;
         batch.forEach(r => { r.status = "failed"; r.error = e.code || e.message; dbRow("update", r); });
         showNotice(`A batch failed (${e.code || e.message}). Use "Retry failed rows".`, true);
@@ -352,27 +371,42 @@ async function askAgent(rows) {
       done += batch.length; renderAll();
     }
   } catch (e) {
-    rows.filter(r => r.status === "pending" || r.status === "working").forEach(r => { r.status = "failed"; r.error = e.code || e.message; });
-    showNotice(e.code === "cancelled" ? "Stopped: the call to pp-joke was declined." : e.code === "server_not_connected" ? NO_HOST : `rfi-agent stopped: ${e.code || e.message}.`, true);
+    if (!sig.aborted) {
+      rows.filter(r => r.status === "pending" || r.status === "working").forEach(r => { r.status = "failed"; r.error = e.code || e.message; });
+      showNotice(e.code === "cancelled" ? "Stopped: the call to pp-joke was declined." : e.code === "server_not_connected" ? NO_HOST : `rfi-agent stopped: ${e.code || e.message}.`, true);
+    }
   }
-  progress(rows.length, rows.length, state.ctl.signal.aborted ? "Stopped." : "Done.");
+  if (sig.aborted) {
+    rows.filter(r => r.status === "pending" || r.status === "working").forEach(r => { r.status = "failed"; r.error = STOPPED; dbRow("update", r); });
+    const left = state.rows.filter(r => r.error === STOPPED), fin = state.rows.filter(r => r.status === "drafted" || r.status === "routed");
+    showNotice(`Stopped. ${fin.length} of ${state.rows.length} questions are finished. Not finished: ${left.length ? "#" + left.map(r => r.n).join(", #") : "none"}. "Retry failed rows" runs them again.` +
+      (state.halted === false ? " rfi-agent couldn't be interrupted (pp-joke 0.2.5 or later is needed), so it finishes its current batch on its own." : ""));
+  }
+  progress(rows.length, rows.length, sig.aborted ? "Stopped." : "Done.");
   setRunning(false); renderAll();
 }
 
+// Every result object the agent posted across its messages; a later copy of the same # wins.
+function replyRows(messages) {
+  const byN = new Map();
+  for (const m of messages || []) [].concat(parseReply(m) || []).forEach(o => { if (o && o.n != null) byN.set(String(o.n), o); });
+  return [...byN.values()];
+}
 function parseReply(text) {
   const t = String(text).replace(/```(?:json)?/g, "");
-  const a = t.indexOf("["), b = t.lastIndexOf("]");
-  if (a < 0 || b < a) return null;
-  try { const v = JSON.parse(t.slice(a, b + 1)); return Array.isArray(v) ? v : null; } catch { return null; }
+  const a = t.search(/[[{]/); if (a < 0) return null;
+  const b = t.lastIndexOf(t[a] === "[" ? "]" : "}"); if (b < a) return null;
+  try { const v = JSON.parse(t.slice(a, b + 1)); return v && typeof v === "object" ? v : null; }
+  catch { const v = t.split("\n").map(l => { try { return JSON.parse(l.trim()); } catch { return null; } }).filter(o => o && typeof o === "object"); return v.length ? v : null; }   // one object per line
 }
 
-function applyAgent(batch, out) {
+function applyAgent(batch, out, missing = "missing from the agent's reply") {
   const expanded = [];
   for (const row of state.rows) {
     if (!batch.includes(row)) { expanded.push(row); continue; }
     const base = String(row.n);
     const parts = out.filter(o => String(o.n) === base || (String(o.n).startsWith(base) && /^[a-h]$/.test(String(o.n).slice(base.length))));
-    if (!parts.length) { row.status = "failed"; row.error = "missing from the agent's reply"; expanded.push(row); dbRow("update", row); continue; }
+    if (!parts.length) { row.status = "failed"; row.error = missing; expanded.push(row); dbRow("update", row); continue; }
     parts.forEach((p, i) => {
       const r = i === 0 ? row : { ...row, id: uid() };
       r.n = parts.length > 1 ? String(p.n) : base;
@@ -397,7 +431,7 @@ function applyAgent(batch, out) {
 }
 
 // --- db -----------------------------------------------------------------------
-function runRef() { return caps.db && state.userId && state.run ? caps.db.doc(`logs/${state.userId}/runs/${state.run.id}`) : null; }
+function runRef() { return caps.db && state.userId && state.canLog !== false && state.run ?caps.db.doc(`logs/${state.userId}/runs/${state.run.id}`) : null; }
 async function dbRun(op, data) { const ref = runRef(); if (!ref) return; try { await ref[op](data); } catch (e) { console.warn("db run", e); setChip("chip-db", "warn", "Run log: write refused"); } }
 const rowWrites = new Map();
 function dbRow(op, r) {

@@ -113,9 +113,9 @@ The run log (`db`), the 👍/👎 feedback and the Excel export work as before.
 - `library-search` output has no record IDs, so `sources[].id` comes back blank. Source questions, dates and scores still show and are kept in the run log. Adding IDs to `query.py` output would fix it.
 - The agent's flags are full sentences, not the page's short labels, so the chips run long and the "flagged" count is right but not grouped. A short flag vocabulary in the skill would help.
 - The reply doesn't include source answer text, so the matches drawer shows only source questions.
-- "Stop" stops polling but not the agent's current batch.
+- "Stop" stops polling but not the agent's current batch. *(Fixed 2026-11-19 in AF-126, PR #10: Stop calls pp-joke 0.2.5's `interrupt` and keeps the finished questions. With pp-joke 0.2.4 the agent still finishes its batch.)*
 - pp-joke 0.2.4 marks `list_agents` and `get_reply` read-only, so polling shouldn't ask for approval. Only `send_message` may ask, once per batch.
-- Testers need Contributor access or higher for their runs to be logged, because of the `logs/{self}` write rule.
+- Testers need Contributor access or higher for their runs to be logged, because of the `logs/{self}` write rule. *(2026-11-19, AF-127: see `docs/rfi-helper-run-log-access.md`.)*
 - A long questionnaire takes a few minutes per 10 questions. The batch size isn't tuned.
 - **Server name.** In an Artifact the server is `host:pp-joke`, which is the desktop app's name for the org plugin. Claude Code's internal name `plugin_pp-joke_pp-joke` returns `server_not_connected`, which Caedon's first probe click showed.
 - **Personal accounts.** The org plugin only reaches pages opened under the PulsePoint enterprise account. To test from a personal claude.ai account, install `pp-joke-0.2.4.mcpb` as a desktop extension. It was built on 2026-11-12 from the 0.2.4 plugin zip's server and the 0.2.2 `.mcpb` manifest, and it is also named `pp-joke`.
