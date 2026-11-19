@@ -3,101 +3,71 @@ provenance: agent-generated
 last-verified: never
 ---
 
-# AF-129: memory store vs Pinecone for the answer library (2026-11-19)
+# Memory store vs Pinecone for the RFI library: review for Maggie (AF-129)
 
-This is a point-in-time result from one run of each eval on 2026-11-19. The answer keys are agent-built and Caedon hasn't checked them, so every score is provisional. Accuracy and routing judgments are Maggie's.
+This is a point-in-time result from one run of each eval on 2026-11-19. The answer keys are agent-built and nobody has checked them, so every score is provisional. Accuracy and routing calls are yours.
 
-## What was tested
+## The question
 
-Ezra suggested keeping the library in a Claude Managed Agents **memory store** instead of Pinecone. A memory store is a set of text files mounted read-only at `/mnt/memory/`, and the agent searches it with grep. It has no meaning-based search and no scores. The feature is in beta, behind `agent-memory-2026-07-22`. It isn't the same as the agent's vault, which holds credentials only.
+Ezra suggested keeping the library in a Claude Managed Agents **memory store** instead of Pinecone. A memory store is a set of read-only text files at `/mnt/memory/`, and the agent searches it with grep. That means keyword matching: no meaning-based search and no scores. We tested it side by side, and **rfi-agent was not changed.**
 
-- **Store:** `memstore_01MqRVN7npVy4FFPnuWZmVru` (`rfi-answer-library`). It holds 2,297 files, one per record, in one folder per stack. It was loaded by `pipeline/build_memory_store.py` from the same 2,297 IDs that are in the Pinecone index. The Loopio records have no usable category, so the files couldn't be grouped by topic.
-- **Agent:** `rfi-agent-memory` (`agent_01Eu17bC4gDYXD1h4eHT7Nu8`, v1) in `agents/rfi-agent-memory/`. It's a copy of live rfi-agent v3. The only changes are the retrieval sections of rfi-system-helper and a grep-based library-search skill. It has no vault, no Pinecone and no OpenAI.
-- **rfi-agent itself was not changed.**
+- **Store:** `memstore_01MqRVN7npVy4FFPnuWZmVru`, holding the same 2,297 records as the index, one file per record, one folder per stack. Built by `pipeline/build_memory_store.py`.
+- **Copy agent:** `rfi-agent-memory` (`agent_01Eu17bC4gDYXD1h4eHT7Nu8`). It's live rfi-agent v3 with only the search steps swapped (`agents/rfi-agent-memory/`). It needs no vault, no Pinecone and no OpenAI.
 
 ## Results
 
-**Accuracy (AF-50 set, 29 questions)**, compared with the AF-50 baseline on rfi-agent v3 (2026-11-12):
-
-| | Pinecone (v3) | Memory store (v1) |
+| | Pinecone (rfi-agent v3) | Memory store |
 |---|---|---|
-| Triage | 28/29 | 29/29 |
+| Triage, AF-50 set (29 questions) | 28/29 | 29/29 |
 | Routing (amber + red) | 15/15 | 15/15 |
 | Red safety | 8/8 | 8/8 |
 | Faithfulness | 13/14 | 15/16 |
-| Agent cost | $1.04 | $1.79 |
-| Judge cost | $0.65 | $1.81 |
+| Retrieval, right record first (first 30 AF-49 paraphrases) | 25/30 | 25/30 |
+| Retrieval, right record in top 3 | 28/30 | 27/30 |
+| Claude cost per question | about $0.036 | about $0.062 |
 
-**Retrieval (the first 30 paraphrase items of the AF-49 set)**, compared with the AF-49 baseline on loopio-library-2 (2026-11-12):
+The Pinecone baselines are AF-50 and AF-49, both run 2026-11-12. Files: `evals/accuracy/results/2026-11-19-cmi2025-slice-memory-v1.json` and `evals/retrieval/results/2026-11-19-memory-v1-paraphrase-first30.json`.
 
-| | Pinecone | Memory store |
-|---|---|---|
-| Right record ranked first | 25/30 | 25/30 |
-| Right record in the top 3 | 28/30 | 27/30 |
-| Right record in the top 5 | n/a | 29/30 |
-| Cost | about $0 (script) | $1.63 (agent sessions) |
+## What we need from you
 
-**Where the two differ:**
-- **Memory store missed, Pinecone hit:**
-  - `af49-037`: report breakouts
-  - `af49-038`: source of physician targeting data
-  - `af49-039`: how fast an audience goes live
-- **Memory store hit, Pinecone missed** (not in the top 3):
-  - `af49-030`: dynamic creative optimization
-  - `af49-031`: daily trigger files
-- **Accuracy set:**
-  - `CMI-049` (bid shading) came back green on the memory store and amber on Pinecone. The library has conflicting records on this, so routing it amber may be the better answer.
-  - `CMI-055` has one unsupported claim, "patented MeSH-mapped contextual engine".
-  - `CMI-018` passed this time.
+1. **Three retrieval misses that Pinecone got right.** Is the record the memory agent picked an acceptable answer?
+   - `af49-037`, report breakouts: picked `rfi2026-cmi2025-016`
+   - `af49-038`, source of physician targeting data: picked `rfi2026-cmi0826-037`
+   - `af49-039`, how fast an audience goes live: picked `loopio-13130670`
 
-## Caveats
-
-- One run per question. AF-50 already showed that overclaims vary from run to run.
-- The AF-49 answer key was widened by reviewing Pinecone's misses, so it leans toward Pinecone. Some of the memory store's "misses" may still be valid answers.
-- The CMI set is easy: its answers sit in the library almost word for word. The Dentsu 14 (AF-120) are still the real test for both setups.
-- Cost per question is about 1.7× on the agent side, because the agent runs several greps and file reads instead of one search call.
+   The answer key was widened by reviewing Pinecone's misses, so it may favour Pinecone.
+2. **`CMI-049`, bid shading.** The memory agent called it green. Pinecone called it amber and routed it to Becky Hallam. The library has conflicting records on this question. Which call is right?
+3. **`CMI-055`.** The draft claims a "patented MeSH-mapped contextual engine", and the judge found no record that says so. Is it true?
+4. **The answer key.** Please check `evals/accuracy/questions.json`, starting with `CMI-057` and `CMI-049`.
 
 ## Cost and scale
 
-Prices are from pinecone.io/pricing, the Pinecone cost docs and OpenAI's API pricing page, checked 2026-11-19. They may have changed since.
+Prices were checked 2026-11-19 on pinecone.io/pricing and OpenAI's pricing page.
 
-**Per question:**
+- **Pinecone per question is close to $0:** about $0.000004 for the search and $0.000001 for the OpenAI embedding. The real cost is the plan: Standard has a $50/month minimum and Builder is $20. The index is on GCP, so it's on a paid plan; which one is not checked.
+- **The memory store has no storage charge listed,** but it costs about $0.026 more Claude per question. It's cheaper overall below about 1,900 questions a month, and only if the Pinecone plan exists just for this library.
+- **Upkeep Pinecone needs and the memory store doesn't:**
+  - two vendors' keys in the vault, plus the allowed hosts
+  - a ReadWrite key for every load
+  - an OpenAI account that can run out of credit
+  - two outside services to clear in a legal or security review
+- **Scale:**
+  - The memory store caps at 10,000 files per store, and it holds 2,297 now.
+  - Keyword search reads more files as the library grows, and it gets worse at matching reworded questions.
+  - Pinecone stays at minimum query cost up to roughly 40,000 records, and its search quality holds as the library grows.
+  - Both get worse as duplicates and conflicts grow, so library cleanup (AF-117) matters either way.
 
-| | Pinecone (live) | Memory store |
-|---|---|---|
-| Search | 0.25 RU minimum at $16–18 per million RU, about $0.000004 | n/a (grep) |
-| Embedding | OpenAI `text-embedding-3-small` at $0.02/M tokens, about $0.000001. Pinecone `llama-text-embed-v2` would be $0.16/M | none |
-| Storage | about 15 MB at $0.33/GB-month, about $0.005 a month | no charge listed (the docs are silent) |
-| Claude tokens | about $0.036 | about $0.062 |
+## Still open
 
-**Fixed costs:**
-- Pinecone's Standard plan has a $50/month minimum; Builder is $20 flat. The free Starter plan is AWS us-east-1 only, and the agent's index is on GCP us-central1, so the project is on a paid plan. Which plan is not checked.
-- If that plan also covers the other indexes (`rfihistoricalanswers`, `pulsepoint-knowledge`), the library adds about $0 at the margin.
-- If the plan exists only for this library, the memory store is cheaper overall below about 1,900 questions a month: $50 ÷ $0.026 extra per question.
-
-**Upkeep costs (not on any invoice):**
-- Two vendors' keys in the vault, plus the allowed hosts.
-- A separate ReadWrite key for every load.
-- An OpenAI account that can run out of credit (`429 insufficient_quota`).
-- Two outside services to clear in a legal or security review.
-
-**Scale:**
-- **Memory store:**
-  - The store holds at most 10,000 files; it has 2,297 now. Past that, records have to be packed several to a file or spread across stores (a session can attach up to 8).
-  - Each keyword search returns more candidates as the library grows, so the tokens and time per question grow with it.
-  - Matching reworded questions gets harder as near-duplicates pile up.
-  - Loading takes one API call per file.
-- **Pinecone:** the query cost stays at the 0.25 RU minimum up to about 0.25 GB per namespace (roughly 40,000 records at this size). Search quality doesn't depend on library size the way keyword search does.
-- **Both:** duplicates and conflicts grow with the library, so library cleanup (AF-117) matters more than the choice of store.
-
-## Reading
-
-On this sample, keyword search over a memory store matched Pinecone on both accuracy and retrieval. It also removed the vault keys, the allowed hosts and the laptop load scripts. The open questions are the Dentsu 14, run-to-run variance, and whether the higher cost per question is acceptable. Those are calls for Maggie and Caedon.
+- **Dentsu 14 (AF-120).** These are the real retrieval test. Run both evals on both agents when the questions arrive.
+- **Run-to-run variance.** Each question ran once, and AF-50 showed overclaims vary between runs.
+- **The other 44 AF-49 paraphrases and 16 verbatim items.** Not run on the memory store yet, to stay inside the budget.
+- **Which Pinecone plan the project is on.**
 
 ## Rerun
 
 ```
 unset ANTHROPIC_API_KEY
-python3 evals/accuracy/run_accuracy_eval.py --agent-id agent_01Eu17bC4gDYXD1h4eHT7Nu8 --memory-store memstore_01MqRVN7npVy4FFPnuWZmVru
-python3 evals/retrieval/run_memory_retrieval.py --origin paraphrase --limit 30
+python3 evals/accuracy/run_accuracy_eval.py --agent-id agent_01Eu17bC4gDYXD1h4eHT7Nu8 --memory-store memstore_01MqRVN7npVy4FFPnuWZmVru [--set evals/accuracy/dentsu14.json]
+python3 evals/retrieval/run_memory_retrieval.py [--origin paraphrase] [--limit N]
 ```
