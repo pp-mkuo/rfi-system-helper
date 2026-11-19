@@ -6,6 +6,26 @@
     "workspace_id": "wrkspc_011wRRWPbejEjn3r2uoWBVzQ"
   },
   "resources": {
+    "./agents/rfi-agent-memory/agent.md": {
+      "kind": "agent",
+      "id": "agent_01Eu17bC4gDYXD1h4eHT7Nu8",
+      "version": "1",
+      "hash": "db448bef268af8250d4db9f0559f7e31",
+      "remote_hash": "0275420804baa744fd81df5353aaf3ca",
+      "stamp": "1"
+    },
+    "./agents/rfi-agent-memory/skills/library-search-memory": {
+      "kind": "skill",
+      "id": "skill_01AybJp75MZ5Cq6bJF9SoH1t",
+      "version": "skver_01WLhergNFHrUDRVyZ1T67UF",
+      "hash": "0e6b36285e8252a02e4af85ee6ff0adc"
+    },
+    "./agents/rfi-agent-memory/skills/rfi-system-helper-memory": {
+      "kind": "skill",
+      "id": "skill_01Tiy1ohjnE6p3KMupthwjwR",
+      "version": "skver_012LqV8UZiSoJd5aij8ukBAU",
+      "hash": "bed656834c815387eaf67ce74c96c764"
+    },
     "./agents/rfi-agent/agent.md": {
       "kind": "agent",
       "id": "agent_018cUnLHJKgSVrFqY346wgTs",

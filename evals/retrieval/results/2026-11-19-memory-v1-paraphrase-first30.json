@@ -1,0 +1,1023 @@
+{
+ "date": "2026-11-19",
+ "agent": {
+  "id": "agent_01Eu17bC4gDYXD1h4eHT7Nu8",
+  "version": 1
+ },
+ "memory_store": "memstore_01MqRVN7npVy4FFPnuWZmVru",
+ "batches": [
+  {
+   "session_id": "sesn_01Wjj2XpJHrp7D5QKphmQZ82",
+   "status": "idle",
+   "stop_reason": {
+    "type": "end_turn"
+   },
+   "cost_cents": 69,
+   "searches": [
+    {
+     "command": "ls /mnt/memory/ /mnt/memory/*/; ls -R /mnt/memory | wc -l; cd /mnt/memory/rfi-answer-library; grep -rh '^question:' . | wc -l"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; s(){ grep -rliE \"$1\" . | while read f; do printf \"%s | %s | %s\\n\" \"$f\" \"$(grep -m1 '^updated:' $f|cut -c10-19)\" \"$(grep -m1 '^question:' $f|cut -c11-150)\"; done; }\necho \"== Q18\"; grep -rliE '^question:.*(self[- ]serve|managed service|log ?in|platform access|run campaigns)' . | xargs grep -h -m1 -H '^question:' | cut -c1-220 | head -40"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; for f in rfi-2026/rfi2026-cmi0826-011.md rfi-q-a-bank-v2-unverified/qabank-AGC-041.md rfi-q-a-bank-v2-unverified/qabank-AGC-039.md client-strategy-cleaned/loopio-13130555.md client-strategy/loopio-12254615.md; do echo \"#### $f\"; cat $f | cut -c1-600; done; grep -rliE '^question:.*(self-service|self service|selfserve|dsp access|seat|hands-on|managed)' . | xargs grep -h -m1 -H '^question:' | cut -c1-200"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; for f in client-strategy-cleaned/loopio-13130598.md client-strategy/loopio-11344883.md client-strategy-cleaned/loopio-13131247.md; do echo \"#### $f\"; cut -c1-700 $f; done"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; grep -rliE '^question:.*(pixel|retarget)' . | xargs grep -h -m1 -H '^question:' | cut -c1-220"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; for f in rfi-2026/rfi2026-cmi2025-009.md client-strategy-cleaned/loopio-13130814.md client-strategy-cleaned/loopio-13130628.md client-strategy-cleaned/loopio-13130916.md rfi-2026/rfi2026-kso-002.md client-strategy-cleaned/loopio-13130866.md; do echo \"#### $f\"; cut -c1-600 $f; done; grep -rliE 'universal pixel|smart pixel' . "
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; for f in client-strategy/loopio-11344807.md client-strategy-cleaned/loopio-13130660.md rfi-2026/rfi2026-cmi0826-018.md rfi-2026/rfi2026-cmi2025-002.md rfi-2026/rfi2026-cmi2025-011.md; do echo \"#### $f\"; cut -c1-500 $f; done"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; grep -rliE 'predict|pre-diagnos|prediagnos|before diagnos|undiagnosed|propensity|at[- ]risk|likely to develop' . | xargs grep -h -m1 -H '^question:' | cut -c1-200"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; for f in rfi-2026/rfi2026-cmi0826-043.md rfi-2026/rfi2026-cmi0826-044.md rfi-2026/rfi2026-cmi0826-053.md client-strategy-cleaned/loopio-13130514.md client-strategy-cleaned/loopio-13130513.md rfi-2026/rfi2026-cmi0826-054.md; do echo \"#### $f\"; cut -c1-700 $f; done"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; grep -rliE '^question:.*(contextual|context)' . | xargs grep -h -m1 -H '^question:' | cut -c1-200"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; for f in client-strategy-cleaned/loopio-13131329.md client-strategy/loopio-11344247.md rfi-2026/rfi2026-cmi2025-055.md rfi-2026/rfi2026-cmi2025-056.md client-strategy/loopio-12254605.md client-strategy-cleaned/loopio-13130533.md rfi-q-a-bank-v2-unverified/qabank-AGC-103.md rfi-q-a-bank-v2-unverified/qabank-SUP-284.md; do echo \"#### $f\"; cut -c1-500 $f; done; grep -rl 'List integrations with third party contextual' ."
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; grep -rliE 'populate|turnaround|onboard.*(segment|data)|(segment|audience).*(live|ready|available)|how long' . | xargs grep -h -m1 -H '^question:' | grep -iE 'segment|audience|data|populat|long|turnaround|onboard|third|3rd' | cut -c1-200"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; for f in rfi-2026/rfi2026-kso-040.md client-strategy-cleaned/loopio-13130665.md client-strategy/loopio-11344812.md client-strategy-cleaned/loopio-13130670.md client-strategy-cleaned/loopio-13131293.md client-strategy-cleaned/loopio-13130568.md; do echo \"#### $f\"; cut -c1-600 $f; done"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; grep -rliE '^question:.*(channel|ctv|connected tv|olv|online video|formats|media types|inventory types|audio|dooh)' . | xargs grep -h -m1 -H '^question:' | cut -c1-200"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; for f in rfi-2026/rfi2026-cmi2025-029.md rfi-2026/rfi2026-kso-011.md rfi-2026/rfi2026-kso-020.md client-strategy-cleaned/loopio-13130591.md client-strategy-cleaned/loopio-13131272.md client-strategy-cleaned/loopio-13130702.md client-strategy-cleaned/loopio-13130545.md rfi-2026/rfi2026-cmi0826-007.md; do echo \"#### $f\"; cut -c1-500 $f; done"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; grep -rliE '^question:.*(fee|cost|pric|charge|markup|rate)' . | xargs grep -h -m1 -H '^question:' | cut -c1-200"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; tail -49 /tmp/ale-bash-full-output-thread_01Wjj2XpJHrp7D5QKphmQZ82.txt | grep -v 'qabank-SUP\\|qabank-DEM' ; grep -rliE 'partner fee' . ; for f in client-strategy-cleaned/loopio-13130636.md client-strategy/loopio-11344817.md client-strategy-cleaned/loopio-13130460.md client-strategy-cleaned/loopio-13130708.md client-strategy-cleaned/loopio-13130459.md client-strategy-cleaned/loopio-13130680.md rfi-2026/rfi2026-kso-050.md; do echo \"#### $f\"; cut -c1-500 $f; done"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; for f in rfi-2026/rfi2026-kso-057.md rfi-q-a-bank-v2-unverified/qabank-AGC-124.md rfi-2026/rfi2026-kso-073.md; do echo \"#### $f\"; cut -c1-600 $f; done; grep -rl -B3 -A3 'these partners' rfi-2026/rfi2026-kso-05[5-7].md"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; grep -rliE '^question:.*((hcp|professional).*(dtc|consumer|patient)|(dtc|consumer|patient).*(hcp|professional)|omnichannel|surround|halo|synerg)' . | xargs grep -h -m1 -H '^question:' | cut -c1-220"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; for f in rfi-2026/rfi2026-cmi2025-014.md rfi-2026/rfi2026-cmi2025-010.md client-strategy-cleaned/loopio-13131302.md rfi-2026/rfi2026-cmi0826-003.md rfi-2026/rfi2026-cmi0826-009.md; do echo \"#### $f\"; cut -c1-600 $f; done; grep -rliE 'patient provider|connected (hcp|dtc)|hcp and (dtc|consumer).*(align|together|connect|coordinat)|point of care.*both' . | head"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; for f in client-strategy-cleaned/loopio-13130766.md client-strategy-cleaned/loopio-13131303.md client-strategy-cleaned/loopio-13131347.md client-strategy-cleaned/loopio-13131351.md client-strategy/loopio-11344676.md; do echo \"#### $f\"; cut -c1-500 $f; done; grep -rliE 'crosswalk|patient-provider|provider-patient' . | xargs grep -h -m1 -H '^question:' | cut -c1-200"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; for f in client-strategy-cleaned/loopio-13131184.md client-strategy-cleaned/loopio-13131148.md client-strategy-cleaned/loopio-13130890.md client-strategy-cleaned/loopio-13131297.md client-strategy-cleaned/loopio-13130493.md client-strategy-cleaned/loopio-13130641.md client-strategy-cleaned/loopio-13131262.md client-strategy-cleaned/loopio-13130494.md client-strategy-cleaned/loopio-13130478.md rfi-2026/rfi2026-cmi0826-035.md; do echo \"#### $f\"; cut -c1-500 $f; done; grep -rliE 'data cpm' . | xargs grep -h -m1 -H '^question:' | cut -c1-200"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; for f in rfi-2026/rfi2026-kso-008.md client-strategy-cleaned/loopio-13130912.md client-strategy/loopio-11344502.md; do echo \"#### $f\"; cut -c1-600 $f; done"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; grep -rliE 'slack|teams channel|microsoft teams|instant messag|chat|real[- ]time support|support (team|model|hours)|customer support' . | xargs grep -h -m1 -H '^question:' | cut -c1-200"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; for f in rfi-2026/rfi2026-kso-053.md client-strategy-cleaned/loopio-13131146.md client-strategy/loopio-11344478.md rfi-q-a-bank-v2-unverified/qabank-AGC-015.md client-strategy-cleaned/loopio-13130536.md; do echo \"#### $f\"; cut -c1-500 $f; done"
+    }
+   ],
+   "reply": "I searched the library (2,297 records across 4 stacks) for all ten questions, running several keyword searches per question and reading the best matches in full. Every question has at least one record that answers it, ranked newest-first by the library's rule. As you asked, I didn't triage, draft or route anything.\n\nRecords worth checking before you use them:\n- **af49-018 (self-serve vs managed):** `rfi2026-cmi0826-011` is the newest record, but its answer is only a ticked \"Yes\" box with no explanation. `loopio-13130598` has the real substance. `qabank-AGC-041` and `qabank-AGC-039` are in the unverified stack and need confirmation from a subject expert.\n- **af49-022 (segment populate time):** the records disagree. The newest (`rfi2026-kso-040`) says about 48 hours for onboarding through LiveRamp, Throtle or Datavant, with more time to fully populate. `loopio-13130665` says 2–5 days for audiences to populate. `loopio-13131293` says third-party audiences arrive in 3–5 business days.\n- **af49-026 (first-party data CPM):** the HCP range differs. The newest (`rfi2026-kso-008`) says \"$15 and up\"; `loopio-13130912` and `loopio-13130912`'s older copy `loopio-11344502` say $25–$45. Both give $0.25–$3.50 for consumer (DTC) audiences.\n- **af49-025 (consumer and HCP links):** `rfi2026-cmi2025-014` answers this directly. The other four are value-proposition and differentiator records that each include a paragraph on linking HCP and consumer audiences.\n- **af49-027 (Teams/Slack):** `qabank-AGC-015` gives the same answer as the cleaned record but is in the unverified stack.\n\n```json\n[\n  {\"id\": \"af49-018\", \"record_ids\": [\"loopio-13130598\", \"rfi2026-cmi0826-011\", \"loopio-11344883\", \"qabank-AGC-041\", \"loopio-13130555\"]},\n  {\"id\": \"af49-019\", \"record_ids\": [\"rfi2026-cmi2025-009\", \"rfi2026-kso-002\", \"loopio-13130916\", \"loopio-13130866\", \"loopio-13130633\"]},\n  {\"id\": \"af49-020\", \"record_ids\": [\"rfi2026-cmi0826-043\", \"rfi2026-cmi0826-053\", \"rfi2026-cmi0826-054\", \"loopio-13130514\", \"rfi2026-cmi0826-044\"]},\n  {\"id\": \"af49-021\", \"record_ids\": [\"loopio-13131329\", \"rfi2026-cmi2025-055\", \"loopio-12254605\", \"rfi2026-cmi2025-056\", \"loopio-13130533\"]},\n  {\"id\": \"af49-022\", \"record_ids\": [\"rfi2026-kso-040\", \"loopio-13130665\", \"loopio-13131293\", \"loopio-11344812\"]},\n  {\"id\": \"af49-023\", \"record_ids\": [\"rfi2026-kso-011\", \"rfi2026-kso-020\", \"rfi2026-cmi2025-029\", \"loopio-13130591\", \"loopio-13130545\"]},\n  {\"id\": \"af49-024\", \"record_ids\": [\"rfi2026-kso-057\", \"rfi2026-kso-073\", \"loopio-13130708\", \"loopio-13130636\", \"rfi2026-kso-050\"]},\n  {\"id\": \"af49-025\", \"record_ids\": [\"rfi2026-cmi2025-014\", \"loopio-13130766\", \"loopio-13131303\", \"loopio-13131351\", \"loopio-13131347\"]},\n  {\"id\": \"af49-026\", \"record_ids\": [\"rfi2026-kso-008\", \"loopio-13130912\", \"loopio-11344502\", \"loopio-13130890\", \"loopio-13130493\"]},\n  {\"id\": \"af49-027\", \"record_ids\": [\"rfi2026-kso-053\", \"loopio-13131146\", \"loopio-11344478\", \"qabank-AGC-015\", \"loopio-13130536\"]}\n]\n```",
+   "parsed": {
+    "af49-018": {
+     "id": "af49-018",
+     "record_ids": [
+      "loopio-13130598",
+      "rfi2026-cmi0826-011",
+      "loopio-11344883",
+      "qabank-AGC-041",
+      "loopio-13130555"
+     ]
+    },
+    "af49-019": {
+     "id": "af49-019",
+     "record_ids": [
+      "rfi2026-cmi2025-009",
+      "rfi2026-kso-002",
+      "loopio-13130916",
+      "loopio-13130866",
+      "loopio-13130633"
+     ]
+    },
+    "af49-020": {
+     "id": "af49-020",
+     "record_ids": [
+      "rfi2026-cmi0826-043",
+      "rfi2026-cmi0826-053",
+      "rfi2026-cmi0826-054",
+      "loopio-13130514",
+      "rfi2026-cmi0826-044"
+     ]
+    },
+    "af49-021": {
+     "id": "af49-021",
+     "record_ids": [
+      "loopio-13131329",
+      "rfi2026-cmi2025-055",
+      "loopio-12254605",
+      "rfi2026-cmi2025-056",
+      "loopio-13130533"
+     ]
+    },
+    "af49-022": {
+     "id": "af49-022",
+     "record_ids": [
+      "rfi2026-kso-040",
+      "loopio-13130665",
+      "loopio-13131293",
+      "loopio-11344812"
+     ]
+    },
+    "af49-023": {
+     "id": "af49-023",
+     "record_ids": [
+      "rfi2026-kso-011",
+      "rfi2026-kso-020",
+      "rfi2026-cmi2025-029",
+      "loopio-13130591",
+      "loopio-13130545"
+     ]
+    },
+    "af49-024": {
+     "id": "af49-024",
+     "record_ids": [
+      "rfi2026-kso-057",
+      "rfi2026-kso-073",
+      "loopio-13130708",
+      "loopio-13130636",
+      "rfi2026-kso-050"
+     ]
+    },
+    "af49-025": {
+     "id": "af49-025",
+     "record_ids": [
+      "rfi2026-cmi2025-014",
+      "loopio-13130766",
+      "loopio-13131303",
+      "loopio-13131351",
+      "loopio-13131347"
+     ]
+    },
+    "af49-026": {
+     "id": "af49-026",
+     "record_ids": [
+      "rfi2026-kso-008",
+      "loopio-13130912",
+      "loopio-11344502",
+      "loopio-13130890",
+      "loopio-13130493"
+     ]
+    },
+    "af49-027": {
+     "id": "af49-027",
+     "record_ids": [
+      "rfi2026-kso-053",
+      "loopio-13131146",
+      "loopio-11344478",
+      "qabank-AGC-015",
+      "loopio-13130536"
+     ]
+    }
+   },
+   "skills": [
+    {
+     "skill_id": "skill_01Tiy1ohjnE6p3KMupthwjwR",
+     "version": "1795115712445576"
+    },
+    {
+     "skill_id": "skill_01AybJp75MZ5Cq6bJF9SoH1t",
+     "version": "1795115711509436"
+    },
+    {
+     "skill_id": "xlsx",
+     "version": "20261116"
+    }
+   ],
+   "ids": [
+    "af49-018",
+    "af49-019",
+    "af49-020",
+    "af49-021",
+    "af49-022",
+    "af49-023",
+    "af49-024",
+    "af49-025",
+    "af49-026",
+    "af49-027"
+   ]
+  },
+  {
+   "session_id": "sesn_01Ee3Wpo4c53r89X125KCdGJ",
+   "status": "idle",
+   "stop_reason": {
+    "type": "end_turn"
+   },
+   "cost_cents": 51,
+   "searches": [
+    {
+     "command": "ls /mnt/memory/; ls /mnt/memory/*/; ls -R /mnt/memory/ | wc -l; cd /mnt/memory/rfi-answer-library; grep -rh '^question:' . | wc -l"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; q(){ grep -rliE \"$1\" . | while read f; do echo \"$f | $(grep -m1 '^updated:' $f | cut -c10-20) | $(grep -m1 '^question:' $f)\"; done | head -${2:-40}; }\necho ==028; q 'latency|lag|refresh|real[- ]time report|how often.*(updated|refresh)|data freshness'\necho ==029; q 'retain|retention|historical data|how far back|lookback|look back'"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; for f in client-strategy-cleaned/loopio-13130691.md client-strategy/loopio-11344771.md client-strategy-cleaned/loopio-13130476.md client-strategy-cleaned/loopio-13130561.md client-strategy-cleaned/loopio-13130596.md rfi-2026/rfi2026-cmi2025-065.md client-strategy-cleaned/loopio-13130511.md; do echo \"#### $f\"; cat $f; echo; done\ngrep -rliE 'report' . | xargs grep -liE 'hour|daily|lag|delay|update' | while read f; do echo \"$f | $(grep -m1 '^question:' $f)\"; done | grep -iE 'report|dashboard|data' | head -50"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; for p in 'How frequently is campaign performance data updated' 'look-back limit on pulling' '^question: Reporting Dimensions' '^question: Reporting Dashboard' 'Can reports be exported in a granular form' 'What reporting capabilities do you have\\? What is the cadence'; do echo \"=== $p\"; grep -rlE \"$p\" . | while read f; do echo \"## $f\"; cat $f; echo; done; done"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; q(){ grep -rliE \"$1\" . | while read f; do echo \"$f | $(grep -m1 '^updated:' $f | cut -c10-20) | $(grep -m1 '^question:' $f)\"; done | head -${2:-40}; }\necho ==029b; q '(months|years|13 month|24 month|2 years).*(data|report)|(data|report).*(months|years) (of|back)|historical (report|delivery|performance)|data history|stored for'\necho ==030; q 'dynamic creative|\\bDCO\\b'"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; for f in client-strategy/loopio-11344407.md client-strategy-cleaned/loopio-13131193.md rfi-2026/rfi2026-cmi2025-038.md; do echo \"## $f\"; cat $f; echo; done; grep -rl 'Can DCO assets' .; grep -rliE 'creative optimi|creative rotation|dynamic' . | while read f; do echo \"$f | $(grep -m1 '^question:' $f)\"; done"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; for f in client-strategy-cleaned/loopio-13130595.md client-strategy-cleaned/loopio-13130546.md; do echo \"## $f\"; cat $f; echo; done\nq(){ grep -rliE \"$1\" . | while read f; do echo \"$f | $(grep -m1 '^updated:' $f | cut -c10-20) | $(grep -m1 '^question:' $f)\"; done | head -${2:-40}; }\necho ==031; q 'trigger|daily (file|list|feed)|sftp|turnaround|onboard.*list|list.*(upload|onboard)'"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; for f in client-strategy-cleaned/loopio-13130867.md client-strategy-cleaned/loopio-13130651.md client-strategy-cleaned/loopio-13130474.md; do echo \"## $f\"; cat $f; echo; done\nq(){ grep -rliE \"$1\" . | while read f; do echo \"$f | $(grep -m1 '^updated:' $f | cut -c10-20) | $(grep -m1 '^question:' $f)\"; done | head -${2:-40}; }\necho ==031b; q 'trigger|(daily|automat).*(target list|upload|ingest)|ingest' 60 | grep -v 'loopio-1134'"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; for f in rfi-2026/rfi2026-cmi0826-034.md client-strategy-cleaned/loopio-13130523.md client-strategy-cleaned/loopio-13130519.md rfi-2026/rfi2026-kso-036.md; do echo \"## $f\"; cat $f; echo; done\nq(){ grep -rliE \"$1\" . | while read f; do echo \"$f | $(grep -m1 '^updated:' $f | cut -c10-20) | $(grep -m1 '^question:' $f)\"; done | head -${2:-40}; }\necho ==032; q 'social determinant|\\bSDOH\\b|socioeconomic|income|HHI'"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; for f in rfi-2026/rfi2026-cmi0826-048.md client-strategy-cleaned/loopio-13130873.md; do echo \"## $f\"; cat $f; echo; done\nq(){ grep -rliE \"$1\" . | while read f; do echo \"$f | $(grep -m1 '^updated:' $f | cut -c10-20) | $(grep -m1 '^question:' $f)\"; done | head -${2:-40}; }\necho ==033; q 'bulk|spreadsheet|csv|excel|template upload'\necho ==034; q 'flight|budget schedul|pacing.*(week|month)|segment.*(week|month)'"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; for f in rfi-2026/rfi2026-cmi2025-031.md client-strategy/loopio-11344668.md client-strategy-cleaned/loopio-13130858.md client-strategy/loopio-11344767.md rfi-2026/rfi2026-kso-039.md client-strategy-cleaned/loopio-13130666.md client-strategy/loopio-11344813.md; do echo \"## $f\"; cat $f; echo; done; grep -rl 'Bulk Campaign Creation\\|bulk edit' . "
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; q(){ grep -rliE \"$1\" . | while read f; do echo \"$f | $(grep -m1 '^updated:' $f | cut -c10-20) | $(grep -m1 '^question:' $f)\"; done | head -${2:-60}; }\necho ==035; q 'append|re-identif|reidentif' \necho ==036; q '\\bSSPs?\\b|supply.side|exchange partner' 80 | grep -iE 'question: .*(ssp|exchange|supply|partner)'"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; for f in rfi-2026/rfi2026-kso-014.md rfi-2026/rfi2026-kso-022.md client-strategy-cleaned/loopio-13131209.md client-strategy-cleaned/loopio-13130576.md client-strategy-cleaned/loopio-13131334.md rfi-q-a-bank-v2-unverified/qabank-AGC-002.md; do echo \"## $f\"; cat $f; echo; done"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; q(){ grep -rliE \"$1\" . | while read f; do echo \"$f | $(grep -m1 '^updated:' $f | cut -c10-20) | $(grep -m1 '^question:' $f)\"; done | head -${2:-60}; }\necho ==035b; q 'PII|personally identifiable|personal (info|data)' 80 | grep -iE 'question: .*(pii|personal|hipaa|de-?identif|append|model)'\necho ==037; q 'breakout|break out|breakdown|dimension' 60 | grep -iE 'question: .*(report|breakout|break|dimension)'"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; for f in rfi-2026/rfi2026-cmi2025-006.md client-strategy-cleaned/loopio-13130785.md rfi-2026/rfi2026-cmi2025-016.md client-strategy-cleaned/loopio-13130540.md client-strategy-cleaned/loopio-13130786.md rfi-q-a-bank-v2-unverified/qabank-AGC-123.md client-strategy-cleaned/loopio-13130499.md client-strategy-cleaned/loopio-13130899.md; do echo \"## $f\"; cat $f; echo; done"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; grep -rliE 'how long|archiv|available for|historical' . | while read f; do echo \"$f | $(grep -m1 '^question:' $f)\"; done | grep -iE 'report|data|histor|archiv|retain|delivery' | head -30; grep -rlE 'data retention|retention' . | xargs grep -h '^question:' | sort -u"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; cat rfi-2026/rfi2026-cmi2025-026.md; grep -rl 'How long is campaign delivery' .; grep -rliE 'quick|fast|turnaround|same.day|24 hours' . | xargs grep -liE 'list|file|npi' | while read f; do echo \"$f | $(grep -m1 '^question:' $f)\"; done | grep -iE 'list|upload|file|turnaround|how (long|quick)' | head -20"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; cat rfi-2026/rfi2026-kso-040.md rfi-2026/rfi2026-kso-076.md client-strategy-cleaned/loopio-13130665.md"
+    }
+   ],
+   "reply": "Now 035 (append PII to HIPAA data) and 037 (report breakouts).\n\nI searched the library for all 10 questions and found records for each one. Several matches need a caveat, listed below.\n\n| ID | Best match | Gap |\n|---|---|---|\n| 028 | loopio-13130560: data shows in the platform in real time, but dashboards and report exports can lag up to 6 hours | None |\n| 029 | rfi2026-cmi2025-026: \"No standard limit\" on how long delivery and performance data stays available | Only one record. The loopio-13131179 record asks about a look-back limit, but its answer doesn't address it, so I left it out. |\n| 030 | rfi2026-cmi2025-038: creative variations served by audience attributes (via Search Extension); loopio-13131193 covers DCO within pre-approved creatives | None |\n| 031 | rfi2026-cmi0826-034 has the same question | Its answer is about the CMI AMO partnership, not trigger-file handling. The next records (NPI list upload or API sync, sFTP target-list ingest, audience turnaround times) cover this only partly. |\n| 032 | rfi2026-cmi0826-048: \"No, but we are happy to explore\" | None |\n| 033 | rfi2026-cmi2025-031: campaign templates, with offline bulk builds being tested with CMI | The plain \"Yes\" for bulk campaign creation (loopio-11344668) is older and not in the cleaned stack |\n| 034 | rfi2026-kso-039: separate flights, down to the minute | The older cleaned record says down to the hour; the newer record wins |\n| 035 | rfi2026-cmi2025-006: no personal information is ever added to HIPAA de-identified data | None |\n| 036 | rfi2026-kso-014 and rfi2026-kso-022: full SSP lists | The library disagrees on numbers: older records say \"15+ SSPs\" and give a top five. qabank-AGC-002 has the same \"15+\" answer but is unverified, so I left it out. |\n| 037 | rfi2026-cmi2025-016: full list of report dimensions and metrics | None |\n\n```json\n[\n  {\"id\": \"af49-028\", \"record_ids\": [\"loopio-13130560\", \"loopio-13130691\", \"loopio-13130476\", \"loopio-13130596\"]},\n  {\"id\": \"af49-029\", \"record_ids\": [\"rfi2026-cmi2025-026\"]},\n  {\"id\": \"af49-030\", \"record_ids\": [\"rfi2026-cmi2025-038\", \"loopio-13131193\", \"loopio-13130595\"]},\n  {\"id\": \"af49-031\", \"record_ids\": [\"rfi2026-cmi0826-034\", \"rfi2026-kso-076\", \"loopio-13130651\", \"rfi2026-kso-040\"]},\n  {\"id\": \"af49-032\", \"record_ids\": [\"rfi2026-cmi0826-048\"]},\n  {\"id\": \"af49-033\", \"record_ids\": [\"rfi2026-cmi2025-031\", \"loopio-11344668\", \"loopio-13130858\", \"loopio-11344767\"]},\n  {\"id\": \"af49-034\", \"record_ids\": [\"rfi2026-kso-039\", \"loopio-13130666\"]},\n  {\"id\": \"af49-035\", \"record_ids\": [\"rfi2026-cmi2025-006\", \"loopio-13130499\", \"loopio-13130899\"]},\n  {\"id\": \"af49-036\", \"record_ids\": [\"rfi2026-kso-014\", \"rfi2026-kso-022\", \"loopio-13130576\", \"loopio-13131334\", \"loopio-13131209\"]},\n  {\"id\": \"af49-037\", \"record_ids\": [\"rfi2026-cmi2025-016\", \"loopio-13130540\", \"loopio-13130596\", \"loopio-13130785\", \"loopio-13130678\"]}\n]\n```",
+   "parsed": {
+    "af49-028": {
+     "id": "af49-028",
+     "record_ids": [
+      "loopio-13130560",
+      "loopio-13130691",
+      "loopio-13130476",
+      "loopio-13130596"
+     ]
+    },
+    "af49-029": {
+     "id": "af49-029",
+     "record_ids": [
+      "rfi2026-cmi2025-026"
+     ]
+    },
+    "af49-030": {
+     "id": "af49-030",
+     "record_ids": [
+      "rfi2026-cmi2025-038",
+      "loopio-13131193",
+      "loopio-13130595"
+     ]
+    },
+    "af49-031": {
+     "id": "af49-031",
+     "record_ids": [
+      "rfi2026-cmi0826-034",
+      "rfi2026-kso-076",
+      "loopio-13130651",
+      "rfi2026-kso-040"
+     ]
+    },
+    "af49-032": {
+     "id": "af49-032",
+     "record_ids": [
+      "rfi2026-cmi0826-048"
+     ]
+    },
+    "af49-033": {
+     "id": "af49-033",
+     "record_ids": [
+      "rfi2026-cmi2025-031",
+      "loopio-11344668",
+      "loopio-13130858",
+      "loopio-11344767"
+     ]
+    },
+    "af49-034": {
+     "id": "af49-034",
+     "record_ids": [
+      "rfi2026-kso-039",
+      "loopio-13130666"
+     ]
+    },
+    "af49-035": {
+     "id": "af49-035",
+     "record_ids": [
+      "rfi2026-cmi2025-006",
+      "loopio-13130499",
+      "loopio-13130899"
+     ]
+    },
+    "af49-036": {
+     "id": "af49-036",
+     "record_ids": [
+      "rfi2026-kso-014",
+      "rfi2026-kso-022",
+      "loopio-13130576",
+      "loopio-13131334",
+      "loopio-13131209"
+     ]
+    },
+    "af49-037": {
+     "id": "af49-037",
+     "record_ids": [
+      "rfi2026-cmi2025-016",
+      "loopio-13130540",
+      "loopio-13130596",
+      "loopio-13130785",
+      "loopio-13130678"
+     ]
+    }
+   },
+   "skills": [
+    {
+     "skill_id": "skill_01Tiy1ohjnE6p3KMupthwjwR",
+     "version": "1795115712445576"
+    },
+    {
+     "skill_id": "skill_01AybJp75MZ5Cq6bJF9SoH1t",
+     "version": "1795115711509436"
+    },
+    {
+     "skill_id": "xlsx",
+     "version": "20261116"
+    }
+   ],
+   "ids": [
+    "af49-028",
+    "af49-029",
+    "af49-030",
+    "af49-031",
+    "af49-032",
+    "af49-033",
+    "af49-034",
+    "af49-035",
+    "af49-036",
+    "af49-037"
+   ]
+  },
+  {
+   "session_id": "sesn_015zq6kjsKYGnV8vFcyont1N",
+   "status": "idle",
+   "stop_reason": {
+    "type": "end_turn"
+   },
+   "cost_cents": 43,
+   "searches": [
+    {
+     "command": "ls /mnt/memory/rfi-answer-library/; ls -R /mnt/memory/rfi-answer-library | wc -l; cd /mnt/memory/rfi-answer-library; grep -rh '^question:' . | wc -l"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; for f in */*.md; do printf '%s\\t%s\\t%s\\n' \"$f\" \"$(grep -m1 '^updated:' $f | cut -c10-)\" \"$(grep -m1 '^question:' $f | cut -c11-)\"; done > /tmp/q.tsv; wc -l /tmp/q.tsv"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; for f in rfi-2026/rfi2026-cmi0826-037.md client-strategy-cleaned/loopio-13131283.md client-strategy/loopio-11344327.md client-strategy-cleaned/loopio-13276546.md client-strategy-cleaned/loopio-13130531.md client-strategy/loopio-13024499.md client-strategy-cleaned/loopio-13130887.md rfi-2026/rfi2026-kso-078.md; do echo \"##### $f\"; cat $f | cut -c1-700; echo; done"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; for f in client-strategy-cleaned/loopio-13130670.md client-strategy/loopio-11344781.md client-strategy-cleaned/loopio-13131293.md client-strategy-cleaned/loopio-13130566.md client-strategy-cleaned/loopio-13130568.md client-strategy-cleaned/loopio-13130665.md rfi-2026/rfi2026-kso-040.md; do echo \"##### $f\"; cat $f | cut -c1-600; echo; done"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; for f in client-strategy-cleaned/loopio-13130681.md client-strategy-cleaned/loopio-13130931.md client-strategy-cleaned/loopio-13130932.md client-strategy-cleaned/loopio-13131164.md client-strategy-cleaned/loopio-13130712.md client-strategy/loopio-11344760.md client-strategy-cleaned/loopio-13130897.md client-strategy-cleaned/loopio-13130744.md client-strategy-cleaned/loopio-13130743.md rfi-2026/rfi2026-kso-031.md client-strategy-cleaned/loopio-13130650.md client-strategy-cleaned/loopio-13130497.md client-strategy/loopio-13024536.md client-strategy/loopio-12865757.md rfi-2026/rfi2026-cmi0826-024.md client-strategy-cleaned/loopio-13131259.md client-strategy-cleaned/loopio-13130649.md rfi-2026/rfi2026-cmi2025-036.md; do echo \"##### $f\"; cat $f | cut -c1-500; echo; done"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; grep -rliE 'ad collision|competitive separation|competitive exclusion|ad adjacency' . ; echo; grep -rliE 'out-of-home|DOOH' rfi-2026 client-strategy-cleaned | head; echo; grep -rliE 'green deal|carbon|scope3' . | head -20"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; for f in rfi-2026/rfi2026-cmi2025-029.md rfi-2026/rfi2026-kso-011.md rfi-2026/rfi2026-kso-014.md rfi-2026/rfi2026-kso-020.md rfi-2026/rfi2026-kso-022.md client-strategy-cleaned/loopio-13131256.md client-strategy-cleaned/loopio-13130815.md client-strategy-cleaned/loopio-13131255.md rfi-q-a-bank-v2-unverified/qabank-DEM-058.md; do echo \"##### $f\"; cut -c1-400 $f; echo; done"
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; for f in client-strategy-cleaned/loopio-13130762.md client-strategy-cleaned/loopio-13130761.md client-strategy-cleaned/loopio-13130542.md client-strategy-cleaned/loopio-13130621.md client-strategy-cleaned/loopio-13131286.md; do echo \"##### $f\"; cut -c1-400 $f; echo; done; grep -rliE 'suppress' . | xargs grep -liE 'target list|npi' "
+    },
+    {
+     "command": "cd /mnt/memory/rfi-answer-library; for f in rfi-2026/rfi2026-cmi2025-002.md rfi-2026/rfi2026-cmi2025-022.md; do echo \"##### $f\"; cut -c1-600 $f; echo; done"
+    }
+   ],
+   "reply": "I searched the answer library for all 10 questions. Each one matched at least one approved record. I didn't triage, draft or route anything. Two of the best matches don't fully answer what the client asked, so their answers will need care:\n\n- **af49-038 (where HCP data comes from):** `rfi2026-cmi0826-037` (\"Source of your HCP data\", RFI 2026, updated 2026-08-18) is the newest direct answer. It lists four sources: logged-in Medscape/WebMD users, NPI lists, NPPES/CMS registry data and the LiveRamp graph. The Client Strategy records add the Medscape-backed HCP database and the opt-in identity graph.\n- **af49-039 (how fast an audience goes live):** `loopio-13130670` says most audiences are available in real time. Custom (\"bespoke\") audiences depend on what the client provides. Related records cover segments set live in about a minute and list matches in seconds. Third-party audiences take 3–5 business days to arrive.\n- **af49-040 (green deal IDs):** `loopio-13130681` asks almost exactly this question, but its answer doesn't confirm that green deal IDs exist. It talks about recycling equipment and matching charity donations. `loopio-13130931` only says PulsePoint works with sustainable supply sources and can create deals on request.\n- **af49-041 (unique logins):** `loopio-13131164` is a direct yes.\n- **af49-042 (frequency caps and competing ads):** `loopio-13130712` covers both parts. Caps can be set at campaign, line item and tactic level. However, it says \"there is currently no ad collision reporting available\", and no record describes keeping competing ads apart. Other records add more levels for caps (creative; device, person or household; by hour, day, week or month).\n- **af49-043 (data collected after opt-out):** `loopio-13130897` is a direct match. PulsePoint may still collect pseudonymous IDs such as cookies or mobile ad IDs (MAIDs), and contextual ads may still show.\n- **af49-044 (HCP targeting without third-party cookies):** `loopio-13130744` is a direct yes, based on the Medscape single sign-on integration. The other records add the outside identity providers (RampID, UID2, ID5).\n- **af49-045 (keeping target-list HCPs out of other tactics):** `loopio-13130650` is the same question, but the answer is one line (\"Nesting HCP targeting is possible via our SmartList capabilities\"). `rfi2026-cmi2025-002` confirms that SmartList can suppress segments.\n- **af49-046 (tokenization or identity vendor):** `loopio-13130497` is a direct match: PulsePoint uses both. `rfi2026-cmi0826-024` names the token and ID providers (Datavant, RampID, UID2).\n- **af49-047 (digital out-of-home):** `loopio-13131259` (PlaceExchange; conference and point-of-care uses) and `loopio-13130649` (the partner list) both answer it. The 2026 SSP list confirms PlaceExchange and Vistar Media.\n\nNone of the chosen records come from the unverified Q&A bank. Where the same question appears in more than one stack, the cleaned Client Strategy or 2026 version is listed ahead of the older copy.\n\n```json\n[\n{\"id\": \"af49-038\", \"record_ids\": [\"rfi2026-cmi0826-037\", \"loopio-13131283\", \"loopio-13130531\", \"loopio-13276546\", \"rfi2026-kso-078\"]},\n{\"id\": \"af49-039\", \"record_ids\": [\"loopio-13130670\", \"loopio-13130568\", \"loopio-13130566\", \"loopio-13131293\", \"loopio-11344781\"]},\n{\"id\": \"af49-040\", \"record_ids\": [\"loopio-13130681\", \"loopio-13130931\", \"loopio-11344794\"]},\n{\"id\": \"af49-041\", \"record_ids\": [\"loopio-13131164\", \"loopio-11344456\"]},\n{\"id\": \"af49-042\", \"record_ids\": [\"loopio-13130712\", \"rfi2026-cmi2025-036\", \"loopio-13130762\", \"loopio-13130761\", \"loopio-11344760\"]},\n{\"id\": \"af49-043\", \"record_ids\": [\"loopio-13130897\", \"loopio-11344528\"]},\n{\"id\": \"af49-044\", \"record_ids\": [\"loopio-13130744\", \"loopio-13131286\", \"rfi2026-kso-031\", \"loopio-13130743\", \"loopio-13130542\"]},\n{\"id\": \"af49-045\", \"record_ids\": [\"loopio-13130650\", \"loopio-11344831\", \"rfi2026-cmi2025-002\"]},\n{\"id\": \"af49-046\", \"record_ids\": [\"loopio-13130497\", \"loopio-13024536\", \"loopio-12865757\", \"rfi2026-cmi0826-024\"]},\n{\"id\": \"af49-047\", \"record_ids\": [\"loopio-13131259\", \"loopio-13130649\", \"rfi2026-kso-014\", \"loopio-11344334\"]}\n]\n```",
+   "parsed": {
+    "af49-038": {
+     "id": "af49-038",
+     "record_ids": [
+      "rfi2026-cmi0826-037",
+      "loopio-13131283",
+      "loopio-13130531",
+      "loopio-13276546",
+      "rfi2026-kso-078"
+     ]
+    },
+    "af49-039": {
+     "id": "af49-039",
+     "record_ids": [
+      "loopio-13130670",
+      "loopio-13130568",
+      "loopio-13130566",
+      "loopio-13131293",
+      "loopio-11344781"
+     ]
+    },
+    "af49-040": {
+     "id": "af49-040",
+     "record_ids": [
+      "loopio-13130681",
+      "loopio-13130931",
+      "loopio-11344794"
+     ]
+    },
+    "af49-041": {
+     "id": "af49-041",
+     "record_ids": [
+      "loopio-13131164",
+      "loopio-11344456"
+     ]
+    },
+    "af49-042": {
+     "id": "af49-042",
+     "record_ids": [
+      "loopio-13130712",
+      "rfi2026-cmi2025-036",
+      "loopio-13130762",
+      "loopio-13130761",
+      "loopio-11344760"
+     ]
+    },
+    "af49-043": {
+     "id": "af49-043",
+     "record_ids": [
+      "loopio-13130897",
+      "loopio-11344528"
+     ]
+    },
+    "af49-044": {
+     "id": "af49-044",
+     "record_ids": [
+      "loopio-13130744",
+      "loopio-13131286",
+      "rfi2026-kso-031",
+      "loopio-13130743",
+      "loopio-13130542"
+     ]
+    },
+    "af49-045": {
+     "id": "af49-045",
+     "record_ids": [
+      "loopio-13130650",
+      "loopio-11344831",
+      "rfi2026-cmi2025-002"
+     ]
+    },
+    "af49-046": {
+     "id": "af49-046",
+     "record_ids": [
+      "loopio-13130497",
+      "loopio-13024536",
+      "loopio-12865757",
+      "rfi2026-cmi0826-024"
+     ]
+    },
+    "af49-047": {
+     "id": "af49-047",
+     "record_ids": [
+      "loopio-13131259",
+      "loopio-13130649",
+      "rfi2026-kso-014",
+      "loopio-11344334"
+     ]
+    }
+   },
+   "skills": [
+    {
+     "skill_id": "skill_01Tiy1ohjnE6p3KMupthwjwR",
+     "version": "1795115712445576"
+    },
+    {
+     "skill_id": "skill_01AybJp75MZ5Cq6bJF9SoH1t",
+     "version": "1795115711509436"
+    },
+    {
+     "skill_id": "xlsx",
+     "version": "20261116"
+    }
+   ],
+   "ids": [
+    "af49-038",
+    "af49-039",
+    "af49-040",
+    "af49-041",
+    "af49-042",
+    "af49-043",
+    "af49-044",
+    "af49-045",
+    "af49-046",
+    "af49-047"
+   ]
+  }
+ ],
+ "grades": [
+  {
+   "id": "af49-018",
+   "origin": "paraphrase",
+   "source": "rfi2026",
+   "answered": true,
+   "got": [
+    "13130598",
+    "rfi2026-cmi0826-011",
+    "11344883",
+    "qabank-AGC-041",
+    "13130555"
+   ],
+   "top1": false,
+   "top3": true,
+   "any5": true
+  },
+  {
+   "id": "af49-019",
+   "origin": "paraphrase",
+   "source": "rfi2026",
+   "answered": true,
+   "got": [
+    "rfi2026-cmi2025-009",
+    "rfi2026-kso-002",
+    "13130916",
+    "13130866",
+    "13130633"
+   ],
+   "top1": true,
+   "top3": true,
+   "any5": true
+  },
+  {
+   "id": "af49-020",
+   "origin": "paraphrase",
+   "source": "rfi2026",
+   "answered": true,
+   "got": [
+    "rfi2026-cmi0826-043",
+    "rfi2026-cmi0826-053",
+    "rfi2026-cmi0826-054",
+    "13130514",
+    "rfi2026-cmi0826-044"
+   ],
+   "top1": true,
+   "top3": true,
+   "any5": true
+  },
+  {
+   "id": "af49-021",
+   "origin": "paraphrase",
+   "source": "rfi2026",
+   "answered": true,
+   "got": [
+    "13131329",
+    "rfi2026-cmi2025-055",
+    "12254605",
+    "rfi2026-cmi2025-056",
+    "13130533"
+   ],
+   "top1": true,
+   "top3": true,
+   "any5": true
+  },
+  {
+   "id": "af49-022",
+   "origin": "paraphrase",
+   "source": "rfi2026",
+   "answered": true,
+   "got": [
+    "rfi2026-kso-040",
+    "13130665",
+    "13131293",
+    "11344812"
+   ],
+   "top1": true,
+   "top3": true,
+   "any5": true
+  },
+  {
+   "id": "af49-023",
+   "origin": "paraphrase",
+   "source": "rfi2026",
+   "answered": true,
+   "got": [
+    "rfi2026-kso-011",
+    "rfi2026-kso-020",
+    "rfi2026-cmi2025-029",
+    "13130591",
+    "13130545"
+   ],
+   "top1": false,
+   "top3": true,
+   "any5": true
+  },
+  {
+   "id": "af49-024",
+   "origin": "paraphrase",
+   "source": "rfi2026",
+   "answered": true,
+   "got": [
+    "rfi2026-kso-057",
+    "rfi2026-kso-073",
+    "13130708",
+    "13130636",
+    "rfi2026-kso-050"
+   ],
+   "top1": true,
+   "top3": true,
+   "any5": true
+  },
+  {
+   "id": "af49-025",
+   "origin": "paraphrase",
+   "source": "rfi2026",
+   "answered": true,
+   "got": [
+    "rfi2026-cmi2025-014",
+    "13130766",
+    "13131303",
+    "13131351",
+    "13131347"
+   ],
+   "top1": true,
+   "top3": true,
+   "any5": true
+  },
+  {
+   "id": "af49-026",
+   "origin": "paraphrase",
+   "source": "rfi2026",
+   "answered": true,
+   "got": [
+    "rfi2026-kso-008",
+    "13130912",
+    "11344502",
+    "13130890",
+    "13130493"
+   ],
+   "top1": true,
+   "top3": true,
+   "any5": true
+  },
+  {
+   "id": "af49-027",
+   "origin": "paraphrase",
+   "source": "rfi2026",
+   "answered": true,
+   "got": [
+    "rfi2026-kso-053",
+    "13131146",
+    "11344478",
+    "qabank-AGC-015",
+    "13130536"
+   ],
+   "top1": true,
+   "top3": true,
+   "any5": true
+  },
+  {
+   "id": "af49-028",
+   "origin": "paraphrase",
+   "source": "rfi2026",
+   "answered": true,
+   "got": [
+    "13130560",
+    "13130691",
+    "13130476",
+    "13130596"
+   ],
+   "top1": true,
+   "top3": true,
+   "any5": true
+  },
+  {
+   "id": "af49-029",
+   "origin": "paraphrase",
+   "source": "rfi2026",
+   "answered": true,
+   "got": [
+    "rfi2026-cmi2025-026"
+   ],
+   "top1": true,
+   "top3": true,
+   "any5": true
+  },
+  {
+   "id": "af49-030",
+   "origin": "paraphrase",
+   "source": "rfi2026",
+   "answered": true,
+   "got": [
+    "rfi2026-cmi2025-038",
+    "13131193",
+    "13130595"
+   ],
+   "top1": true,
+   "top3": true,
+   "any5": true
+  },
+  {
+   "id": "af49-031",
+   "origin": "paraphrase",
+   "source": "rfi2026",
+   "answered": true,
+   "got": [
+    "rfi2026-cmi0826-034",
+    "rfi2026-kso-076",
+    "13130651",
+    "rfi2026-kso-040"
+   ],
+   "top1": true,
+   "top3": true,
+   "any5": true
+  },
+  {
+   "id": "af49-032",
+   "origin": "paraphrase",
+   "source": "rfi2026",
+   "answered": true,
+   "got": [
+    "rfi2026-cmi0826-048"
+   ],
+   "top1": true,
+   "top3": true,
+   "any5": true
+  },
+  {
+   "id": "af49-033",
+   "origin": "paraphrase",
+   "source": "rfi2026",
+   "answered": true,
+   "got": [
+    "rfi2026-cmi2025-031",
+    "11344668",
+    "13130858",
+    "11344767"
+   ],
+   "top1": true,
+   "top3": true,
+   "any5": true
+  },
+  {
+   "id": "af49-034",
+   "origin": "paraphrase",
+   "source": "rfi2026",
+   "answered": true,
+   "got": [
+    "rfi2026-kso-039",
+    "13130666"
+   ],
+   "top1": true,
+   "top3": true,
+   "any5": true
+  },
+  {
+   "id": "af49-035",
+   "origin": "paraphrase",
+   "source": "rfi2026",
+   "answered": true,
+   "got": [
+    "rfi2026-cmi2025-006",
+    "13130499",
+    "13130899"
+   ],
+   "top1": true,
+   "top3": true,
+   "any5": true
+  },
+  {
+   "id": "af49-036",
+   "origin": "paraphrase",
+   "source": "rfi2026",
+   "answered": true,
+   "got": [
+    "rfi2026-kso-014",
+    "rfi2026-kso-022",
+    "13130576",
+    "13131334",
+    "13131209"
+   ],
+   "top1": true,
+   "top3": true,
+   "any5": true
+  },
+  {
+   "id": "af49-037",
+   "origin": "paraphrase",
+   "source": "loopio",
+   "answered": true,
+   "got": [
+    "rfi2026-cmi2025-016",
+    "13130540",
+    "13130596",
+    "13130785",
+    "13130678"
+   ],
+   "top1": false,
+   "top3": false,
+   "any5": true
+  },
+  {
+   "id": "af49-038",
+   "origin": "paraphrase",
+   "source": "loopio",
+   "answered": true,
+   "got": [
+    "rfi2026-cmi0826-037",
+    "13131283",
+    "13130531",
+    "13276546",
+    "rfi2026-kso-078"
+   ],
+   "top1": false,
+   "top3": false,
+   "any5": false
+  },
+  {
+   "id": "af49-039",
+   "origin": "paraphrase",
+   "source": "loopio",
+   "answered": true,
+   "got": [
+    "13130670",
+    "13130568",
+    "13130566",
+    "13131293",
+    "11344781"
+   ],
+   "top1": false,
+   "top3": false,
+   "any5": true
+  },
+  {
+   "id": "af49-040",
+   "origin": "paraphrase",
+   "source": "loopio",
+   "answered": true,
+   "got": [
+    "13130681",
+    "13130931",
+    "11344794"
+   ],
+   "top1": true,
+   "top3": true,
+   "any5": true
+  },
+  {
+   "id": "af49-041",
+   "origin": "paraphrase",
+   "source": "loopio",
+   "answered": true,
+   "got": [
+    "13131164",
+    "11344456"
+   ],
+   "top1": true,
+   "top3": true,
+   "any5": true
+  },
+  {
+   "id": "af49-042",
+   "origin": "paraphrase",
+   "source": "loopio",
+   "answered": true,
+   "got": [
+    "13130712",
+    "rfi2026-cmi2025-036",
+    "13130762",
+    "13130761",
+    "11344760"
+   ],
+   "top1": true,
+   "top3": true,
+   "any5": true
+  },
+  {
+   "id": "af49-043",
+   "origin": "paraphrase",
+   "source": "loopio",
+   "answered": true,
+   "got": [
+    "13130897",
+    "11344528"
+   ],
+   "top1": true,
+   "top3": true,
+   "any5": true
+  },
+  {
+   "id": "af49-044",
+   "origin": "paraphrase",
+   "source": "loopio",
+   "answered": true,
+   "got": [
+    "13130744",
+    "13131286",
+    "rfi2026-kso-031",
+    "13130743",
+    "13130542"
+   ],
+   "top1": true,
+   "top3": true,
+   "any5": true
+  },
+  {
+   "id": "af49-045",
+   "origin": "paraphrase",
+   "source": "loopio",
+   "answered": true,
+   "got": [
+    "13130650",
+    "11344831",
+    "rfi2026-cmi2025-002"
+   ],
+   "top1": true,
+   "top3": true,
+   "any5": true
+  },
+  {
+   "id": "af49-046",
+   "origin": "paraphrase",
+   "source": "loopio",
+   "answered": true,
+   "got": [
+    "13130497",
+    "13024536",
+    "12865757",
+    "rfi2026-cmi0826-024"
+   ],
+   "top1": true,
+   "top3": true,
+   "any5": true
+  },
+  {
+   "id": "af49-047",
+   "origin": "paraphrase",
+   "source": "loopio",
+   "answered": true,
+   "got": [
+    "13131259",
+    "13130649",
+    "rfi2026-kso-014",
+    "11344334"
+   ],
+   "top1": true,
+   "top3": true,
+   "any5": true
+  }
+ ],
+ "summary": {
+  "overall": {
+   "n": 30,
+   "top1": 0.833,
+   "top3": 0.9,
+   "any5": 0.967,
+   "top1_count": 25
+  },
+  "by_origin": {
+   "paraphrase": {
+    "n": 30,
+    "top1": 0.833,
+    "top3": 0.9,
+    "any5": 0.967,
+    "top1_count": 25
+   }
+  },
+  "unparsed": []
+ },
+ "cost_usd": 1.63
+}
