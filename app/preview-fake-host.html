@@ -1,0 +1,49 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- Local preview only, never published. Serves rfi-system-helper.html with a stub window.claude:
+     an in-memory run log and a fake pp-joke whose rfi-agent answers 12 questions in two batches,
+     covering every row state and flag. Serve this folder over http (e.g. python3 -m http.server) and open this file. -->
+<script>
+(() => {
+  const store = { "logs/u1/runs/old": { name: "Genentech brand RFI", createdAt: "2026-11-17T19:40:00Z", total: 31, status: "done", counts: { GREEN: 18, AMBER: 9, RED: 4 } } };
+  const doc = path => ({ set: async d => { store[path] = { ...d }; }, update: async d => { store[path] = { ...(store[path] || {}), ...d }; }, collection: c => coll(`${path}/${c}`) });
+  const coll = path => { const q = { orderBy: () => q, limit: () => q, doc: id => doc(`${path}/${id}`), get: async () => {
+    const docs = Object.keys(store).filter(k => k.startsWith(path + "/") && !k.slice(path.length + 1).includes("/")).map(k => ({ id: k.split("/").pop(), data: () => store[k] }));
+    docs.sort((a, b) => String(b.data().createdAt).localeCompare(String(a.data().createdAt))); return { empty: !docs.length, docs }; } }; return q; };
+  const ANS = [
+    q => ({ lane: "GREEN", route: "CS — answered", why: "Answerable from Legal Approved library entries.", draft: "Yes. PulsePoint targets condition-based audiences using de-identified, HIPAA-compliant health data. No protected health information is used to target or measure.",
+      sources: [{ id: "a", score: 0.82, stack: "Privacy & compliance", updated: "2026-03", legal_approved: true, question: "Is PulsePoint HIPAA compliant when targeting health conditions?", used: true }, { id: "b", score: 0.74, stack: "Data partners", updated: "2026-01", question: "How is health data de-identified?" }, { id: "c", score: 0.61, stack: "Privacy", updated: "2025-10", question: "Do you use PHI?" }] }),
+    q => ({ lane: "GREEN", route: "CS — answered", draft: "PulsePoint verifies HCPs against the NPI registry and its own physician graph, then matches devices.", stitched: true,
+      sources: [1, 2, 3, 4].map(i => ({ id: "s" + i, score: 0.8 - i / 20, stack: "HCP identity", updated: "2026-0" + i, question: `HCP verification source ${i}`, used: i < 3 })) }),
+    q => ({ lane: "AMBER", route: "SME: Ad Ops lead (owner unconfirmed)", why: "Partly covered; reporting detail needs Ad Ops.", uncovered: "report at the line-item level", sources: [{ id: "d", score: 0.61, stack: "Brand safety", updated: "2025-12", question: "Which brand safety vendors do you support?" }] }),
+    q => ({ lane: "AMBER", route: "SME needed — no owner on file (pricing)", why: "Commercial terms are deal-specific." }),
+    q => ({ lane: "RED", route: "Route out: Security/privacy team", esc: "CISO", why: "Requires a security document." }),
+    q => ({ lane: "GREEN", route: "CS — answered", draft: "Yes, through our clean-room partners.", flags: ["date older than 12 months"], sources: [{ id: "e", score: 0.88, stack: "Data onboarding", updated: "2025-06", question: "Clean room support?", used: true }] }),
+  ];
+  const sessions = {}; let ev = 0;
+  window.claude = { use: async name => ({
+    user: { id: async () => "u1", can: async () => true },
+    db: { doc, collection: coll },
+    downloads: { save: async f => console.log("download", f.filename) },
+    mcp: {
+      listTools: async () => ({ servers: [{ server: "host:pp-joke", tools: ["list_agents", "send_message", "get_reply"] }] }),
+      callTool: async (host, tool, input) => {
+        if (tool === "list_agents") return { payload: { agents: [{ name: "rfi-agent", id: "agent1" }] } };
+        if (tool === "send_message") {
+          const qs = JSON.parse(input.message.match(/Questions \(JSON\):\n(.*)\n/)[1]), id = "e" + ++ev;
+          sessions[id] = { qs, polls: 0 }; return { payload: { session_id: "sess1", user_event_id: id } };
+        }
+        if (tool === "get_reply") {
+          const s = sessions[input.user_event_id]; s.polls++;
+          const msgs = s.qs.filter(q => q.n !== "12").map(q => JSON.stringify({ n: q.n, question: q.q, ...ANS[(+q.n - 1) % 6](q) }));
+          return { payload: { done: s.polls >= 1, state: "running", messages: msgs } };
+        }
+        throw { code: "tool_error", message: tool };
+      },
+    },
+  })[name] || null };
+  const x = new XMLHttpRequest(); x.open("GET", "rfi-system-helper.html", false); x.send();
+  document.write(x.responseText);
+})();
+</script>
