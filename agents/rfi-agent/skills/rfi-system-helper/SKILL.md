@@ -106,7 +106,7 @@ Where the two list different people for the same topic, **both are valid contact
 | Data and platform infrastructure security | Security/privacy team — rfi@internetbrands.com | — | 🔴 | Doc |
 | HR, DE&I, other company policy sourced from IB | Internet Brands RFI team — rfi@internetbrands.com | — | 🔴 | Skill default |
 
-Creative **spec** questions (file types, sizes, durations) can be answered from the PulsePoint Ad Specifications guide in the Knowledge Base — it is client-facing. Extract the applicable specs rather than attaching the whole guide.
+Creative **spec** questions (file types, sizes, file weights, durations, bitrates, character limits) go to the **ad-specs** skill, which answers from the master ad specs doc behind the client-facing Knowledge Base guide. Triage them green when they ask for spec values; the ad-specs skill decides which values are green and which route. Extract only the applicable specs rather than attaching the whole guide.
 
 ### Routing rules
 
