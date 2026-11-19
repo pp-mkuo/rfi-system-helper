@@ -156,7 +156,8 @@ header.top .in { display: flex; align-items: center; justify-content: space-betw
 .src .used { color: var(--brand); font-weight: 600; }
 .panel .back { display: none; }
 @media (max-width: 899px) {
-  .panel { display: none; }
+  .body { flex-direction: column; align-items: stretch; }
+  .panel { position: static; width: auto; max-height: none; margin: 0; border-left: 0; }
   body.has-sel .panel { display: block; position: fixed; inset: 0; z-index: 20; width: auto; max-height: none; margin: 0; border: 0; background: var(--bg);
     padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
   .panel .back { display: inline-flex; }
@@ -371,7 +372,7 @@ async function startRun() {
 function setRunning(on) {
   state.running = on; $("start").disabled = on; $("stop").hidden = !on; $("stop").disabled = false;
   $("runbar").hidden = !on; $("newrun").disabled = on;
-  if (!on && state.run) { state.run.status = "done"; dbRun("update", { status: "done", finished: new Date().toISOString(), counts: counts() }); }
+  if (!on && state.run) { state.run.status = "done"; state.run.finished = new Date().toISOString(); dbRun("update", { status: "done", finished: new Date().toISOString(), counts: counts() }); }
 }
 function progress(done, total, text) { $("bar").style.width = total ? (100 * done / total) + "%" : "0"; $("status").textContent = text || ""; }
 const fatal = new Set(["server_not_connected", "not_granted", "not_declared", "capability_disabled", "session_expired", "cancelled", "agent_missing"]);
@@ -553,7 +554,7 @@ async function openRun(id, run) {
 // --- render -------------------------------------------------------------------
 // What a row shows at the right edge.
 function rowState(r) {
-  if (r.status === "failed") return { key: "failed", label: "Retry" };
+  if (r.status === "failed") return { key: "failed", label: "Failed" };
   if (r.status === "working") return { key: "working", label: "Working…" };
   if (r.status === "pending" || !r.status) return { key: "pending", label: "Waiting" };
   if (r.lane === "GREEN" && r.status === "drafted") return r.accepted ? { key: "accepted", label: "Accepted" } : { key: "review", label: "Draft to review" };
@@ -599,41 +600,148 @@ function summaryLines() {
   if (c.failed) lines.push(`${c.failed} rows failed and need a retry.`);
   return lines;
 }
-function renderSummary() {
+const ICON = (() => {
+  const s = (w, d) => `<svg width="${w}" height="${w}" viewBox="0 0 16 16" fill="none" aria-hidden="true">${d}</svg>`, k = 'stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"';
+  const person = `<circle cx="6.5" cy="5" r="2.4" ${k}/><path d="M2 13.5c.4-2.4 2.2-4 4.5-4 1 0 1.9.3 2.6.8" ${k}/>`;
+  const shield = `<path d="M8 1.8l5 1.9v3.8c0 3-2.1 5.4-5 6.7-2.9-1.3-5-3.7-5-6.7V3.7l5-1.9z" ${k}/><path d="M5.6 8l1.7 1.7 3.2-3.4" ${k}/>`;
+  return {
+    unconfirmed: s(16, person + `<path d="M11.4 9.6c0-.8.6-1.3 1.3-1.3s1.3.5 1.3 1.2c0 .9-1.3 1-1.3 1.9M12.7 13.3v.1" ${k}/>`),
+    noowner: s(16, person + `<path d="M11 9.5l3 3M14 9.5l-3 3" ${k}/>`),
+    stitched: s(16, `<path d="M6.8 9.2a2.6 2.6 0 003.7 0l2.2-2.2a2.6 2.6 0 00-3.7-3.7l-.9.9M9.2 6.8a2.6 2.6 0 00-3.7 0L3.3 9a2.6 2.6 0 003.7 3.7l.9-.9" ${k}/>`),
+    uncovered: s(16, `<circle cx="8" cy="8" r="5.7" ${k} stroke-dasharray="2.2 2"/>`),
+    other: s(16, `<path d="M3.5 14V2.5m0 0h8l-1.7 3 1.7 3h-8" ${k}/>`),
+    legal: s(16, shield), legalSm: s(12, shield),
+    alert: s(14, `<path d="M8 2.2l6 10.6H2L8 2.2z" ${k}/><path d="M8 6.5v3M8 11.3v.1" ${k}/>`),
+    left: s(20, `<path d="M10 4L6 8l4 4" ${k}/>`), right: s(20, `<path d="M6 4l4 4-4 4" ${k}/>`),
+    up: s(16, `<path d="M5 7v6.5H3V7h2zm0 0l2.6-5c1 0 1.7.8 1.5 1.8L8.7 6H12c.9 0 1.5.8 1.3 1.7l-1 4.7c-.1.6-.7 1.1-1.3 1.1H5" ${k}/>`),
+    down: s(16, `<path d="M11 9V2.5h2V9h-2zm0 0l-2.6 5c-1 0-1.7-.8-1.5-1.8L7.3 10H4c-.9 0-1.5-.8-1.3-1.7l1-4.7c.1-.6.7-1.1 1.3-1.1H11" ${k}/>`),
+    check: s(14, `<path d="M3.5 8.2l2.8 2.8L12.5 4.8" ${k} stroke-width="1.6"/>`),
+  };
+})();
+const laneDot = l => ({ GREEN: "g", AMBER: "a", RED: "r" })[l] || "none";
+const when = iso => new Date(iso).toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+const selRow = () => state.rows.find(r => r.id === state.sel);
+state.sel = null; state.panelKey = ""; state.more = new Set();
+
+function runMeta() {
+  const r = state.run, c = counts(), ro = state.roles || {};
+  const at = state.running ? "rfi-agent is working" : r.finished ? `finished ${when(r.finished)}` : `started ${when(r.createdAt)}`;
+  return [`${c.total} question${c.total === 1 ? "" : "s"}`, at, ...[["AE", ro.ae], ["AM", ro.am], ["PSM/CM", ro.psm]].filter(([, v]) => v).map(([k, v]) => `${k} ${v}`)].join(" · ");
+}
+// The list and the strip rebuild after every batch; the panel only when what it shows changed, so a draft being typed survives a refresh.
+function renderAll() {
+  if (state.run) { $("runhead").textContent = state.run.name; $("runmeta").textContent = runMeta(); }
+  if (state.sel && !selRow()) state.sel = null;
+  renderStrip(); renderList(); applyFilter();
+  if (panelKey() !== state.panelKey) renderPanel();
+}
+function panelKey() {
+  const r = selRow();
+  return r ? [r.id, r.status, r.lane, r.draft, r.sources.length, r.flags.join(), r.error].join("|") : "summary|" + summaryLines().join("\n");
+}
+function renderStrip() {
   const c = counts();
-  $("counts").innerHTML = [["GREEN", "CS answers"], ["AMBER", "needs SME"], ["RED", "route out"]].map(([k, l]) => `<div class="count ${k}"><b>${c[k]}</b><span class="muted">${l}</span></div>`).join("") +
-    `<div class="count"><b>${c.flagged}</b><span class="muted">flagged</span></div>`;
-  $("summary-body").innerHTML = "<ul>" + summaryLines().map(l => `<li${l.startsWith("  ") ? ' style="margin-left:16px"' : ""}>${esc(l.trim())}</li>`).join("") + "</ul>";
+  if (state.filter === "failed" && !c.failed) state.filter = "all";
+  const items = [["all", "All", c.total, ""], ["GREEN", "Green", c.GREEN, '<span class="dot g"></span>'], ["AMBER", "Amber", c.AMBER, '<span class="dot a"></span>'],
+    ["RED", "Red", c.RED, '<span class="dot r"></span>'], ["flagged", "Flagged", c.flagged, ICON.other]];
+  if (c.failed) items.push(["failed", "Failed", c.failed, ICON.alert]);
+  $("filters").innerHTML = items.map(([k, l, n, i]) => `<button data-f="${k}" aria-pressed="${state.filter === k}">${i}${l} ${n}</button>`).join("");
+  const g = state.rows.filter(r => r.lane === "GREEN" && r.status === "drafted"), a = g.filter(r => r.accepted).length;
+  $("accepted").textContent = g.length ? `${a} of ${g.length} green answers accepted` : "";
+  $("meter").hidden = !g.length; $("meter").firstElementChild.style.width = g.length ? `${100 * a / g.length}%` : "0";
   $("retry").hidden = !c.failed || state.running;
 }
-function renderAll() { renderSummary(); $("rows").innerHTML = ""; state.rows.forEach(r => $("rows").append(rowEl(r))); applyFilter(); }
-function renderRow(r) { const old = document.querySelector(`[data-id="${r.id}"]`); if (old) old.replaceWith(rowEl(r)); applyFilter(); }
+function renderList() {
+  const l = $("list"); l.innerHTML = "";
+  state.rows.forEach(r => l.append(rowEl(r)));
+  if (!state.rows.length) l.innerHTML = `<p class="cap" style="padding:16px 12px">No questions in this run.</p>`;
+}
+function renderRow(r) { const old = document.querySelector(`.qrow[data-id="${CSS.escape(r.id)}"]`); if (old) old.replaceWith(rowEl(r)); renderStrip(); applyFilter(); }
 function rowEl(r) {
-  const el = document.createElement("div"); el.className = "qrow"; el.dataset.id = r.id; el.dataset.lane = r.lane || ""; el.dataset.flagged = r.flags.length ? "1" : ""; el.dataset.failed = r.status === "failed" ? "1" : "";
-  const statusText = { pending: "waiting for rfi-agent", working: "rfi-agent working…", drafted: "", routed: "", failed: "failed" }[r.status] || "";
-  let body = `<div class="num">#${esc(r.n)}</div><div>
-    <div class="q">${esc(r.question)}</div>
-    <div class="meta">${r.lane ? `<span class="pill ${r.lane}">${r.lane}</span>` : ""}<span>${esc(r.route)}</span>${r.esc ? `<span>Escalation: ${esc(r.esc)}</span>` : ""}${r.why ? `<span class="muted">${esc(r.why)}</span>` : ""}${statusText ? `<span class="${r.status === "failed" ? "flag err" : "muted"}">${esc(statusText)}${r.error ? ": " + esc(r.error) : ""}</span>` : ""}</div>`;
-  if (r.lane === "GREEN" && (r.status === "drafted" || r.finalDraft)) {
-    body += `<textarea id="d-${r.id}" aria-label="Draft answer for question ${esc(r.n)}">${esc(r.finalDraft)}</textarea>
-      <div class="meta"><span>${r.flags.map(f => `<span class="flag">${esc(f)}</span>`).join(" ")}</span>
-      <span class="fb"><button class="small" data-fb="up" aria-pressed="${r.feedback === "up"}" aria-label="Good answer">👍</button> <button class="small" data-fb="down" aria-pressed="${r.feedback === "down"}" aria-label="Bad answer">👎</button></span>
-      <label style="margin:0;display:inline-flex;gap:6px;align-items:center"><input type="checkbox" id="a-${r.id}" ${r.accepted ? "checked" : ""}> accepted</label></div>`;
-  } else if (r.flags.length) body += `<div class="meta">${r.flags.map(f => `<span class="flag">${esc(f)}</span>`).join(" ")}</div>`;
-  if (r.sources.length) {
-    body += `<details><summary>${r.sources.length} library matches (top ${Number(r.topScore ?? 0).toFixed(2)})</summary>` + r.sources.map(s => `<div class="src"><div class="h"><span class="mono">${Number(s.score ?? 0).toFixed(3)}</span><span>${esc(s.stack || "")}</span><span>${esc(s.updated || "")}</span>${s.legal ? "<span>Legal Approved</span>" : ""}${s.used ? "<span><b>used</b></span>" : ""}</div><div><b>${esc(s.question)}</b></div><div>${esc(s.answer)}</div></div>`).join("") + "</details>";
-  }
-  el.innerHTML = body + "</div>";
-  const ta = el.querySelector("textarea"); if (ta) ta.addEventListener("input", () => { r.finalDraft = ta.value; dbRowLater(r); });
-  el.querySelectorAll("[data-fb]").forEach(b => b.addEventListener("click", () => { r.feedback = r.feedback === b.dataset.fb ? null : b.dataset.fb; dbRow("update", r); renderRow(r); }));
-  const cb = el.querySelector(`#a-${r.id}`); if (cb) cb.addEventListener("change", () => { r.accepted = cb.checked; dbRow("update", r); });
+  const el = document.createElement("div"), st = rowState(r), n = r.sources.length;
+  el.className = "qrow" + (state.sel === r.id ? " sel" : ""); el.tabIndex = 0; el.setAttribute("role", "button");
+  el.setAttribute("aria-label", `Question ${r.n}, ${r.lane || "not triaged"}, ${st.label}: ${r.question}`);
+  Object.assign(el.dataset, { id: r.id, lane: r.lane || "", flagged: r.flags.length ? "1" : "", failed: r.status === "failed" ? "1" : "" });
+  const sub = r.status === "failed" ? `<span class="sub err">Failed: ${esc(r.error || "unknown error")}</span>`
+    : r.lane ? `<span class="sub">${esc([r.route, r.esc && `Escalation: ${r.esc}`, n && `${n} library match${n === 1 ? "" : "es"}, top ${Number(r.topScore ?? 0).toFixed(2)}`].filter(Boolean).join(" · "))}</span>`
+    : `<span class="sub">${r.status === "working" ? "rfi-agent is working on this" : "Waiting for rfi-agent"}</span>`;
+  el.innerHTML = `<span class="num mono">#${esc(r.n)}</span><span class="dot ${laneDot(r.lane)}"></span><span class="txt"><span class="q">${esc(r.question)}</span>${sub}</span>
+    <span class="flags">${flagList(r).map(f => `<span class="ico ${f.key}" tabindex="0" aria-label="${esc(f.label)}: ${esc(f.tip)}">${ICON[f.key]}<span role="tooltip"><b>${esc(f.label)}</b>${esc(f.tip)}</span></span>`).join("")}</span>
+    <span class="state ${st.key}">${esc(st.label)}</span>`;
   return el;
 }
-$("filters").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; state.filter = b.dataset.f; $("filters").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b)); applyFilter(); });
-function applyFilter() {
-  const f = state.filter;
-  document.querySelectorAll(".qrow").forEach(el => { el.hidden = !(f === "all" || el.dataset.lane === f || (f === "flagged" && el.dataset.flagged) || (f === "failed" && el.dataset.failed)); });
+function rowVisible(r) { const f = state.filter; return f === "all" || r.lane === f || (f === "flagged" && (r.flags || []).length > 0) || (f === "failed" && r.status === "failed"); }
+function applyFilter() { document.querySelectorAll(".qrow").forEach(el => { el.hidden = !rowVisible(state.rows.find(r => r.id === el.dataset.id) || {}); }); }
+const visibleRows = () => state.rows.filter(rowVisible);
+
+function select(id) {
+  state.sel = id; document.body.classList.toggle("has-sel", !!id);
+  document.querySelectorAll(".qrow").forEach(el => el.classList.toggle("sel", el.dataset.id === id));
+  renderPanel();
 }
+// ↑/↓ step through the rows the filter shows; a selected row the filter hides stays in the panel.
+function step(d) {
+  const vis = visibleRows(); if (!vis.length) return;
+  const i = vis.findIndex(r => r.id === state.sel), n = vis[i < 0 ? (d > 0 ? 0 : vis.length - 1) : Math.min(Math.max(i + d, 0), vis.length - 1)];
+  select(n.id); document.querySelector(`.qrow[data-id="${CSS.escape(n.id)}"]`)?.scrollIntoView({ block: "nearest" });
+}
+function summaryHtml() {
+  let out = "", ul = [];
+  const flush = () => { if (ul.length) out += `<ul>${ul.join("")}</ul>`; ul = []; };
+  summaryLines().forEach((l, i) => { if (l.startsWith("  ")) ul.push(`<li>${esc(l.trim())}</li>`); else { flush(); out += `<p style="margin:${i ? 10 : 0}px 0 2px;font-weight:${i ? 600 : 400}">${esc(l)}</p>`; } });
+  flush(); return out;
+}
+function srcHtml(s) {
+  return `<div class="src"><div class="h"><span class="mono">${Number(s.score ?? 0).toFixed(2)}</span>${s.stack ? `<span>${esc(s.stack)}</span>` : ""}${s.updated ? `<span>Updated ${esc(s.updated)}</span>` : ""}${s.legal ? `<span class="ok">${ICON.legalSm}Legal Approved</span>` : ""}${s.used ? `<span class="used">Used</span>` : ""}</div><div>${esc(s.question || "")}</div></div>`;
+}
+function renderPanel() {
+  const p = $("panel"), r = selRow(); state.panelKey = panelKey();
+  if (!r) {
+    p.innerHTML = state.rows.length ? `<div class="sec head"><h2 class="title" style="font-size:16px">Scope summary</h2><span class="cap">Select a question to read its answer. ↑ and ↓ step through the list, Esc comes back here.</span></div><div class="sec">${summaryHtml()}</div>` : "";
+    return;
+  }
+  const vis = visibleRows(), i = vis.indexOf(r), fl = flagList(r), n = r.sources.length, all = state.more.has(r.id);
+  const draft = r.lane === "GREEN" && (r.status === "drafted" || r.finalDraft);
+  p.innerHTML = `<div class="sec head">
+      <div class="bar"><div class="lane"><button class="ico-btn back" data-act="close" aria-label="Back to the list">${ICON.left}</button><span class="mono cap">#${esc(r.n)}</span>${r.lane ? `<span class="pill ${r.lane}">${r.lane}</span>` : ""}<span class="cap">${esc(r.route || rowState(r).label)}</span></div>
+        <div style="display:flex"><button class="ico-btn" data-act="prev" aria-label="Previous question"${i <= 0 ? " disabled" : ""}>${ICON.left}</button><button class="ico-btn" data-act="next" aria-label="Next question"${i < 0 || i >= vis.length - 1 ? " disabled" : ""}>${ICON.right}</button></div></div>
+      <h2 class="title">${esc(r.question)}</h2>
+      ${r.why ? `<span class="cap">${esc(r.why)}</span>` : ""}${r.esc ? `<span class="cap">Escalation: ${esc(r.esc)}</span>` : ""}
+      ${r.status === "failed" ? `<span class="cap" style="color:var(--neg)">Failed: ${esc(r.error || "unknown error")}. Retry failed (above the list) sends it again.</span>` : ""}
+      ${fl.map(f => `<div class="lane"><span class="ico ${f.key}">${ICON[f.key]}</span><span><b style="font-weight:600">${esc(f.label)}.</b> <span class="cap">${esc(f.tip)}</span></span></div>`).join("")}
+    </div>
+    ${draft ? `<div class="sec"><div class="row"><h3 style="margin:0">Draft answer</h3><span class="cap">Edits save automatically</span></div>
+      <textarea id="draft" aria-label="Draft answer for question ${esc(r.n)}">${esc(r.finalDraft)}</textarea>
+      <div class="row"><div style="display:flex;gap:8px"><button class="ico-btn out" data-fb="up" aria-pressed="${r.feedback === "up"}" aria-label="Good answer">${ICON.up}</button><button class="ico-btn out" data-fb="down" aria-pressed="${r.feedback === "down"}" aria-label="Bad answer">${ICON.down}</button></div>
+        <button class="accept" data-act="accept" aria-pressed="${!!r.accepted}">${ICON.check}${r.accepted ? "Accepted" : "Accept"}</button></div></div>`
+      : r.lane ? `<div class="sec"><span class="cap">No draft: rfi-agent drafts green questions only.</span></div>` : ""}
+    ${n ? `<div class="sec"><h3 style="margin:0">Library matches</h3>${r.sources.slice(0, all ? n : 2).map(srcHtml).join("")}${n > 2 ? `<span><button class="link" data-act="more">${all ? "Show fewer" : `Show ${n - 2} more`}</button></span>` : ""}</div>` : ""}`;
+}
+$("list").addEventListener("click", e => { const row = e.target.closest(".qrow"); if (row) select(row.dataset.id); });
+$("list").addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && e.target.classList.contains("qrow")) { e.preventDefault(); select(e.target.dataset.id); } });
+$("panel").addEventListener("input", e => { const r = selRow(); if (r && e.target.id === "draft") { r.finalDraft = e.target.value; dbRowLater(r); } });
+$("panel").addEventListener("click", e => {
+  const r = selRow(), b = e.target.closest("button"); if (!b) return;
+  const act = b.dataset.act;
+  if (act === "close") return select(null);
+  if (act === "prev" || act === "next") return step(act === "next" ? 1 : -1);
+  if (!r) return;
+  if (b.dataset.fb) r.feedback = r.feedback === b.dataset.fb ? null : b.dataset.fb;
+  else if (act === "accept") r.accepted = !r.accepted;
+  else if (act === "more") { state.more.has(r.id) ? state.more.delete(r.id) : state.more.add(r.id); return renderPanel(); }
+  else return;
+  dbRow("update", r); renderRow(r); renderPanel();
+});
+$("filters").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  state.filter = b.dataset.f; renderStrip(); applyFilter();
+  if (document.activeElement?.id !== "draft") renderPanel();   // prev/next follow the new filter
+});
+document.addEventListener("keydown", e => {
+  if ($("review").hidden || e.target.closest("input, textarea, select")) return;
+  if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); step(e.key === "ArrowDown" ? 1 : -1); }
+  else if (e.key === "Escape" && state.sel) select(null);
+});
 
 // --- export -------------------------------------------------------------------
 $("export").addEventListener("click", async () => {
