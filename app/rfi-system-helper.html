@@ -1,166 +1,229 @@
 <title>RFI System Helper</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
 <style>
-/* Layout: one working column (max 1120px); summary before detail; rows are the detail. */
+/* pulsepoint design system, Platform mode (labs-open-design design-systems/pulsepoint): white page, Open Sans,
+   18/16/13/12 type, one brand-gradient button per screen, semantic colours only with a reason, no motion.
+   Flow: Send (composer) → Working (header progress) → Review (slim list + side panel). Design: docs/plans/2026-11-19-rfi-helper-redesign-design.md */
 :root {
-  --bg: #f6f7f9; --panel: #ffffff; --fg: #14202b; --muted: #5b6b7a; --line: #d9dfe6;
-  --accent: #1f6f78; --accent-fg: #ffffff; --accent-soft: #e2f0f1;
-  --green: #1d7a3e; --green-soft: #dff3e5; --amber: #9a6400; --amber-soft: #fbefcf; --red: #b3261e; --red-soft: #fbe1df;
-  --font: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --bg: #ffffff; --ink: rgb(34, 34, 34); --ink2: rgba(34, 34, 34, 0.55); --line: rgba(34, 34, 34, 0.12); --line2: rgba(34, 34, 34, 0.18);
+  --surf: rgba(34, 34, 34, 0.03); --surf2: rgba(34, 34, 34, 0.07);
+  --brand: #5536B3; --brand-l: #EDE8FF; --grad: linear-gradient(135deg, #655BC6 0%, #422B94 100%);
+  --pos: #008888; --pos-l: #E3F8F8; --warn: #F58406; --warn-ink: #AD5402; --warn-l: #FFF1D9; --neg: #EA2656; --neg-l: #FDECF0;
+  --tip: rgba(34, 34, 34, 0.88); --shadow: 0 1px 3px rgba(0, 11, 99, 0.2);
+  --font: "Open Sans", system-ui, -apple-system, "Segoe UI", sans-serif; --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  color-scheme: light;
 }
+/* Dark: the same hues, from the system's -medium tokens, over the ink colour as ground. */
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --bg: #121a21; --panel: #1a242d; --fg: #e8edf1; --muted: #9aa8b4; --line: #2d3a46;
-  --accent: #5fb7c0; --accent-fg: #0d1a1c; --accent-soft: #1d3a3e;
-  --green: #5ccb7f; --green-soft: #173a25; --amber: #e3b341; --amber-soft: #3d3014; --red: #ff8a80; --red-soft: #4a1f1c;
-  color-scheme: dark; } }
+  --bg: rgb(34, 34, 34); --ink: #ffffff; --ink2: rgba(255, 255, 255, 0.6); --line: rgba(255, 255, 255, 0.12); --line2: rgba(255, 255, 255, 0.2);
+  --surf: rgba(255, 255, 255, 0.04); --surf2: rgba(255, 255, 255, 0.08); --brand: rgb(166, 152, 219); --brand-l: rgba(85, 54, 179, 0.35);
+  --pos: rgb(102, 184, 184); --pos-l: rgba(0, 136, 136, 0.22); --warn: rgb(245, 191, 102); --warn-ink: rgb(245, 191, 102); --warn-l: rgba(245, 132, 6, 0.2);
+  --neg: rgb(255, 109, 145); --neg-l: rgba(234, 38, 86, 0.2); --tip: rgba(0, 0, 0, 0.88); color-scheme: dark; } }
 :root[data-theme="dark"] {
-  --bg: #121a21; --panel: #1a242d; --fg: #e8edf1; --muted: #9aa8b4; --line: #2d3a46;
-  --accent: #5fb7c0; --accent-fg: #0d1a1c; --accent-soft: #1d3a3e;
-  --green: #5ccb7f; --green-soft: #173a25; --amber: #e3b341; --amber-soft: #3d3014; --red: #ff8a80; --red-soft: #4a1f1c;
-  color-scheme: dark; }
+  --bg: rgb(34, 34, 34); --ink: #ffffff; --ink2: rgba(255, 255, 255, 0.6); --line: rgba(255, 255, 255, 0.12); --line2: rgba(255, 255, 255, 0.2);
+  --surf: rgba(255, 255, 255, 0.04); --surf2: rgba(255, 255, 255, 0.08); --brand: rgb(166, 152, 219); --brand-l: rgba(85, 54, 179, 0.35);
+  --pos: rgb(102, 184, 184); --pos-l: rgba(0, 136, 136, 0.22); --warn: rgb(245, 191, 102); --warn-ink: rgb(245, 191, 102); --warn-l: rgba(245, 132, 6, 0.2);
+  --neg: rgb(255, 109, 145); --neg-l: rgba(234, 38, 86, 0.2); --tip: rgba(0, 0, 0, 0.88); color-scheme: dark; }
 
 * { box-sizing: border-box; }
-body { background: var(--bg); color: var(--fg); font-family: var(--font); font-size: 15px; line-height: 1.5;
-  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 0 48px; }
-.wrap { max-width: 1120px; margin: 0 auto; display: grid; gap: 20px; }
-h1 { font-size: 22px; font-weight: 700; margin: 0; letter-spacing: -0.01em; }
-h2 { font-size: 15px; font-weight: 600; margin: 0 0 10px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
-p { margin: 0; }
-a { color: var(--accent); }
-header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding-block: 20px 4px; border-bottom: 1px solid var(--line); }
-header .sub { color: var(--muted); font-size: 14px; }
-.chips { display: flex; flex-wrap: wrap; gap: 8px; }
-.chip { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel); color: var(--muted); white-space: nowrap; }
-.chip::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--line); }
-.chip.ok::before { background: var(--green); } .chip.bad::before { background: var(--red); } .chip.warn::before { background: var(--amber); }
-.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 18px; }
-.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-@media (max-width: 760px) { .grid2 { grid-template-columns: 1fr; } }
-label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 4px; }
-textarea, input[type=text], select { width: 100%; font: inherit; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; }
-textarea { min-height: 150px; resize: vertical; }
-textarea:focus, input:focus, select:focus, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
-.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
-button { font: inherit; font-weight: 600; font-size: 14px; border-radius: 6px; padding: 8px 14px; border: 1px solid var(--line); background: var(--panel); color: var(--fg); cursor: pointer; }
-button.primary { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
-button.small { font-size: 12.5px; padding: 4px 10px; font-weight: 500; }
-button:disabled { opacity: 0.5; cursor: default; }
-.muted { color: var(--muted); font-size: 13.5px; }
-.mono { font-family: var(--mono); font-size: 12.5px; font-variant-numeric: tabular-nums; }
-.pill { display: inline-block; font-size: 12px; font-weight: 600; padding: 2px 9px; border-radius: 4px; letter-spacing: 0.04em; }
-.pill.GREEN { background: var(--green-soft); color: var(--green); } .pill.AMBER { background: var(--amber-soft); color: var(--amber); } .pill.RED { background: var(--red-soft); color: var(--red); }
-.progress { height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; }
-.progress > div { height: 100%; width: 0; background: var(--accent); transition: width 0.3s; }
-.counts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
-.count { border-left: 4px solid var(--line); padding: 6px 12px; }
-.count b { display: block; font-size: 24px; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1.1; }
-.count.GREEN { border-color: var(--green); } .count.AMBER { border-color: var(--amber); } .count.RED { border-color: var(--red); }
-.summary ul { margin: 6px 0 0; padding-left: 18px; } .summary li { margin: 2px 0; }
-.filters button[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); }
-.qrow { display: grid; grid-template-columns: 56px 1fr; gap: 10px 14px; padding: 14px 0; border-top: 1px solid var(--line); }
-.qrow:first-child { border-top: 0; }
-.qrow .num { font-family: var(--mono); font-size: 13px; color: var(--muted); padding-top: 3px; }
-.qrow .q { font-weight: 500; }
-.qrow .meta { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; font-size: 13px; color: var(--muted); margin-top: 6px; }
-.qrow textarea { min-height: 84px; margin-top: 8px; font-size: 14px; }
-.qrow details { margin-top: 8px; font-size: 13.5px; }
-.qrow summary { cursor: pointer; color: var(--accent); }
-.src { border-left: 3px solid var(--line); padding: 4px 10px; margin: 6px 0; }
-.src .h { display: flex; flex-wrap: wrap; gap: 8px; color: var(--muted); font-size: 12.5px; }
-.flag { display: inline-block; font-size: 12px; padding: 1px 7px; border-radius: 4px; background: var(--amber-soft); color: var(--amber); }
-.flag.err { background: var(--red-soft); color: var(--red); }
-.fb button[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); }
-.runs li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; padding: 6px 0; border-top: 1px solid var(--line); font-size: 14px; }
-.runs ul { list-style: none; margin: 0; padding: 0; }
-.notice { padding: 10px 12px; border-radius: 6px; background: var(--amber-soft); color: var(--amber); font-size: 14px; }
-.notice.err { background: var(--red-soft); color: var(--red); }
+html { scroll-padding-top: 72px; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 13px/20px var(--font); -webkit-font-smoothing: antialiased; }
 [hidden] { display: none !important; }
-@media (prefers-reduced-motion: reduce) { .progress > div { transition: none; } }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; background: none; border: 0; padding: 0; }
+button:disabled { opacity: 0.45; cursor: default; }
+:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+.cap { font-size: 12px; line-height: 16px; color: var(--ink2); }
+.mono { font-family: var(--mono); font-size: 12px; line-height: 18px; font-variant-numeric: tabular-nums; }
+.gut { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+@media (min-width: 900px) { .gut { padding-left: 32px; padding-right: 32px; } }
+
+/* buttons: pills; .primary is the one gradient per screen */
+.btn { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 14px; border-radius: 9999px; font-weight: 600; font-size: 13px; white-space: nowrap; }
+.btn.primary { background: var(--grad); color: #fff; padding: 0 18px; }
+.btn.ghost { border: 1px solid var(--line2); }
+.btn.sm { height: 28px; padding: 0 12px; font-size: 12px; }
+.link { color: var(--brand); font-weight: 600; font-size: 12px; line-height: 16px; cursor: pointer; }
+.ico-btn { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 9999px; color: var(--ink2); }
+.ico-btn:hover { background: var(--surf2); }
+.ico-btn[aria-pressed="true"] { background: var(--brand-l); color: var(--brand); }
+.ico-btn.out { border: 1px solid var(--line2); }
+svg { display: block; flex-shrink: 0; }
+
+/* header (shared by both screens) */
+header.top { position: sticky; top: 0; z-index: 10; background: var(--bg); border-bottom: 1px solid var(--line);
+  padding-top: env(safe-area-inset-top, 0px); }
+header.top .in { display: flex; align-items: center; justify-content: space-between; gap: 12px 16px; min-height: 64px; padding-block: 10px; flex-wrap: wrap; }
+.brand { display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1 1 280px; }
+.logo { width: 28px; height: 28px; border-radius: 6px; background: var(--grad); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.brand .h1 { font-size: 16px; line-height: 20px; font-weight: 700; overflow-wrap: anywhere; }
+.acts { display: flex; align-items: center; gap: 8px 12px; flex-wrap: wrap; }
+.chip { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; line-height: 16px; color: var(--ink2); white-space: nowrap; }
+.chip::before { content: ""; width: 6px; height: 6px; border-radius: 3px; background: var(--line2); }
+.chip.ok::before { background: var(--pos); } .chip.warn::before { background: var(--warn); } .chip.bad::before { background: var(--neg); }
+.notice { margin: 12px 0 0; padding: 8px 12px; border-radius: 6px; background: var(--warn-l); color: var(--warn-ink); font-size: 13px; line-height: 20px; }
+.notice.err { background: var(--neg-l); color: var(--neg); }
+
+/* Send */
+.send { max-width: 752px; margin: 0 auto; padding-block: 48px 64px; display: flex; flex-direction: column; gap: 20px; }
+.send h1 { font-size: 18px; line-height: 24px; font-weight: 700; margin: 0; }
+.send p { margin: 4px 0 0; }
+.paste { border: 1px solid var(--line2); border-radius: 6px; overflow: hidden; }
+.paste:focus-within { border-color: var(--brand); }
+.paste textarea { display: block; width: 100%; min-height: 184px; resize: vertical; border: 0; padding: 14px 16px; background: none; font-size: 13px; line-height: 20px; outline: none; }
+.paste-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 12px 8px 16px; border-top: 1px solid var(--line); background: var(--surf); }
+.paste-foot .cap { display: inline-flex; align-items: center; gap: 8px; }
+.fields { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; }
+.field { display: flex; flex-direction: column; gap: 4px; flex: 1 1 140px; min-width: 0; }
+.field.wide { flex: 2 1 240px; }
+.field label { font-size: 12px; line-height: 16px; font-weight: 600; color: var(--ink2); }
+.field input, .field select, .panel textarea { width: 100%; height: 34px; padding: 6px 10px; border: 1px solid var(--line2); border-radius: 4px; background: var(--bg); font-size: 13px; line-height: 20px; }
+.field input:focus, .field select:focus, .panel textarea:focus { outline: none; border-color: var(--brand); box-shadow: inset 0 0 0 0.5px var(--brand); }
+.go { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.runs h2, .panel h3 { font-size: 13px; line-height: 20px; font-weight: 600; margin: 0 0 8px; }
+.runs { padding-top: 28px; }
+.run-row { display: flex; align-items: center; gap: 16px; width: 100%; padding: 10px 4px; border-top: 1px solid var(--line); text-align: left; }
+.runs .run-row:last-child { border-bottom: 1px solid var(--line); }
+.run-row:hover { background: var(--surf); }
+.run-row .nm { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lanebar { display: flex; gap: 2px; width: 96px; height: 4px; flex-shrink: 0; }
+.lanebar i { border-radius: 2px; }
+.g { background: var(--pos); } .a { background: var(--warn); } .r { background: var(--neg); }
+@media (max-width: 600px) { .run-row .when { display: none; } }
+
+/* Working + Review */
+.runbar { display: flex; align-items: center; gap: 12px; padding-top: 12px; }
+.progress { flex: 0 0 160px; height: 4px; border-radius: 2px; background: var(--line); overflow: hidden; }
+.progress > div { height: 100%; width: 0; background: var(--brand); }
+.strip { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-block: 16px 12px; }
+.seg { display: flex; gap: 2px; padding: 3px; border-radius: 9999px; background: var(--surf2); overflow-x: auto; max-width: 100%; }
+.seg button { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 12px; border-radius: 9999px; font-size: 13px; font-weight: 500; color: var(--ink2); white-space: nowrap; }
+.seg button[aria-pressed="true"] { background: var(--bg); color: var(--ink); font-weight: 600; box-shadow: var(--shadow); }
+.dot { width: 8px; height: 8px; border-radius: 4px; flex-shrink: 0; }
+.dot.none { border: 1.5px solid var(--line2); }
+.strip-r { display: flex; align-items: center; gap: 12px; }
+.meter { width: 96px; height: 4px; border-radius: 2px; background: var(--line); overflow: hidden; }
+.meter > div { height: 100%; background: var(--pos); }
+
+.body { display: flex; align-items: flex-start; }
+.list { flex: 1; min-width: 0; border-top: 1px solid var(--line); padding-bottom: 64px; }
+.qrow { display: flex; align-items: flex-start; gap: 12px; width: 100%; padding: 12px; border-bottom: 1px solid var(--line); text-align: left; }
+.qrow:hover { background: var(--surf); }
+.qrow.sel { background: var(--brand-l); }
+.qrow .num { width: 40px; flex-shrink: 0; color: var(--ink2); overflow: hidden; text-overflow: ellipsis; }
+.qrow .dot { margin-top: 6px; }
+.qrow .txt { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.qrow .q { font-weight: 600; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }
+.qrow .sub { font-size: 12px; line-height: 16px; color: var(--ink2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.qrow .sub.err { color: var(--neg); white-space: normal; }
+.qrow .flags { display: flex; gap: 8px; width: 80px; flex-shrink: 0; justify-content: flex-end; padding-top: 2px; }
+.qrow .state { width: 112px; flex-shrink: 0; text-align: right; font-size: 12px; color: var(--ink2); }
+.state.accepted { color: var(--pos); font-weight: 600; } .state.review, .state.failed { color: var(--brand); font-weight: 600; }
+.state.working { color: var(--ink); }
+@media (max-width: 600px) { .qrow .num { width: 28px; } .qrow .flags { width: auto; } .qrow .state { width: auto; max-width: 84px; } }
+
+/* flag icons + tooltip (hover or keyboard focus) */
+.ico { position: relative; display: inline-flex; color: var(--ink2); }
+.ico.unconfirmed, .ico.stitched, .ico.uncovered, .ico.other { color: var(--warn); }
+.ico.noowner { color: var(--neg); } .ico.legal { color: var(--pos); }
+.ico [role="tooltip"] { display: none; position: absolute; right: -8px; top: calc(100% + 8px); z-index: 30; width: 240px; padding: 8px 12px; border-radius: 6px;
+  background: var(--tip); backdrop-filter: blur(4px); color: #fff; box-shadow: var(--shadow); text-align: left; font-size: 12px; line-height: 16px; font-weight: 400; pointer-events: none; }
+.ico [role="tooltip"] b { display: block; font-weight: 600; }
+.ico:hover [role="tooltip"], .ico:focus [role="tooltip"], .ico:focus-within [role="tooltip"] { display: block; }
+
+/* side panel */
+.panel { position: sticky; top: 64px; width: 520px; flex-shrink: 0; max-height: calc(100vh - 64px); overflow-y: auto; border-left: 1px solid var(--line); margin-left: 32px; margin-right: -32px; }
+.panel .sec { padding: 16px 24px; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px; }
+.panel .sec:last-child { border-bottom: 0; }
+.panel .head { padding-top: 20px; gap: 10px; }
+.panel .bar { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.panel .lane { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-width: 0; }
+.panel .title { font-size: 18px; line-height: 24px; font-weight: 700; margin: 0; overflow-wrap: anywhere; }
+.panel textarea { height: auto; min-height: 140px; resize: vertical; }
+.panel .row { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.panel ul { margin: 0; padding-left: 18px; } .panel li { margin: 2px 0; }
+.pill { display: inline-flex; align-items: center; gap: 6px; padding: 1px 10px; border-radius: 9999px; font-size: 12px; line-height: 18px; font-weight: 600; }
+.pill::before { content: ""; width: 6px; height: 6px; border-radius: 3px; background: currentColor; }
+.pill.GREEN { background: var(--pos-l); color: var(--pos); } .pill.AMBER { background: var(--warn-l); color: var(--warn-ink); } .pill.RED { background: var(--neg-l); color: var(--neg); }
+.accept { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 14px; border-radius: 9999px; border: 1px solid var(--pos); color: var(--pos); font-weight: 600; }
+.accept[aria-pressed="true"] { background: var(--pos-l); border-color: transparent; }
+.src { display: flex; flex-direction: column; gap: 4px; padding: 10px 12px; border-radius: 6px; background: var(--surf); }
+.src .h { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; font-size: 12px; line-height: 16px; color: var(--ink2); }
+.src .h .mono { color: var(--ink); }
+.src .ok { display: inline-flex; align-items: center; gap: 4px; color: var(--pos); font-weight: 600; }
+.src .used { color: var(--brand); font-weight: 600; }
+.panel .back { display: none; }
+@media (max-width: 899px) {
+  .panel { display: none; }
+  body.has-sel .panel { display: block; position: fixed; inset: 0; z-index: 20; width: auto; max-height: none; margin: 0; border: 0; background: var(--bg);
+    padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  .panel .back { display: inline-flex; }
+}
 </style>
 
-<div class="wrap">
-  <header>
-    <div>
-      <h1>RFI System Helper</h1>
-      <p class="sub">Triage a client RFI, draft green answers from the PulsePoint answer library, route the rest.</p>
-    </div>
-    <div class="chips" id="chips">
-      <span class="chip" id="chip-agent">rfi-agent</span>
-      <span class="chip" id="chip-db">Run log</span>
-    </div>
-  </header>
+<header class="top"><div class="in gut">
+  <div class="brand">
+    <span class="logo" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 4h10M3 8h7M3 12h5" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+    <div style="min-width:0"><div class="h1" id="runhead">RFI System Helper</div><div class="cap" id="runmeta">Triage a client RFI, draft green answers from the PulsePoint answer library, route the rest.</div></div>
+  </div>
+  <div class="acts">
+    <span class="chip" id="chip-agent">rfi-agent</span>
+    <span class="chip" id="chip-db">Run log</span>
+    <button class="btn ghost" id="stop" hidden>Stop</button>
+    <button class="btn ghost" id="newrun" hidden>New run</button>
+    <span class="cap" id="exportnote"></span>
+    <button class="btn primary" id="export" hidden><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v7m0 0L4 6m3 3l3-3M2.5 11.5h9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Export .xlsx</button>
+  </div>
+</div></header>
+<div class="gut"><div class="notice" id="notice" role="status" hidden></div></div>
 
-  <section class="panel" id="setup">
-    <h2>1 · Questionnaire</h2>
-    <div class="grid2">
-      <div>
-        <label for="paste">Paste questions, one per line (leading numbers are kept as the question #)</label>
-        <textarea id="paste" placeholder="1. Can you target by medical condition and remain HIPAA compliant?&#10;2. Provide your information security policy and most recent SOC 2 report.&#10;3. Which brand safety vendors do you integrate with?"></textarea>
-        <div class="row" style="margin-top:8px">
-          <label for="file" style="margin:0">or upload .xlsx / .csv</label>
-          <input type="file" id="file" accept=".xlsx,.csv">
-        </div>
-        <div id="colpick" class="row" hidden style="margin-top:8px">
-          <div><label for="qcol">Question column</label><select id="qcol"></select></div>
-          <div><label for="ncol">Number column</label><select id="ncol"></select></div>
-          <span class="muted" id="filenote"></span>
-        </div>
-      </div>
-      <div>
-        <label for="runname">Run name</label>
-        <input type="text" id="runname" placeholder="e.g. CMI Data RFI – Nov 2026">
-        <div class="grid2" style="margin-top:10px">
-          <div><label for="ae">AE on the account</label><input type="text" id="ae" placeholder="name, or leave as a role"></div>
-          <div><label for="am">AM on the account</label><input type="text" id="am"></div>
-          <div><label for="psm">PSM/CM on the account</label><input type="text" id="psm"></div>
-        </div>
-        <p class="muted" style="margin-top:10px">Questions go to <b>rfi-agent</b> through the pp-joke plugin, 10 at a time; each batch takes a few minutes. The agent never searches or drafts red questions. It searches the library for green and amber ones but drafts only green. A green question with no usable match becomes amber and is routed. Works only in the Claude desktop app.</p>
-        <div class="row" style="margin-top:14px">
-          <button class="primary" id="start">Triage and draft</button>
-          <button id="stop" hidden>Stop</button>
-          <span class="muted" id="status"></span>
-        </div>
-      </div>
+<main id="send" class="send gut">
+  <div>
+    <h1>New RFI run</h1>
+    <p class="cap">rfi-agent triages each question, drafts the green ones from the answer library and routes the rest. Questions go 10 at a time, and each batch takes a few minutes. Works only in the Claude desktop app with pp-joke installed.</p>
+  </div>
+  <div class="paste">
+    <textarea id="paste" aria-label="Questions, one per line" placeholder="Paste questions, one per line. Leading numbers are kept as the question #.&#10;1. Can you target by medical condition and remain HIPAA compliant?&#10;2. Provide your information security policy and most recent SOC 2 report."></textarea>
+    <div class="paste-foot">
+      <span class="cap"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M9.5 2h-5A1.5 1.5 0 003 3.5v9A1.5 1.5 0 004.5 14h7a1.5 1.5 0 001.5-1.5v-7L9.5 2z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M9.5 2v3.5H13" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg><span id="qcount">No questions yet. Paste them, or upload an .xlsx or .csv.</span></span>
+      <label class="link" for="file">Upload file</label><input type="file" id="file" accept=".xlsx,.csv" hidden>
     </div>
-    <div class="progress" style="margin-top:14px"><div id="bar"></div></div>
-    <div class="notice" id="notice" hidden></div>
+  </div>
+  <div id="colpick" class="fields" hidden>
+    <div class="field"><label for="qcol">Question column</label><select id="qcol"></select></div>
+    <div class="field"><label for="ncol">Number column</label><select id="ncol"></select></div>
+    <div class="field"><span class="cap" id="filenote"></span><span class="link" id="clearfile" role="button" tabindex="0">Use pasted text instead</span></div>
+  </div>
+  <div class="fields">
+    <div class="field wide"><label for="runname">Run name</label><input type="text" id="runname" placeholder="e.g. CMI Data RFI – Nov 2026"></div>
+    <div class="field"><label for="ae">AE</label><input type="text" id="ae" placeholder="Optional"></div>
+    <div class="field"><label for="am">AM</label><input type="text" id="am" placeholder="Optional"></div>
+    <div class="field"><label for="psm">PSM / CM</label><input type="text" id="psm" placeholder="Optional"></div>
+  </div>
+  <div class="go">
+    <span class="cap">Account roles you leave empty are routed as "the AE on the account", and so on.</span>
+    <button class="btn primary" id="start">Send questions<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8m0 0L7.5 3.5M11 7l-3.5 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  </div>
+  <section class="runs">
+    <h2>Recent runs</h2>
+    <p class="cap" id="runs-empty">Runs you start are saved here under your own account. Editors can read every run through the artifact's data store.</p>
+    <div id="runs"></div>
   </section>
+</main>
 
-  <section class="panel runs" id="history">
-    <h2>Your runs</h2>
-    <p class="muted" id="runs-empty">Runs you start are saved here under your own account. Editors can read every run through the artifact's data store.</p>
-    <ul id="runs"></ul>
-  </section>
-
-  <section class="panel summary" id="summary" hidden>
-    <h2>2 · Scope summary</h2>
-    <div class="counts" id="counts"></div>
-    <div id="summary-body" style="margin-top:12px"></div>
-    <div class="row" style="margin-top:14px">
-      <button class="primary" id="export">Export triaged workbook (.xlsx)</button>
-      <button id="retry" hidden>Retry failed rows</button>
-      <span class="muted" id="exportnote"></span>
-    </div>
-  </section>
-
-  <section class="panel" id="rowspanel" hidden>
-    <div class="row" style="justify-content:space-between">
-      <h2 style="margin:0">3 · Questions</h2>
-      <div class="row filters" id="filters">
-        <button class="small" data-f="all" aria-pressed="true">All</button>
-        <button class="small" data-f="RED">Red</button>
-        <button class="small" data-f="AMBER">Amber</button>
-        <button class="small" data-f="GREEN">Green</button>
-        <button class="small" data-f="flagged">Flagged</button>
-        <button class="small" data-f="failed">Failed</button>
-      </div>
-    </div>
-    <div id="rows" style="margin-top:8px"></div>
-  </section>
-</div>
+<main id="review" class="gut" hidden>
+  <div class="runbar" id="runbar" hidden><div class="progress"><div id="bar"></div></div><span class="cap" id="status"></span></div>
+  <div class="strip">
+    <div class="seg" id="filters" role="group" aria-label="Filter questions"></div>
+    <div class="strip-r"><button class="btn ghost sm" id="retry" hidden>Retry failed</button><span class="cap" id="accepted"></span><div class="meter" id="meter"><div></div></div></div>
+  </div>
+  <div class="body">
+    <div class="list" id="list"></div>
+    <aside class="panel" id="panel" aria-label="Question detail"></aside>
+  </div>
+</main>
 
 <script>
 "use strict";
@@ -259,7 +322,28 @@ $("file").addEventListener("change", async e => {
   parsedUpload = { grid, header };
   $("colpick").hidden = false; $("filenote").textContent = `${f.name}: ${grid.length - 1} rows (first row read as headers)`;
   if (!$("runname").value) $("runname").value = f.name.replace(/\.[^.]+$/, "");
+  updateCount();
 });
+// The composer's live count and the Send button's label.
+function updateCount() {
+  const n = parsedUpload ? questionsFromUpload().length : parsePaste($("paste").value).length;
+  $("qcount").textContent = parsedUpload ? `${n} question${n === 1 ? "" : "s"} from the file` : n ? `${n} question${n === 1 ? "" : "s"} found. You can also upload an .xlsx or .csv.` : "No questions yet. Paste them, or upload an .xlsx or .csv.";
+  $("start").firstChild.textContent = n ? `Send ${n} question${n === 1 ? "" : "s"}` : "Send questions";
+}
+$("paste").addEventListener("input", updateCount);
+["qcol", "ncol"].forEach(id => $(id).addEventListener("change", updateCount));
+function clearFile() { parsedUpload = null; $("file").value = ""; $("colpick").hidden = true; updateCount(); }
+$("clearfile").addEventListener("click", clearFile);
+$("clearfile").addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); clearFile(); } });
+// Two screens: the composer, and the run (working + review). The header carries the run's name once one is open.
+function showScreen(name) {
+  const rev = name === "review";
+  $("send").hidden = rev; $("review").hidden = !rev; $("newrun").hidden = !rev; $("export").hidden = !rev;
+  if (!rev) { $("runhead").textContent = "RFI System Helper"; $("runmeta").textContent = "Triage a client RFI, draft green answers from the PulsePoint answer library, route the rest."; select(null); loadRuns(); }
+  else renderAll();
+  window.scrollTo(0, 0);
+}
+$("newrun").addEventListener("click", () => { if (!state.running) { showNotice(""); showScreen("send"); } });
 function cellText(v) { if (v == null) return ""; if (typeof v === "object") return v.richText ? v.richText.map(t => t.text).join("") : (v.text ?? v.result ?? v.toString()); return String(v); }
 function questionsFromUpload() {
   const qc = +$("qcol").value, nc = +$("ncol").value;
@@ -280,13 +364,13 @@ async function startRun() {
   state.run = { id: uid(), name: $("runname").value.trim() || `Run ${new Date().toLocaleString()}`, createdAt: new Date().toISOString(), total: qs.length, roles: state.roles, status: "running", sessionId: null };
   state.rows = qs.map(x => ({ id: uid(), n: x.n, question: x.q, lane: null, route: "", esc: "", why: "", sources: [], topScore: null, draft: "", finalDraft: "", flags: [], stitched: false, uncovered: "", feedback: null, accepted: false, status: "pending", error: "" }));
   await dbRun("set", state.run);
-  $("summary").hidden = false; $("rowspanel").hidden = false;
-  renderAll();
+  select(null); showScreen("review");
   await askAgent(state.rows.slice());
 }
 
 function setRunning(on) {
   state.running = on; $("start").disabled = on; $("stop").hidden = !on; $("stop").disabled = false;
+  $("runbar").hidden = !on; $("newrun").disabled = on;
   if (!on && state.run) { state.run.status = "done"; dbRun("update", { status: "done", finished: new Date().toISOString(), counts: counts() }); }
 }
 function progress(done, total, text) { $("bar").style.width = total ? (100 * done / total) + "%" : "0"; $("status").textContent = text || ""; }
@@ -448,10 +532,12 @@ async function loadRuns() {
     const ul = $("runs"); ul.innerHTML = "";
     $("runs-empty").hidden = !snap.empty;
     snap.docs.forEach(d => {
-      const x = d.data(); const li = document.createElement("li");
-      li.innerHTML = `<span>${esc(x.name)} <span class="muted">· ${esc(new Date(x.createdAt).toLocaleString())} · ${x.total} questions · ${esc(x.status)}</span></span>`;
-      const b = document.createElement("button"); b.className = "small"; b.textContent = "Open"; b.onclick = () => openRun(d.id, x);
-      li.append(b); ul.append(li);
+      const x = d.data(), c = x.counts, b = document.createElement("button");
+      b.className = "run-row";
+      const bar = c && (c.GREEN + c.AMBER + c.RED) ? `<span class="lanebar" title="${c.GREEN} green, ${c.AMBER} amber, ${c.RED} red">${[["g", c.GREEN], ["a", c.AMBER], ["r", c.RED]].filter(([, v]) => v).map(([k, v]) => `<i class="${k}" style="flex:${v}"></i>`).join("")}</span>` : "";
+      b.innerHTML = `<span class="nm">${esc(x.name)}</span>${bar}<span class="cap">${x.total} q${x.status === "running" ? " · unfinished" : ""}</span><span class="cap when">${esc(new Date(x.createdAt).toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }))}</span>`;
+      b.onclick = () => openRun(d.id, x);
+      ul.append(b);
     });
   } catch (e) { console.warn("runs", e); }
 }
@@ -461,8 +547,7 @@ async function openRun(id, run) {
   const snap = await caps.db.collection(`logs/${state.userId}/runs/${id}/rows`).get();
   state.rows = snap.docs.map(d => { const x = d.data(); return { id: d.id, ...x, sources: (x.sources || (x.retrievedIds || []).map((sid, i) => ({ id: sid, score: x.scores?.[i], question: "(source not stored in older runs)" }))).map(s => ({ ...s, answer: "" })), flags: x.flags || [] }; });
   state.rows.sort((a, b) => String(a.n).localeCompare(String(b.n), undefined, { numeric: true }));
-  $("summary").hidden = false; $("rowspanel").hidden = false; renderAll();
-  showNotice(`Opened "${run.name}".`);
+  showNotice(""); select(null); showScreen("review");
 }
 
 // --- render -------------------------------------------------------------------
