@@ -9,10 +9,10 @@
     "./agents/rfi-agent/agent.md": {
       "kind": "agent",
       "id": "agent_018cUnLHJKgSVrFqY346wgTs",
-      "version": "3",
-      "hash": "e57822914341a92fc2b8dd5028dc57d8",
-      "remote_hash": "7b573d6c67320a2107f6bfd2943d9a6b",
-      "stamp": "3"
+      "version": "4",
+      "hash": "22bca14fbabca63988e700c28bcca65c",
+      "remote_hash": "c4f7a3ad3543a2202110f0269912f1d5",
+      "stamp": "4"
     },
     "./agents/rfi-agent/environment.yaml": {
       "kind": "environment",
@@ -20,6 +20,12 @@
       "hash": "5d3af554e8e56cbd1ef268b1211b8b38",
       "remote_hash": "4777f0c2611f3f12eddbd6f5be28dffb",
       "stamp": "2026-11-10T23:16:03.370442Z"
+    },
+    "./agents/rfi-agent/skills/ad-specs": {
+      "kind": "skill",
+      "id": "skill_01AQD5C6fxNARssJ6SAG6sWi",
+      "version": "skver_0192NudWnAAQ46c9cAyDnHFx",
+      "hash": "7fe348bae1f4ec19cb21e589349dd794"
     },
     "./agents/rfi-agent/skills/library-search": {
       "kind": "skill",
@@ -31,9 +37,8 @@
     "./agents/rfi-agent/skills/rfi-system-helper": {
       "kind": "skill",
       "id": "skill_01AaFB187tRbFATFZrk6zssT",
-      "version": "skver_01NjoW6WErrns8Nzg8dH47B2",
-      "hash": "c0eb173190629c991f8dcfbc67903ecf",
-      "stamp": "skver_01NjoW6WErrns8Nzg8dH47B2"
+      "version": "skver_019DQyUKYWY4EVLdp8o3PQSq",
+      "hash": "1da872f40ac8f4a343d89d2df9afc2d0"
     },
     "./agents/rfi-agent/vault.yaml": {
       "kind": "vault",
