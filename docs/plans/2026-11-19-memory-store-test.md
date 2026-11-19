@@ -57,6 +57,39 @@ Ezra suggested keeping the library in a Claude Managed Agents **memory store** i
 - The CMI set is easy: its answers sit in the library almost word for word. The Dentsu 14 (AF-120) are still the real test for both setups.
 - Cost per question is about 1.7× on the agent side, because the agent runs several greps and file reads instead of one search call.
 
+## Cost and scale
+
+Prices are from pinecone.io/pricing, the Pinecone cost docs and OpenAI's API pricing page, checked 2026-11-19. They may have changed since.
+
+**Per question:**
+
+| | Pinecone (live) | Memory store |
+|---|---|---|
+| Search | 0.25 RU minimum at $16–18 per million RU, about $0.000004 | n/a (grep) |
+| Embedding | OpenAI `text-embedding-3-small` at $0.02/M tokens, about $0.000001. Pinecone `llama-text-embed-v2` would be $0.16/M | none |
+| Storage | about 15 MB at $0.33/GB-month, about $0.005 a month | no charge listed (the docs are silent) |
+| Claude tokens | about $0.036 | about $0.062 |
+
+**Fixed costs:**
+- Pinecone's Standard plan has a $50/month minimum; Builder is $20 flat. The free Starter plan is AWS us-east-1 only, and the agent's index is on GCP us-central1, so the project is on a paid plan. Which plan is not checked.
+- If that plan also covers the other indexes (`rfihistoricalanswers`, `pulsepoint-knowledge`), the library adds about $0 at the margin.
+- If the plan exists only for this library, the memory store is cheaper overall below about 1,900 questions a month: $50 ÷ $0.026 extra per question.
+
+**Upkeep costs (not on any invoice):**
+- Two vendors' keys in the vault, plus the allowed hosts.
+- A separate ReadWrite key for every load.
+- An OpenAI account that can run out of credit (`429 insufficient_quota`).
+- Two outside services to clear in a legal or security review.
+
+**Scale:**
+- **Memory store:**
+  - The store holds at most 10,000 files; it has 2,297 now. Past that, records have to be packed several to a file or spread across stores (a session can attach up to 8).
+  - Each keyword search returns more candidates as the library grows, so the tokens and time per question grow with it.
+  - Matching reworded questions gets harder as near-duplicates pile up.
+  - Loading takes one API call per file.
+- **Pinecone:** the query cost stays at the 0.25 RU minimum up to about 0.25 GB per namespace (roughly 40,000 records at this size). Search quality doesn't depend on library size the way keyword search does.
+- **Both:** duplicates and conflicts grow with the library, so library cleanup (AF-117) matters more than the choice of store.
+
 ## Reading
 
 On this sample, keyword search over a memory store matched Pinecone on both accuracy and retrieval. It also removed the vault keys, the allowed hosts and the laptop load scripts. The open questions are the Dentsu 14, run-to-run variance, and whether the higher cost per question is acceptable. Those are calls for Maggie and Caedon.
