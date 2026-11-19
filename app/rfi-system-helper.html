@@ -1,166 +1,230 @@
 <title>RFI System Helper</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
 <style>
-/* Layout: one working column (max 1120px); summary before detail; rows are the detail. */
+/* pulsepoint design system, Platform mode (labs-open-design design-systems/pulsepoint): white page, Open Sans,
+   18/16/13/12 type, one brand-gradient button per screen, semantic colours only with a reason, no motion.
+   Flow: Send (composer) → Working (header progress) → Review (slim list + side panel). Design: docs/plans/2026-11-19-rfi-helper-redesign-design.md */
 :root {
-  --bg: #f6f7f9; --panel: #ffffff; --fg: #14202b; --muted: #5b6b7a; --line: #d9dfe6;
-  --accent: #1f6f78; --accent-fg: #ffffff; --accent-soft: #e2f0f1;
-  --green: #1d7a3e; --green-soft: #dff3e5; --amber: #9a6400; --amber-soft: #fbefcf; --red: #b3261e; --red-soft: #fbe1df;
-  --font: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --bg: #ffffff; --ink: rgb(34, 34, 34); --ink2: rgba(34, 34, 34, 0.55); --line: rgba(34, 34, 34, 0.12); --line2: rgba(34, 34, 34, 0.18);
+  --surf: rgba(34, 34, 34, 0.03); --surf2: rgba(34, 34, 34, 0.07);
+  --brand: #5536B3; --brand-l: #EDE8FF; --grad: linear-gradient(135deg, #655BC6 0%, #422B94 100%);
+  --pos: #008888; --pos-l: #E3F8F8; --warn: #F58406; --warn-ink: #AD5402; --warn-l: #FFF1D9; --neg: #EA2656; --neg-l: #FDECF0;
+  --tip: rgba(34, 34, 34, 0.88); --shadow: 0 1px 3px rgba(0, 11, 99, 0.2);
+  --font: "Open Sans", system-ui, -apple-system, "Segoe UI", sans-serif; --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  color-scheme: light;
 }
+/* Dark: the same hues, from the system's -medium tokens, over the ink colour as ground. */
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --bg: #121a21; --panel: #1a242d; --fg: #e8edf1; --muted: #9aa8b4; --line: #2d3a46;
-  --accent: #5fb7c0; --accent-fg: #0d1a1c; --accent-soft: #1d3a3e;
-  --green: #5ccb7f; --green-soft: #173a25; --amber: #e3b341; --amber-soft: #3d3014; --red: #ff8a80; --red-soft: #4a1f1c;
-  color-scheme: dark; } }
+  --bg: rgb(34, 34, 34); --ink: #ffffff; --ink2: rgba(255, 255, 255, 0.6); --line: rgba(255, 255, 255, 0.12); --line2: rgba(255, 255, 255, 0.2);
+  --surf: rgba(255, 255, 255, 0.04); --surf2: rgba(255, 255, 255, 0.08); --brand: rgb(166, 152, 219); --brand-l: rgba(85, 54, 179, 0.35);
+  --pos: rgb(102, 184, 184); --pos-l: rgba(0, 136, 136, 0.22); --warn: rgb(245, 191, 102); --warn-ink: rgb(245, 191, 102); --warn-l: rgba(245, 132, 6, 0.2);
+  --neg: rgb(255, 109, 145); --neg-l: rgba(234, 38, 86, 0.2); --tip: rgba(0, 0, 0, 0.88); color-scheme: dark; } }
 :root[data-theme="dark"] {
-  --bg: #121a21; --panel: #1a242d; --fg: #e8edf1; --muted: #9aa8b4; --line: #2d3a46;
-  --accent: #5fb7c0; --accent-fg: #0d1a1c; --accent-soft: #1d3a3e;
-  --green: #5ccb7f; --green-soft: #173a25; --amber: #e3b341; --amber-soft: #3d3014; --red: #ff8a80; --red-soft: #4a1f1c;
-  color-scheme: dark; }
+  --bg: rgb(34, 34, 34); --ink: #ffffff; --ink2: rgba(255, 255, 255, 0.6); --line: rgba(255, 255, 255, 0.12); --line2: rgba(255, 255, 255, 0.2);
+  --surf: rgba(255, 255, 255, 0.04); --surf2: rgba(255, 255, 255, 0.08); --brand: rgb(166, 152, 219); --brand-l: rgba(85, 54, 179, 0.35);
+  --pos: rgb(102, 184, 184); --pos-l: rgba(0, 136, 136, 0.22); --warn: rgb(245, 191, 102); --warn-ink: rgb(245, 191, 102); --warn-l: rgba(245, 132, 6, 0.2);
+  --neg: rgb(255, 109, 145); --neg-l: rgba(234, 38, 86, 0.2); --tip: rgba(0, 0, 0, 0.88); color-scheme: dark; }
 
 * { box-sizing: border-box; }
-body { background: var(--bg); color: var(--fg); font-family: var(--font); font-size: 15px; line-height: 1.5;
-  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 0 48px; }
-.wrap { max-width: 1120px; margin: 0 auto; display: grid; gap: 20px; }
-h1 { font-size: 22px; font-weight: 700; margin: 0; letter-spacing: -0.01em; }
-h2 { font-size: 15px; font-weight: 600; margin: 0 0 10px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
-p { margin: 0; }
-a { color: var(--accent); }
-header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding-block: 20px 4px; border-bottom: 1px solid var(--line); }
-header .sub { color: var(--muted); font-size: 14px; }
-.chips { display: flex; flex-wrap: wrap; gap: 8px; }
-.chip { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel); color: var(--muted); white-space: nowrap; }
-.chip::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--line); }
-.chip.ok::before { background: var(--green); } .chip.bad::before { background: var(--red); } .chip.warn::before { background: var(--amber); }
-.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 18px; }
-.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-@media (max-width: 760px) { .grid2 { grid-template-columns: 1fr; } }
-label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 4px; }
-textarea, input[type=text], select { width: 100%; font: inherit; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; }
-textarea { min-height: 150px; resize: vertical; }
-textarea:focus, input:focus, select:focus, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
-.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
-button { font: inherit; font-weight: 600; font-size: 14px; border-radius: 6px; padding: 8px 14px; border: 1px solid var(--line); background: var(--panel); color: var(--fg); cursor: pointer; }
-button.primary { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
-button.small { font-size: 12.5px; padding: 4px 10px; font-weight: 500; }
-button:disabled { opacity: 0.5; cursor: default; }
-.muted { color: var(--muted); font-size: 13.5px; }
-.mono { font-family: var(--mono); font-size: 12.5px; font-variant-numeric: tabular-nums; }
-.pill { display: inline-block; font-size: 12px; font-weight: 600; padding: 2px 9px; border-radius: 4px; letter-spacing: 0.04em; }
-.pill.GREEN { background: var(--green-soft); color: var(--green); } .pill.AMBER { background: var(--amber-soft); color: var(--amber); } .pill.RED { background: var(--red-soft); color: var(--red); }
-.progress { height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; }
-.progress > div { height: 100%; width: 0; background: var(--accent); transition: width 0.3s; }
-.counts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
-.count { border-left: 4px solid var(--line); padding: 6px 12px; }
-.count b { display: block; font-size: 24px; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1.1; }
-.count.GREEN { border-color: var(--green); } .count.AMBER { border-color: var(--amber); } .count.RED { border-color: var(--red); }
-.summary ul { margin: 6px 0 0; padding-left: 18px; } .summary li { margin: 2px 0; }
-.filters button[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); }
-.qrow { display: grid; grid-template-columns: 56px 1fr; gap: 10px 14px; padding: 14px 0; border-top: 1px solid var(--line); }
-.qrow:first-child { border-top: 0; }
-.qrow .num { font-family: var(--mono); font-size: 13px; color: var(--muted); padding-top: 3px; }
-.qrow .q { font-weight: 500; }
-.qrow .meta { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; font-size: 13px; color: var(--muted); margin-top: 6px; }
-.qrow textarea { min-height: 84px; margin-top: 8px; font-size: 14px; }
-.qrow details { margin-top: 8px; font-size: 13.5px; }
-.qrow summary { cursor: pointer; color: var(--accent); }
-.src { border-left: 3px solid var(--line); padding: 4px 10px; margin: 6px 0; }
-.src .h { display: flex; flex-wrap: wrap; gap: 8px; color: var(--muted); font-size: 12.5px; }
-.flag { display: inline-block; font-size: 12px; padding: 1px 7px; border-radius: 4px; background: var(--amber-soft); color: var(--amber); }
-.flag.err { background: var(--red-soft); color: var(--red); }
-.fb button[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); }
-.runs li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; padding: 6px 0; border-top: 1px solid var(--line); font-size: 14px; }
-.runs ul { list-style: none; margin: 0; padding: 0; }
-.notice { padding: 10px 12px; border-radius: 6px; background: var(--amber-soft); color: var(--amber); font-size: 14px; }
-.notice.err { background: var(--red-soft); color: var(--red); }
+html { scroll-padding-top: 72px; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 13px/20px var(--font); -webkit-font-smoothing: antialiased; }
 [hidden] { display: none !important; }
-@media (prefers-reduced-motion: reduce) { .progress > div { transition: none; } }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; background: none; border: 0; padding: 0; }
+button:disabled { opacity: 0.45; cursor: default; }
+:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+.cap { font-size: 12px; line-height: 16px; color: var(--ink2); }
+.mono { font-family: var(--mono); font-size: 12px; line-height: 18px; font-variant-numeric: tabular-nums; }
+.gut { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+@media (min-width: 900px) { .gut { padding-left: 32px; padding-right: 32px; } }
+
+/* buttons: pills; .primary is the one gradient per screen */
+.btn { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 14px; border-radius: 9999px; font-weight: 600; font-size: 13px; white-space: nowrap; }
+.btn.primary { background: var(--grad); color: #fff; padding: 0 18px; }
+.btn.ghost { border: 1px solid var(--line2); }
+.btn.sm { height: 28px; padding: 0 12px; font-size: 12px; }
+.link { color: var(--brand); font-weight: 600; font-size: 12px; line-height: 16px; cursor: pointer; }
+.ico-btn { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 9999px; color: var(--ink2); }
+.ico-btn:hover { background: var(--surf2); }
+.ico-btn[aria-pressed="true"] { background: var(--brand-l); color: var(--brand); }
+.ico-btn.out { border: 1px solid var(--line2); }
+svg { display: block; flex-shrink: 0; }
+
+/* header (shared by both screens) */
+header.top { position: sticky; top: 0; z-index: 10; background: var(--bg); border-bottom: 1px solid var(--line);
+  padding-top: env(safe-area-inset-top, 0px); }
+header.top .in { display: flex; align-items: center; justify-content: space-between; gap: 12px 16px; min-height: 64px; padding-block: 10px; flex-wrap: wrap; }
+.brand { display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1 1 280px; }
+.logo { width: 28px; height: 28px; border-radius: 6px; background: var(--grad); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.brand .h1 { font-size: 16px; line-height: 20px; font-weight: 700; overflow-wrap: anywhere; }
+.acts { display: flex; align-items: center; gap: 8px 12px; flex-wrap: wrap; }
+.chip { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; line-height: 16px; color: var(--ink2); white-space: nowrap; }
+.chip::before { content: ""; width: 6px; height: 6px; border-radius: 3px; background: var(--line2); }
+.chip.ok::before { background: var(--pos); } .chip.warn::before { background: var(--warn); } .chip.bad::before { background: var(--neg); }
+.notice { margin: 12px 0 0; padding: 8px 12px; border-radius: 6px; background: var(--warn-l); color: var(--warn-ink); font-size: 13px; line-height: 20px; }
+.notice.err { background: var(--neg-l); color: var(--neg); }
+
+/* Send */
+.send { max-width: 752px; margin: 0 auto; padding-block: 48px 64px; display: flex; flex-direction: column; gap: 20px; }
+.send h1 { font-size: 18px; line-height: 24px; font-weight: 700; margin: 0; }
+.send p { margin: 4px 0 0; }
+.paste { border: 1px solid var(--line2); border-radius: 6px; overflow: hidden; }
+.paste:focus-within { border-color: var(--brand); }
+.paste textarea { display: block; width: 100%; min-height: 184px; resize: vertical; border: 0; padding: 14px 16px; background: none; font-size: 13px; line-height: 20px; outline: none; }
+.paste-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 12px 8px 16px; border-top: 1px solid var(--line); background: var(--surf); }
+.paste-foot .cap { display: inline-flex; align-items: center; gap: 8px; }
+.fields { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; }
+.field { display: flex; flex-direction: column; gap: 4px; flex: 1 1 140px; min-width: 0; }
+.field.wide { flex: 2 1 240px; }
+.field label { font-size: 12px; line-height: 16px; font-weight: 600; color: var(--ink2); }
+.field input, .field select, .panel textarea { width: 100%; height: 34px; padding: 6px 10px; border: 1px solid var(--line2); border-radius: 4px; background: var(--bg); font-size: 13px; line-height: 20px; }
+.field input:focus, .field select:focus, .panel textarea:focus { outline: none; border-color: var(--brand); box-shadow: inset 0 0 0 0.5px var(--brand); }
+.go { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.runs h2, .panel h3 { font-size: 13px; line-height: 20px; font-weight: 600; margin: 0 0 8px; }
+.runs { padding-top: 28px; }
+.run-row { display: flex; align-items: center; gap: 16px; width: 100%; padding: 10px 4px; border-top: 1px solid var(--line); text-align: left; }
+.runs .run-row:last-child { border-bottom: 1px solid var(--line); }
+.run-row:hover { background: var(--surf); }
+.run-row .nm { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lanebar { display: flex; gap: 2px; width: 96px; height: 4px; flex-shrink: 0; }
+.lanebar i { border-radius: 2px; }
+.g { background: var(--pos); } .a { background: var(--warn); } .r { background: var(--neg); }
+@media (max-width: 600px) { .run-row .when { display: none; } }
+
+/* Working + Review */
+.runbar { display: flex; align-items: center; gap: 12px; padding-top: 12px; }
+.progress { flex: 0 0 160px; height: 4px; border-radius: 2px; background: var(--line); overflow: hidden; }
+.progress > div { height: 100%; width: 0; background: var(--brand); }
+.strip { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-block: 16px 12px; }
+.seg { display: flex; gap: 2px; padding: 3px; border-radius: 9999px; background: var(--surf2); overflow-x: auto; max-width: 100%; }
+.seg button { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 12px; border-radius: 9999px; font-size: 13px; font-weight: 500; color: var(--ink2); white-space: nowrap; }
+.seg button[aria-pressed="true"] { background: var(--bg); color: var(--ink); font-weight: 600; box-shadow: var(--shadow); }
+.dot { width: 8px; height: 8px; border-radius: 4px; flex-shrink: 0; }
+.dot.none { border: 1.5px solid var(--line2); }
+.strip-r { display: flex; align-items: center; gap: 12px; }
+.meter { width: 96px; height: 4px; border-radius: 2px; background: var(--line); overflow: hidden; }
+.meter > div { height: 100%; background: var(--pos); }
+
+.body { display: flex; align-items: flex-start; }
+.list { flex: 1; min-width: 0; border-top: 1px solid var(--line); padding-bottom: 64px; }
+.qrow { display: flex; align-items: flex-start; gap: 12px; width: 100%; padding: 12px; border-bottom: 1px solid var(--line); text-align: left; }
+.qrow:hover { background: var(--surf); }
+.qrow.sel { background: var(--brand-l); }
+.qrow .num { width: 40px; flex-shrink: 0; color: var(--ink2); overflow: hidden; text-overflow: ellipsis; }
+.qrow .dot { margin-top: 6px; }
+.qrow .txt { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.qrow .q { font-weight: 600; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }
+.qrow .sub { font-size: 12px; line-height: 16px; color: var(--ink2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.qrow .sub.err { color: var(--neg); white-space: normal; }
+.qrow .flags { display: flex; gap: 8px; width: 80px; flex-shrink: 0; justify-content: flex-end; padding-top: 2px; }
+.qrow .state { width: 112px; flex-shrink: 0; text-align: right; font-size: 12px; color: var(--ink2); }
+.state.accepted { color: var(--pos); font-weight: 600; } .state.review, .state.failed { color: var(--brand); font-weight: 600; }
+.state.working { color: var(--ink); }
+@media (max-width: 600px) { .qrow .num { width: 28px; } .qrow .flags { width: auto; } .qrow .state { width: auto; max-width: 84px; } }
+
+/* flag icons + tooltip (hover or keyboard focus) */
+.ico { position: relative; display: inline-flex; color: var(--ink2); }
+.ico.unconfirmed, .ico.stitched, .ico.uncovered, .ico.other { color: var(--warn); }
+.ico.noowner { color: var(--neg); } .ico.legal { color: var(--pos); }
+.ico [role="tooltip"] { display: none; position: absolute; right: -8px; top: calc(100% + 8px); z-index: 30; width: 240px; padding: 8px 12px; border-radius: 6px;
+  background: var(--tip); backdrop-filter: blur(4px); color: #fff; box-shadow: var(--shadow); text-align: left; font-size: 12px; line-height: 16px; font-weight: 400; pointer-events: none; }
+.ico [role="tooltip"] b { display: block; font-weight: 600; }
+.ico:hover [role="tooltip"], .ico:focus [role="tooltip"], .ico:focus-within [role="tooltip"] { display: block; }
+
+/* side panel */
+.panel { position: sticky; top: 64px; width: 520px; flex-shrink: 0; max-height: calc(100vh - 64px); overflow-y: auto; border-left: 1px solid var(--line); margin-left: 32px; margin-right: -32px; }
+.panel .sec { padding: 16px 24px; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px; }
+.panel .sec:last-child { border-bottom: 0; }
+.panel .head { padding-top: 20px; gap: 10px; }
+.panel .bar { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.panel .lane { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-width: 0; }
+.panel .title { font-size: 18px; line-height: 24px; font-weight: 700; margin: 0; overflow-wrap: anywhere; }
+.panel textarea { height: auto; min-height: 140px; resize: vertical; }
+.panel .row { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.panel ul { margin: 0; padding-left: 18px; } .panel li { margin: 2px 0; }
+.pill { display: inline-flex; align-items: center; gap: 6px; padding: 1px 10px; border-radius: 9999px; font-size: 12px; line-height: 18px; font-weight: 600; }
+.pill::before { content: ""; width: 6px; height: 6px; border-radius: 3px; background: currentColor; }
+.pill.GREEN { background: var(--pos-l); color: var(--pos); } .pill.AMBER { background: var(--warn-l); color: var(--warn-ink); } .pill.RED { background: var(--neg-l); color: var(--neg); }
+.accept { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 14px; border-radius: 9999px; border: 1px solid var(--pos); color: var(--pos); font-weight: 600; }
+.accept[aria-pressed="true"] { background: var(--pos-l); border-color: transparent; }
+.src { display: flex; flex-direction: column; gap: 4px; padding: 10px 12px; border-radius: 6px; background: var(--surf); }
+.src .h { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; font-size: 12px; line-height: 16px; color: var(--ink2); }
+.src .h .mono { color: var(--ink); }
+.src .ok { display: inline-flex; align-items: center; gap: 4px; color: var(--pos); font-weight: 600; }
+.src .used { color: var(--brand); font-weight: 600; }
+.panel .back { display: none; }
+@media (max-width: 899px) {
+  .body { flex-direction: column; align-items: stretch; }
+  .panel { position: static; width: auto; max-height: none; margin: 0; border-left: 0; }
+  body.has-sel .panel { display: block; position: fixed; inset: 0; z-index: 20; width: auto; max-height: none; margin: 0; border: 0; background: var(--bg);
+    padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  .panel .back { display: inline-flex; }
+}
 </style>
 
-<div class="wrap">
-  <header>
-    <div>
-      <h1>RFI System Helper</h1>
-      <p class="sub">Triage a client RFI, draft green answers from the PulsePoint answer library, route the rest. <span class="mono" title="Page build: bump this on every republish">build 2026-11-19 · AF-126/127</span></p>
-    </div>
-    <div class="chips" id="chips">
-      <span class="chip" id="chip-agent">rfi-agent</span>
-      <span class="chip" id="chip-db">Run log</span>
-    </div>
-  </header>
+<header class="top"><div class="in gut">
+  <div class="brand">
+    <span class="logo" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 4h10M3 8h7M3 12h5" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+    <div style="min-width:0"><div class="h1" id="runhead">RFI System Helper</div><div class="cap" id="runmeta">Triage a client RFI, draft green answers from the PulsePoint answer library, route the rest. <span class="mono" title="Page build: bump this on every republish">build 2026-11-19 · redesign</span></div></div>
+  </div>
+  <div class="acts">
+    <span class="chip" id="chip-agent">rfi-agent</span>
+    <span class="chip" id="chip-db">Run log</span>
+    <button class="btn ghost" id="stop" hidden>Stop</button>
+    <button class="btn ghost" id="newrun" hidden>New run</button>
+    <span class="cap" id="exportnote"></span>
+    <button class="btn primary" id="export" hidden><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v7m0 0L4 6m3 3l3-3M2.5 11.5h9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Export .xlsx</button>
+  </div>
+</div></header>
+<div class="gut"><div class="notice" id="notice" role="status" hidden></div></div>
 
-  <section class="panel" id="setup">
-    <h2>1 · Questionnaire</h2>
-    <div class="grid2">
-      <div>
-        <label for="paste">Paste questions, one per line (leading numbers are kept as the question #)</label>
-        <textarea id="paste" placeholder="1. Can you target by medical condition and remain HIPAA compliant?&#10;2. Provide your information security policy and most recent SOC 2 report.&#10;3. Which brand safety vendors do you integrate with?"></textarea>
-        <div class="row" style="margin-top:8px">
-          <label for="file" style="margin:0">or upload .xlsx / .csv</label>
-          <input type="file" id="file" accept=".xlsx,.csv">
-        </div>
-        <div id="colpick" class="row" hidden style="margin-top:8px">
-          <div><label for="qcol">Question column</label><select id="qcol"></select></div>
-          <div><label for="ncol">Number column</label><select id="ncol"></select></div>
-          <span class="muted" id="filenote"></span>
-        </div>
-      </div>
-      <div>
-        <label for="runname">Run name</label>
-        <input type="text" id="runname" placeholder="e.g. CMI Data RFI – Nov 2026">
-        <div class="grid2" style="margin-top:10px">
-          <div><label for="ae">AE on the account</label><input type="text" id="ae" placeholder="name, or leave as a role"></div>
-          <div><label for="am">AM on the account</label><input type="text" id="am"></div>
-          <div><label for="psm">PSM/CM on the account</label><input type="text" id="psm"></div>
-        </div>
-        <p class="muted" style="margin-top:10px">Questions go to <b>rfi-agent</b> through the pp-joke plugin, 10 at a time; each batch takes a few minutes. The agent never searches or drafts red questions. It searches the library for green and amber ones but drafts only green. A green question with no usable match becomes amber and is routed. Works only in the Claude desktop app.</p>
-        <div class="row" style="margin-top:14px">
-          <button class="primary" id="start">Triage and draft</button>
-          <button id="stop" hidden>Stop</button>
-          <span class="muted" id="status"></span>
-        </div>
-      </div>
+<main id="send" class="send gut">
+  <div>
+    <h1>New RFI run</h1>
+    <p class="cap">rfi-agent triages each question, drafts the green ones from the answer library and routes the rest. Questions go 10 at a time, and each batch takes a few minutes. Works only in the Claude desktop app with pp-joke installed.</p>
+  </div>
+  <div class="paste">
+    <textarea id="paste" aria-label="Questions, one per line" placeholder="Paste questions, one per line. Leading numbers are kept as the question #.&#10;1. Can you target by medical condition and remain HIPAA compliant?&#10;2. Provide your information security policy and most recent SOC 2 report."></textarea>
+    <div class="paste-foot">
+      <span class="cap"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M9.5 2h-5A1.5 1.5 0 003 3.5v9A1.5 1.5 0 004.5 14h7a1.5 1.5 0 001.5-1.5v-7L9.5 2z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M9.5 2v3.5H13" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg><span id="qcount">No questions yet. Paste them, or upload an .xlsx or .csv.</span></span>
+      <label class="link" for="file">Upload file</label><input type="file" id="file" accept=".xlsx,.csv" hidden>
     </div>
-    <div class="progress" style="margin-top:14px"><div id="bar"></div></div>
-    <div class="notice" id="notice" hidden></div>
+  </div>
+  <div id="colpick" class="fields" hidden>
+    <div class="field"><label for="qcol">Question column</label><select id="qcol"></select></div>
+    <div class="field"><label for="ncol">Number column</label><select id="ncol"></select></div>
+    <div class="field"><span class="cap" id="filenote"></span><span class="link" id="clearfile" role="button" tabindex="0">Use pasted text instead</span></div>
+  </div>
+  <div class="fields">
+    <div class="field wide"><label for="runname">Run name</label><input type="text" id="runname" placeholder="e.g. CMI Data RFI – Nov 2026"></div>
+    <div class="field"><label for="ae">AE</label><input type="text" id="ae" placeholder="Optional"></div>
+    <div class="field"><label for="am">AM</label><input type="text" id="am" placeholder="Optional"></div>
+    <div class="field"><label for="psm">PSM / CM</label><input type="text" id="psm" placeholder="Optional"></div>
+  </div>
+  <div class="go">
+    <span class="cap">Account roles you leave empty are routed as "the AE on the account", and so on.</span>
+    <button class="btn primary" id="start">Send questions<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8m0 0L7.5 3.5M11 7l-3.5 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  </div>
+  <section class="runs">
+    <h2>Recent runs</h2>
+    <p class="cap" id="runs-empty">Runs you start are saved here under your own account. Editors can read every run through the artifact's data store.</p>
+    <div id="runs"></div>
   </section>
+</main>
 
-  <section class="panel runs" id="history">
-    <h2>Your runs</h2>
-    <p class="muted" id="runs-empty">Runs you start are saved here under your own account. Editors can read every run through the artifact's data store.</p>
-    <ul id="runs"></ul>
-  </section>
-
-  <section class="panel summary" id="summary" hidden>
-    <h2>2 · Scope summary</h2>
-    <div class="counts" id="counts"></div>
-    <div id="summary-body" style="margin-top:12px"></div>
-    <div class="row" style="margin-top:14px">
-      <button class="primary" id="export">Export triaged workbook (.xlsx)</button>
-      <button id="retry" hidden>Retry failed rows</button>
-      <span class="muted" id="exportnote"></span>
-    </div>
-  </section>
-
-  <section class="panel" id="rowspanel" hidden>
-    <div class="row" style="justify-content:space-between">
-      <h2 style="margin:0">3 · Questions</h2>
-      <div class="row filters" id="filters">
-        <button class="small" data-f="all" aria-pressed="true">All</button>
-        <button class="small" data-f="RED">Red</button>
-        <button class="small" data-f="AMBER">Amber</button>
-        <button class="small" data-f="GREEN">Green</button>
-        <button class="small" data-f="flagged">Flagged</button>
-        <button class="small" data-f="failed">Failed</button>
-      </div>
-    </div>
-    <div id="rows" style="margin-top:8px"></div>
-  </section>
-</div>
+<main id="review" class="gut" hidden>
+  <div class="runbar" id="runbar" hidden><div class="progress"><div id="bar"></div></div><span class="cap" id="status"></span></div>
+  <div class="strip">
+    <div class="seg" id="filters" role="group" aria-label="Filter questions"></div>
+    <div class="strip-r"><button class="btn ghost sm" id="retry" hidden>Retry failed</button><span class="cap" id="accepted"></span><div class="meter" id="meter"><div></div></div></div>
+  </div>
+  <div class="body">
+    <div class="list" id="list"></div>
+    <aside class="panel" id="panel" aria-label="Question detail"></aside>
+  </div>
+</main>
 
 <script>
 "use strict";
@@ -259,7 +323,28 @@ $("file").addEventListener("change", async e => {
   parsedUpload = { grid, header };
   $("colpick").hidden = false; $("filenote").textContent = `${f.name}: ${grid.length - 1} rows (first row read as headers)`;
   if (!$("runname").value) $("runname").value = f.name.replace(/\.[^.]+$/, "");
+  updateCount();
 });
+// The composer's live count and the Send button's label.
+function updateCount() {
+  const n = parsedUpload ? questionsFromUpload().length : parsePaste($("paste").value).length;
+  $("qcount").textContent = parsedUpload ? `${n} question${n === 1 ? "" : "s"} from the file` : n ? `${n} question${n === 1 ? "" : "s"} found. You can also upload an .xlsx or .csv.` : "No questions yet. Paste them, or upload an .xlsx or .csv.";
+  $("start").firstChild.textContent = n ? `Send ${n} question${n === 1 ? "" : "s"}` : "Send questions";
+}
+$("paste").addEventListener("input", updateCount);
+["qcol", "ncol"].forEach(id => $(id).addEventListener("change", updateCount));
+function clearFile() { parsedUpload = null; $("file").value = ""; $("colpick").hidden = true; updateCount(); }
+$("clearfile").addEventListener("click", clearFile);
+$("clearfile").addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); clearFile(); } });
+// Two screens: the composer, and the run (working + review). The header carries the run's name once one is open.
+function showScreen(name) {
+  const rev = name === "review";
+  $("send").hidden = rev; $("review").hidden = !rev; $("newrun").hidden = !rev; $("export").hidden = !rev;
+  if (!rev) { $("runhead").textContent = "RFI System Helper"; $("runmeta").textContent = "Triage a client RFI, draft green answers from the PulsePoint answer library, route the rest."; select(null); loadRuns(); }
+  else renderAll();
+  window.scrollTo(0, 0);
+}
+$("newrun").addEventListener("click", () => { if (!state.running) { showNotice(""); showScreen("send"); } });
 function cellText(v) { if (v == null) return ""; if (typeof v === "object") return v.richText ? v.richText.map(t => t.text).join("") : (v.text ?? v.result ?? v.toString()); return String(v); }
 function questionsFromUpload() {
   const qc = +$("qcol").value, nc = +$("ncol").value;
@@ -275,19 +360,20 @@ async function startRun() {
   if (!caps.mcp) return showNotice(NO_HOST, true);
   const qs = parsedUpload ? questionsFromUpload() : parsePaste($("paste").value);
   if (!qs.length) return showNotice("Paste at least one question or upload a questionnaire.", true);
+  state.filter = "all"; // a filter left on from the last run would hide every pending row
   showNotice("");
   state.roles = { ae: $("ae").value.trim(), am: $("am").value.trim(), psm: $("psm").value.trim() };
   state.run = { id: uid(), name: $("runname").value.trim() || `Run ${new Date().toLocaleString()}`, createdAt: new Date().toISOString(), total: qs.length, roles: state.roles, status: "running", sessionId: null };
   state.rows = qs.map(x => ({ id: uid(), n: x.n, question: x.q, lane: null, route: "", esc: "", why: "", sources: [], topScore: null, draft: "", finalDraft: "", flags: [], stitched: false, uncovered: "", feedback: null, accepted: false, status: "pending", error: "" }));
   await dbRun("set", state.run);
-  $("summary").hidden = false; $("rowspanel").hidden = false;
-  renderAll();
+  select(null); showScreen("review");
   await askAgent(state.rows.slice());
 }
 
 function setRunning(on) {
   state.running = on; $("start").disabled = on; $("stop").hidden = !on; $("stop").disabled = false;
-  if (!on && state.run) { state.run.status = "done"; dbRun("update", { status: "done", finished: new Date().toISOString(), counts: counts() }); }
+  $("runbar").hidden = !on; $("newrun").disabled = on;
+  if (!on && state.run) { state.run.status = "done"; state.run.finished = new Date().toISOString(); dbRun("update", { status: "done", finished: new Date().toISOString(), counts: counts() }); }
 }
 function progress(done, total, text) { $("bar").style.width = total ? (100 * done / total) + "%" : "0"; $("status").textContent = text || ""; }
 const fatal = new Set(["server_not_connected", "not_granted", "not_declared", "capability_disabled", "session_expired", "cancelled", "agent_missing"]);
@@ -454,24 +540,45 @@ async function loadRuns() {
     const ul = $("runs"); ul.innerHTML = "";
     $("runs-empty").hidden = !snap.empty;
     snap.docs.forEach(d => {
-      const x = d.data(); const li = document.createElement("li");
-      li.innerHTML = `<span>${esc(x.name)} <span class="muted">· ${esc(new Date(x.createdAt).toLocaleString())} · ${x.total} questions · ${esc(x.status)}</span></span>`;
-      const b = document.createElement("button"); b.className = "small"; b.textContent = "Open"; b.onclick = () => openRun(d.id, x);
-      li.append(b); ul.append(li);
+      const x = d.data(), c = x.counts, b = document.createElement("button");
+      b.className = "run-row";
+      const bar = c && (c.GREEN + c.AMBER + c.RED) ? `<span class="lanebar" title="${c.GREEN} green, ${c.AMBER} amber, ${c.RED} red">${[["g", c.GREEN], ["a", c.AMBER], ["r", c.RED]].filter(([, v]) => v).map(([k, v]) => `<i class="${k}" style="flex:${v}"></i>`).join("")}</span>` : "";
+      b.innerHTML = `<span class="nm">${esc(x.name)}</span>${bar}<span class="cap">${x.total} q${x.status === "running" ? " · unfinished" : ""}</span><span class="cap when">${esc(new Date(x.createdAt).toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }))}</span>`;
+      b.onclick = () => openRun(d.id, x);
+      ul.append(b);
     });
   } catch (e) { console.warn("runs", e); }
 }
 async function openRun(id, run) {
   if (state.running) return;
-  state.run = { ...run, id }; state.roles = run.roles || {};
+  state.run = { ...run, id }; state.roles = run.roles || {}; state.filter = "all";
   const snap = await caps.db.collection(`logs/${state.userId}/runs/${id}/rows`).get();
   state.rows = snap.docs.map(d => { const x = d.data(); return { id: d.id, ...x, sources: (x.sources || (x.retrievedIds || []).map((sid, i) => ({ id: sid, score: x.scores?.[i], question: "(source not stored in older runs)" }))).map(s => ({ ...s, answer: "" })), flags: x.flags || [] }; });
   state.rows.sort((a, b) => String(a.n).localeCompare(String(b.n), undefined, { numeric: true }));
-  $("summary").hidden = false; $("rowspanel").hidden = false; renderAll();
-  showNotice(`Opened "${run.name}".`);
+  showNotice(""); select(null); showScreen("review");
 }
 
 // --- render -------------------------------------------------------------------
+// What a row shows at the right edge.
+function rowState(r) {
+  if (r.status === "failed") return { key: "failed", label: "Failed" };
+  if (r.status === "working") return { key: "working", label: "Working…" };
+  if (r.status === "pending" || !r.status) return { key: "pending", label: "Waiting" };
+  if (r.lane === "GREEN" && r.status === "drafted") return r.accepted ? { key: "accepted", label: "Accepted" } : { key: "review", label: "Draft to review" };
+  return { key: "routed", label: "Routed" };
+}
+// Flag icons, known ones first in a fixed order, then any other agent flag, then a Legal Approved source.
+function flagList(r) {
+  const FLAGS = [["owner unconfirmed", "unconfirmed", "Owner unconfirmed", () => "Q&A Bank proposed this owner. Confirm before routing."],
+    ["no owner on file", "noowner", "No owner on file", () => "No owner on file for this topic."],
+    ["stitched claim", "stitched", "Stitched claim", () => "Draft joins claims from more than one source. Check it reads true."],
+    ["uncovered sub-question", "uncovered", "Uncovered sub-question", () => r.uncovered ? `No library source for: ${r.uncovered}` : "Part of the question has no library source."]];
+  const fs = r.flags || [], out = [];
+  for (const [f, key, label, tip] of FLAGS) if (fs.includes(f)) out.push({ key, label, tip: tip(r) });
+  for (const f of fs) if (!FLAGS.some(k => k[0] === f)) out.push({ key: "other", label: f, tip: "Flag from rfi-agent." });
+  if ((r.sources || []).some(s => s.legal && s.used)) out.push({ key: "legal", label: "Legal Approved", tip: "The draft uses a Legal Approved answer." });
+  return out;
+}
 function counts() {
   const c = { GREEN: 0, AMBER: 0, RED: 0, flagged: 0, failed: 0, total: state.rows.length };
   for (const r of state.rows) { if (r.lane) c[r.lane]++; if (r.flags.length) c.flagged++; if (r.status === "failed") c.failed++; }
@@ -500,41 +607,153 @@ function summaryLines() {
   if (c.failed) lines.push(`${c.failed} rows failed and need a retry.`);
   return lines;
 }
-function renderSummary() {
+const ICON = (() => {
+  const s = (w, d) => `<svg width="${w}" height="${w}" viewBox="0 0 16 16" fill="none" aria-hidden="true">${d}</svg>`, k = 'stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"';
+  const person = `<circle cx="6.5" cy="5" r="2.4" ${k}/><path d="M2 13.5c.4-2.4 2.2-4 4.5-4 1 0 1.9.3 2.6.8" ${k}/>`;
+  const shield = `<path d="M8 1.8l5 1.9v3.8c0 3-2.1 5.4-5 6.7-2.9-1.3-5-3.7-5-6.7V3.7l5-1.9z" ${k}/><path d="M5.6 8l1.7 1.7 3.2-3.4" ${k}/>`;
+  return {
+    unconfirmed: s(16, person + `<path d="M11.4 9.6c0-.8.6-1.3 1.3-1.3s1.3.5 1.3 1.2c0 .9-1.3 1-1.3 1.9M12.7 13.3v.1" ${k}/>`),
+    noowner: s(16, person + `<path d="M11 9.5l3 3M14 9.5l-3 3" ${k}/>`),
+    stitched: s(16, `<path d="M6.8 9.2a2.6 2.6 0 003.7 0l2.2-2.2a2.6 2.6 0 00-3.7-3.7l-.9.9M9.2 6.8a2.6 2.6 0 00-3.7 0L3.3 9a2.6 2.6 0 003.7 3.7l.9-.9" ${k}/>`),
+    uncovered: s(16, `<circle cx="8" cy="8" r="5.7" ${k} stroke-dasharray="2.2 2"/>`),
+    other: s(16, `<path d="M3.5 14V2.5m0 0h8l-1.7 3 1.7 3h-8" ${k}/>`),
+    legal: s(16, shield), legalSm: s(12, shield),
+    alert: s(14, `<path d="M8 2.2l6 10.6H2L8 2.2z" ${k}/><path d="M8 6.5v3M8 11.3v.1" ${k}/>`),
+    left: s(20, `<path d="M10 4L6 8l4 4" ${k}/>`), right: s(20, `<path d="M6 4l4 4-4 4" ${k}/>`),
+    up: s(16, `<path d="M5 7v6.5H3V7h2zm0 0l2.6-5c1 0 1.7.8 1.5 1.8L8.7 6H12c.9 0 1.5.8 1.3 1.7l-1 4.7c-.1.6-.7 1.1-1.3 1.1H5" ${k}/>`),
+    down: s(16, `<path d="M11 9V2.5h2V9h-2zm0 0l-2.6 5c-1 0-1.7-.8-1.5-1.8L7.3 10H4c-.9 0-1.5-.8-1.3-1.7l1-4.7c.1-.6.7-1.1 1.3-1.1H11" ${k}/>`),
+    check: s(14, `<path d="M3.5 8.2l2.8 2.8L12.5 4.8" ${k} stroke-width="1.6"/>`),
+  };
+})();
+const laneDot = l => ({ GREEN: "g", AMBER: "a", RED: "r" })[l] || "none";
+const when = iso => new Date(iso).toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+const selRow = () => state.rows.find(r => r.id === state.sel);
+state.sel = null; state.panelKey = ""; state.more = new Set();
+
+function runMeta() {
+  const r = state.run, c = counts(), ro = state.roles || {};
+  const at = state.running ? "rfi-agent is working" : r.finished ? `finished ${when(r.finished)}` : `started ${when(r.createdAt)}`;
+  return [`${c.total} question${c.total === 1 ? "" : "s"}`, at, ...[["AE", ro.ae], ["AM", ro.am], ["PSM/CM", ro.psm]].filter(([, v]) => v).map(([k, v]) => `${k} ${v}`)].join(" · ");
+}
+// The list and the strip rebuild after every batch; the panel only when what it shows changed, so a draft being typed survives a refresh.
+function renderAll() {
+  if (state.run) { $("runhead").textContent = state.run.name; $("runmeta").textContent = runMeta(); }
+  if (state.sel && !selRow()) state.sel = null;
+  renderStrip(); renderList(); applyFilter();
+  if (panelKey() !== state.panelKey) renderPanel();
+}
+function panelKey() {
+  const r = selRow();
+  return r ? [r.id, r.status, r.lane, r.draft, r.sources.length, r.flags.join(), r.error].join("|") : "summary|" + summaryLines().join("\n");
+}
+function renderStrip() {
   const c = counts();
-  $("counts").innerHTML = [["GREEN", "CS answers"], ["AMBER", "needs SME"], ["RED", "route out"]].map(([k, l]) => `<div class="count ${k}"><b>${c[k]}</b><span class="muted">${l}</span></div>`).join("") +
-    `<div class="count"><b>${c.flagged}</b><span class="muted">flagged</span></div>`;
-  $("summary-body").innerHTML = "<ul>" + summaryLines().map(l => `<li${l.startsWith("  ") ? ' style="margin-left:16px"' : ""}>${esc(l.trim())}</li>`).join("") + "</ul>";
+  if (state.filter === "failed" && !c.failed) state.filter = "all";
+  const items = [["all", "All", c.total, ""], ["GREEN", "Green", c.GREEN, '<span class="dot g"></span>'], ["AMBER", "Amber", c.AMBER, '<span class="dot a"></span>'],
+    ["RED", "Red", c.RED, '<span class="dot r"></span>'], ["flagged", "Flagged", c.flagged, ICON.other]];
+  if (c.failed) items.push(["failed", "Failed", c.failed, ICON.alert]);
+  $("filters").innerHTML = items.map(([k, l, n, i]) => `<button data-f="${k}" aria-pressed="${state.filter === k}">${i}${l} ${n}</button>`).join("");
+  const g = state.rows.filter(r => r.lane === "GREEN" && r.status === "drafted"), a = g.filter(r => r.accepted).length;
+  $("accepted").textContent = g.length ? `${a} of ${g.length} green answers accepted` : "";
+  $("meter").hidden = !g.length; $("meter").firstElementChild.style.width = g.length ? `${100 * a / g.length}%` : "0";
   $("retry").hidden = !c.failed || state.running;
 }
-function renderAll() { renderSummary(); $("rows").innerHTML = ""; state.rows.forEach(r => $("rows").append(rowEl(r))); applyFilter(); }
-function renderRow(r) { const old = document.querySelector(`[data-id="${r.id}"]`); if (old) old.replaceWith(rowEl(r)); applyFilter(); }
+function renderList() {
+  const l = $("list"); l.innerHTML = "";
+  state.rows.forEach(r => l.append(rowEl(r)));
+  if (!state.rows.length) l.innerHTML = `<p class="cap" style="padding:16px 12px">No questions in this run.</p>`;
+}
+function renderRow(r) { const old = document.querySelector(`.qrow[data-id="${CSS.escape(r.id)}"]`); if (old) old.replaceWith(rowEl(r)); renderStrip(); applyFilter(); }
+// The row is one button, so its children are hidden from screen readers: the label carries the flags.
+function rowLabel(r) {
+  const fl = flagList(r).map(f => f.label);
+  return `Question ${r.n}, ${r.lane || "not triaged"}, ${rowState(r).label}: ${r.question}${fl.length ? `. Flags: ${fl.join(", ")}` : ""}`;
+}
 function rowEl(r) {
-  const el = document.createElement("div"); el.className = "qrow"; el.dataset.id = r.id; el.dataset.lane = r.lane || ""; el.dataset.flagged = r.flags.length ? "1" : ""; el.dataset.failed = r.status === "failed" ? "1" : "";
-  const statusText = { pending: "waiting for rfi-agent", working: "rfi-agent working…", drafted: "", routed: "", failed: "failed" }[r.status] || "";
-  let body = `<div class="num">#${esc(r.n)}</div><div>
-    <div class="q">${esc(r.question)}</div>
-    <div class="meta">${r.lane ? `<span class="pill ${r.lane}">${r.lane}</span>` : ""}<span>${esc(r.route)}</span>${r.esc ? `<span>Escalation: ${esc(r.esc)}</span>` : ""}${r.why ? `<span class="muted">${esc(r.why)}</span>` : ""}${statusText ? `<span class="${r.status === "failed" ? "flag err" : "muted"}">${esc(statusText)}${r.error ? ": " + esc(r.error) : ""}</span>` : ""}</div>`;
-  if (r.lane === "GREEN" && (r.status === "drafted" || r.finalDraft)) {
-    body += `<textarea id="d-${r.id}" aria-label="Draft answer for question ${esc(r.n)}">${esc(r.finalDraft)}</textarea>
-      <div class="meta"><span>${r.flags.map(f => `<span class="flag">${esc(f)}</span>`).join(" ")}</span>
-      <span class="fb"><button class="small" data-fb="up" aria-pressed="${r.feedback === "up"}" aria-label="Good answer">👍</button> <button class="small" data-fb="down" aria-pressed="${r.feedback === "down"}" aria-label="Bad answer">👎</button></span>
-      <label style="margin:0;display:inline-flex;gap:6px;align-items:center"><input type="checkbox" id="a-${r.id}" ${r.accepted ? "checked" : ""}> accepted</label></div>`;
-  } else if (r.flags.length) body += `<div class="meta">${r.flags.map(f => `<span class="flag">${esc(f)}</span>`).join(" ")}</div>`;
-  if (r.sources.length) {
-    body += `<details><summary>${r.sources.length} library matches (top ${Number(r.topScore ?? 0).toFixed(2)})</summary>` + r.sources.map(s => `<div class="src"><div class="h"><span class="mono">${Number(s.score ?? 0).toFixed(3)}</span><span>${esc(s.stack || "")}</span><span>${esc(s.updated || "")}</span>${s.legal ? "<span>Legal Approved</span>" : ""}${s.used ? "<span><b>used</b></span>" : ""}</div><div><b>${esc(s.question)}</b></div><div>${esc(s.answer)}</div></div>`).join("") + "</details>";
-  }
-  el.innerHTML = body + "</div>";
-  const ta = el.querySelector("textarea"); if (ta) ta.addEventListener("input", () => { r.finalDraft = ta.value; dbRowLater(r); });
-  el.querySelectorAll("[data-fb]").forEach(b => b.addEventListener("click", () => { r.feedback = r.feedback === b.dataset.fb ? null : b.dataset.fb; dbRow("update", r); renderRow(r); }));
-  const cb = el.querySelector(`#a-${r.id}`); if (cb) cb.addEventListener("change", () => { r.accepted = cb.checked; dbRow("update", r); });
+  const el = document.createElement("div"), st = rowState(r), n = r.sources.length;
+  el.className = "qrow" + (state.sel === r.id ? " sel" : ""); el.tabIndex = 0; el.setAttribute("role", "button");
+  el.setAttribute("aria-label", rowLabel(r));
+  Object.assign(el.dataset, { id: r.id, lane: r.lane || "", flagged: r.flags.length ? "1" : "", failed: r.status === "failed" ? "1" : "" });
+  const sub = r.status === "failed" ? `<span class="sub err">Failed: ${esc(r.error || "unknown error")}</span>`
+    : r.lane ? `<span class="sub">${esc([r.route, r.esc && `Escalation: ${r.esc}`, n && `${n} library match${n === 1 ? "" : "es"}, top ${Number(r.topScore ?? 0).toFixed(2)}`].filter(Boolean).join(" · "))}</span>`
+    : `<span class="sub">${r.status === "working" ? "rfi-agent is working on this" : "Waiting for rfi-agent"}</span>`;
+  el.innerHTML = `<span class="num mono">#${esc(r.n)}</span><span class="dot ${laneDot(r.lane)}"></span><span class="txt"><span class="q">${esc(r.question)}</span>${sub}</span>
+    <span class="flags">${flagList(r).map(f => `<span class="ico ${f.key}" aria-hidden="true">${ICON[f.key]}<span role="tooltip"><b>${esc(f.label)}</b>${esc(f.tip)}</span></span>`).join("")}</span>
+    <span class="state ${st.key}">${esc(st.label)}</span>`;
   return el;
 }
-$("filters").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; state.filter = b.dataset.f; $("filters").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b)); applyFilter(); });
-function applyFilter() {
-  const f = state.filter;
-  document.querySelectorAll(".qrow").forEach(el => { el.hidden = !(f === "all" || el.dataset.lane === f || (f === "flagged" && el.dataset.flagged) || (f === "failed" && el.dataset.failed)); });
+function rowVisible(r) { const f = state.filter; return f === "all" || r.lane === f || (f === "flagged" && (r.flags || []).length > 0) || (f === "failed" && r.status === "failed"); }
+function applyFilter() { document.querySelectorAll(".qrow").forEach(el => { el.hidden = !rowVisible(state.rows.find(r => r.id === el.dataset.id) || {}); }); }
+const visibleRows = () => state.rows.filter(rowVisible);
+
+function select(id) {
+  state.sel = id; document.body.classList.toggle("has-sel", !!id);
+  document.querySelectorAll(".qrow").forEach(el => el.classList.toggle("sel", el.dataset.id === id));
+  renderPanel();
 }
+// ↑/↓ step through the rows the filter shows; a selected row the filter hides stays in the panel.
+function step(d) {
+  const vis = visibleRows(); if (!vis.length) return;
+  const i = vis.findIndex(r => r.id === state.sel), n = vis[i < 0 ? (d > 0 ? 0 : vis.length - 1) : Math.min(Math.max(i + d, 0), vis.length - 1)];
+  select(n.id); document.querySelector(`.qrow[data-id="${CSS.escape(n.id)}"]`)?.scrollIntoView({ block: "nearest" });
+}
+function summaryHtml() {
+  let out = "", ul = [];
+  const flush = () => { if (ul.length) out += `<ul>${ul.join("")}</ul>`; ul = []; };
+  summaryLines().forEach((l, i) => { if (l.startsWith("  ")) ul.push(`<li>${esc(l.trim())}</li>`); else { flush(); out += `<p style="margin:${i ? 10 : 0}px 0 2px;font-weight:${i ? 600 : 400}">${esc(l)}</p>`; } });
+  flush(); return out;
+}
+function srcHtml(s) {
+  return `<div class="src"><div class="h"><span class="mono">${Number(s.score ?? 0).toFixed(2)}</span>${s.stack ? `<span>${esc(s.stack)}</span>` : ""}${s.updated ? `<span>Updated ${esc(s.updated)}</span>` : ""}${s.legal ? `<span class="ok">${ICON.legalSm}Legal Approved</span>` : ""}${s.used ? `<span class="used">Used</span>` : ""}</div><div>${esc(s.question || "")}</div></div>`;
+}
+function renderPanel() {
+  const p = $("panel"), r = selRow(); state.panelKey = panelKey();
+  if (!r) {
+    p.innerHTML = state.rows.length ? `<div class="sec head"><h2 class="title" style="font-size:16px">Scope summary</h2><span class="cap">Select a question to read its answer. ↑ and ↓ step through the list, Esc comes back here.</span></div><div class="sec">${summaryHtml()}</div>` : "";
+    return;
+  }
+  const vis = visibleRows(), i = vis.indexOf(r), fl = flagList(r), n = r.sources.length, all = state.more.has(r.id);
+  const draft = r.lane === "GREEN" && (r.status === "drafted" || r.finalDraft);
+  p.innerHTML = `<div class="sec head">
+      <div class="bar"><div class="lane"><button class="ico-btn back" data-act="close" aria-label="Back to the list">${ICON.left}</button><span class="mono cap">#${esc(r.n)}</span>${r.lane ? `<span class="pill ${r.lane}">${r.lane}</span>` : ""}<span class="cap">${esc(r.route || rowState(r).label)}</span></div>
+        <div style="display:flex"><button class="ico-btn" data-act="prev" aria-label="Previous question"${i <= 0 ? " disabled" : ""}>${ICON.left}</button><button class="ico-btn" data-act="next" aria-label="Next question"${i < 0 || i >= vis.length - 1 ? " disabled" : ""}>${ICON.right}</button></div></div>
+      <h2 class="title">${esc(r.question)}</h2>
+      ${r.why ? `<span class="cap">${esc(r.why)}</span>` : ""}${r.esc ? `<span class="cap">Escalation: ${esc(r.esc)}</span>` : ""}
+      ${r.status === "failed" ? `<span class="cap" style="color:var(--neg)">Failed: ${esc(r.error || "unknown error")}. Retry failed (above the list) sends it again.</span>` : ""}
+      ${fl.map(f => `<div class="lane"><span class="ico ${f.key}">${ICON[f.key]}</span><span><b style="font-weight:600">${esc(f.label)}.</b> <span class="cap">${esc(f.tip)}</span></span></div>`).join("")}
+    </div>
+    ${draft ? `<div class="sec"><div class="row"><h3 style="margin:0">Draft answer</h3><span class="cap">Edits save automatically</span></div>
+      <textarea id="draft" aria-label="Draft answer for question ${esc(r.n)}">${esc(r.finalDraft)}</textarea>
+      <div class="row"><div style="display:flex;gap:8px"><button class="ico-btn out" data-fb="up" aria-pressed="${r.feedback === "up"}" aria-label="Good answer">${ICON.up}</button><button class="ico-btn out" data-fb="down" aria-pressed="${r.feedback === "down"}" aria-label="Bad answer">${ICON.down}</button></div>
+        <button class="accept" data-act="accept" aria-pressed="${!!r.accepted}">${ICON.check}${r.accepted ? "Accepted" : "Accept"}</button></div></div>`
+      : r.lane ? `<div class="sec"><span class="cap">No draft: rfi-agent drafts green questions only.</span></div>` : ""}
+    ${n ? `<div class="sec"><h3 style="margin:0">Library matches</h3>${r.sources.slice(0, all ? n : 2).map(srcHtml).join("")}${n > 2 ? `<span><button class="link" data-act="more">${all ? "Show fewer" : `Show ${n - 2} more`}</button></span>` : ""}</div>` : ""}`;
+}
+$("list").addEventListener("click", e => { const row = e.target.closest(".qrow"); if (row) select(row.dataset.id); });
+$("list").addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && e.target.classList.contains("qrow")) { e.preventDefault(); select(e.target.dataset.id); } });
+$("panel").addEventListener("input", e => { const r = selRow(); if (r && e.target.id === "draft") { r.finalDraft = e.target.value; dbRowLater(r); } });
+$("panel").addEventListener("click", e => {
+  const r = selRow(), b = e.target.closest("button"); if (!b) return;
+  const act = b.dataset.act;
+  if (act === "close") return select(null);
+  if (act === "prev" || act === "next") return step(act === "next" ? 1 : -1);
+  if (!r) return;
+  if (b.dataset.fb) r.feedback = r.feedback === b.dataset.fb ? null : b.dataset.fb;
+  else if (act === "accept") r.accepted = !r.accepted;
+  else if (act === "more") { state.more.has(r.id) ? state.more.delete(r.id) : state.more.add(r.id); return renderPanel(); }
+  else return;
+  dbRow("update", r); renderRow(r); renderPanel();
+});
+$("filters").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  state.filter = b.dataset.f; renderStrip(); applyFilter();
+  if (document.activeElement?.id !== "draft") renderPanel();   // prev/next follow the new filter
+});
+document.addEventListener("keydown", e => {
+  if ($("review").hidden || e.target.closest?.("input, textarea, select")) return;
+  if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); step(e.key === "ArrowDown" ? 1 : -1); }
+  else if (e.key === "Escape" && state.sel) select(null);
+});
 
 // --- export -------------------------------------------------------------------
 $("export").addEventListener("click", async () => {
