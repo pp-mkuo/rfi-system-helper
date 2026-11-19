@@ -6,7 +6,7 @@ const grab = n => { const a = js.indexOf("function " + n); let d = 0, i = js.ind
 const uid = () => Math.random().toString(36).slice(2), dbRow = () => {};
 const rows4 = () => ["1", "2", "3", "4"].map(n => ({ id: n, n, question: "q" + n, flags: [], sources: [] }));
 const state = { rows: rows4() };
-eval(grab("replyRows") + grab("parseReply") + grab("applyAgent") + grab("rowState") + grab("flagList"));
+eval(grab("replyRows") + grab("parseReply") + grab("applyAgent") + grab("rowState") + grab("flagList") + grab("rowLabel"));
 const assert = (c, m) => { if (!c) { console.error("FAIL: " + m); process.exit(1); } };
 
 // What a row shows: its state label and its flag icons (redesign, 2026-11-19).
@@ -46,4 +46,8 @@ assert(r[0].status === "routed" && r[1].status === "drafted", "finished question
 assert(r[2].status === "failed" && r[3].error === "stopped before rfi-agent finished it", "unfinished questions marked stopped");
 // Seen from rfi-agent on 2026-11-19: all objects in one message, a blank line between them.
 assert(replyRows(["Both are green. Searching.", '{"n":"5","lane":"GREEN","draft":"a\\nb","flags":["x"]}\n\n{"n":"6","lane":"AMBER"}']).length === 2, "objects on separate lines in one message are collected");
+// Screen readers hear every flag from the row itself (final review, 2026-11-19).
+const lab = rowLabel({ n: "3", lane: "AMBER", status: "done", question: "Q?", flags: ["no owner on file", "custom flag"], sources: [] });
+assert(lab.includes("Flags: ") && lab.includes("No owner on file") && lab.includes("custom flag"), "row label names its flags");
+assert(!rowLabel({ n: "4", lane: "GREEN", status: "done", question: "Q?", flags: [], sources: [] }).includes("Flags"), "no flags, no flag clause");
 console.log("ok");

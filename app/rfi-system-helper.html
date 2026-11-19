@@ -360,6 +360,7 @@ async function startRun() {
   if (!caps.mcp) return showNotice(NO_HOST, true);
   const qs = parsedUpload ? questionsFromUpload() : parsePaste($("paste").value);
   if (!qs.length) return showNotice("Paste at least one question or upload a questionnaire.", true);
+  state.filter = "all"; // a filter left on from the last run would hide every pending row
   showNotice("");
   state.roles = { ae: $("ae").value.trim(), am: $("am").value.trim(), psm: $("psm").value.trim() };
   state.run = { id: uid(), name: $("runname").value.trim() || `Run ${new Date().toLocaleString()}`, createdAt: new Date().toISOString(), total: qs.length, roles: state.roles, status: "running", sessionId: null };
@@ -544,7 +545,7 @@ async function loadRuns() {
 }
 async function openRun(id, run) {
   if (state.running) return;
-  state.run = { ...run, id }; state.roles = run.roles || {};
+  state.run = { ...run, id }; state.roles = run.roles || {}; state.filter = "all";
   const snap = await caps.db.collection(`logs/${state.userId}/runs/${id}/rows`).get();
   state.rows = snap.docs.map(d => { const x = d.data(); return { id: d.id, ...x, sources: (x.sources || (x.retrievedIds || []).map((sid, i) => ({ id: sid, score: x.scores?.[i], question: "(source not stored in older runs)" }))).map(s => ({ ...s, answer: "" })), flags: x.flags || [] }; });
   state.rows.sort((a, b) => String(a.n).localeCompare(String(b.n), undefined, { numeric: true }));
@@ -657,16 +658,21 @@ function renderList() {
   if (!state.rows.length) l.innerHTML = `<p class="cap" style="padding:16px 12px">No questions in this run.</p>`;
 }
 function renderRow(r) { const old = document.querySelector(`.qrow[data-id="${CSS.escape(r.id)}"]`); if (old) old.replaceWith(rowEl(r)); renderStrip(); applyFilter(); }
+// The row is one button, so its children are hidden from screen readers: the label carries the flags.
+function rowLabel(r) {
+  const fl = flagList(r).map(f => f.label);
+  return `Question ${r.n}, ${r.lane || "not triaged"}, ${rowState(r).label}: ${r.question}${fl.length ? `. Flags: ${fl.join(", ")}` : ""}`;
+}
 function rowEl(r) {
   const el = document.createElement("div"), st = rowState(r), n = r.sources.length;
   el.className = "qrow" + (state.sel === r.id ? " sel" : ""); el.tabIndex = 0; el.setAttribute("role", "button");
-  el.setAttribute("aria-label", `Question ${r.n}, ${r.lane || "not triaged"}, ${st.label}: ${r.question}`);
+  el.setAttribute("aria-label", rowLabel(r));
   Object.assign(el.dataset, { id: r.id, lane: r.lane || "", flagged: r.flags.length ? "1" : "", failed: r.status === "failed" ? "1" : "" });
   const sub = r.status === "failed" ? `<span class="sub err">Failed: ${esc(r.error || "unknown error")}</span>`
     : r.lane ? `<span class="sub">${esc([r.route, r.esc && `Escalation: ${r.esc}`, n && `${n} library match${n === 1 ? "" : "es"}, top ${Number(r.topScore ?? 0).toFixed(2)}`].filter(Boolean).join(" · "))}</span>`
     : `<span class="sub">${r.status === "working" ? "rfi-agent is working on this" : "Waiting for rfi-agent"}</span>`;
   el.innerHTML = `<span class="num mono">#${esc(r.n)}</span><span class="dot ${laneDot(r.lane)}"></span><span class="txt"><span class="q">${esc(r.question)}</span>${sub}</span>
-    <span class="flags">${flagList(r).map(f => `<span class="ico ${f.key}" tabindex="0" aria-label="${esc(f.label)}: ${esc(f.tip)}">${ICON[f.key]}<span role="tooltip"><b>${esc(f.label)}</b>${esc(f.tip)}</span></span>`).join("")}</span>
+    <span class="flags">${flagList(r).map(f => `<span class="ico ${f.key}" aria-hidden="true">${ICON[f.key]}<span role="tooltip"><b>${esc(f.label)}</b>${esc(f.tip)}</span></span>`).join("")}</span>
     <span class="state ${st.key}">${esc(st.label)}</span>`;
   return el;
 }
