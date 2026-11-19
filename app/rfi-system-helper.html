@@ -85,7 +85,7 @@ button:disabled { opacity: 0.5; cursor: default; }
   <header>
     <div>
       <h1>RFI System Helper</h1>
-      <p class="sub">Triage a client RFI, draft green answers from the PulsePoint answer library, route the rest.</p>
+      <p class="sub">Triage a client RFI, draft green answers from the PulsePoint answer library, route the rest. <span class="mono" title="Page build: bump this on every republish">build 2026-11-19 · AF-126/127</span></p>
     </div>
     <div class="chips" id="chips">
       <span class="chip" id="chip-agent">rfi-agent</span>
@@ -316,12 +316,11 @@ Reply in JSON only, no prose. As soon as you finish each question, post its resu
 Leave sources empty for red. Do not write a workbook.`;
 }
 
-// One agent session per run; batches go to it in turn. pp-joke has no interrupt tool, so Stop can't halt rfi-agent
-// mid-turn (AF-126): it ends the batch here at once, keeps the questions the agent has already posted, marks the rest
-// stopped and sends no more. The agent finishes its current turn on its own; a retry queues behind it.
+// One agent session per run; batches go to it in turn. Stop (AF-126) ends the batch here at once, interrupts rfi-agent's
+// turn through pp-joke, keeps the questions the agent has already posted, marks the rest stopped and sends no more.
 async function askAgent(rows) {
   if (!rows.length) { setRunning(false); renderAll(); return; }
-  setRunning(true); state.ctl = new AbortController();
+  setRunning(true); state.ctl = new AbortController(); state.halted = null;
   const sig = state.ctl.signal;
   rows.forEach(r => { r.status = "pending"; r.error = ""; });
   let done = 0;
@@ -349,7 +348,13 @@ async function askAgent(rows) {
           progress(done, rows.length, `${label}, ${g?.state || "working"} (${Math.round((Date.now() - t0) / 60000)} min)…`);
         } while (!sig.aborted && !g?.done && Date.now() - t0 < BATCH_TIMEOUT_MS);
         if (sig.aborted) {
-          g = await read(null).catch(() => g);   // one last read, not aborted, for what the agent has posted so far
+          // pp-joke 0.2.5+ interrupts the turn: the agent finishes the step it is on, then goes idle. Older pp-joke
+          // rejects the call, and the agent then runs the batch out server-side. Either way, keep what it has posted.
+          $("status").textContent = "Stopping rfi-agent…";
+          const halted = await call("interrupt", { agent_id: state.agentId, session_id: s.session_id }, null).then(() => true, e => (console.warn("interrupt", e), false));
+          g = await read(null).catch(() => g);
+          for (const t1 = Date.now(); halted && !g?.done && Date.now() - t1 < 60000; ) { await sleep(2000); g = await read(null).catch(() => g); }
+          state.halted = halted && !!g?.done;
           applyAgent(batch, replyRows(g?.messages), STOPPED);
           break;
         }
@@ -374,7 +379,8 @@ async function askAgent(rows) {
   if (sig.aborted) {
     rows.filter(r => r.status === "pending" || r.status === "working").forEach(r => { r.status = "failed"; r.error = STOPPED; dbRow("update", r); });
     const left = state.rows.filter(r => r.error === STOPPED), fin = state.rows.filter(r => r.status === "drafted" || r.status === "routed");
-    showNotice(`Stopped. ${fin.length} of ${state.rows.length} questions are finished. Not finished: ${left.length ? "#" + left.map(r => r.n).join(", #") : "none"}. "Retry failed rows" runs them again.`);
+    showNotice(`Stopped. ${fin.length} of ${state.rows.length} questions are finished. Not finished: ${left.length ? "#" + left.map(r => r.n).join(", #") : "none"}. "Retry failed rows" runs them again.` +
+      (state.halted === false ? " rfi-agent couldn't be interrupted (pp-joke 0.2.5 or later is needed), so it finishes its current batch on its own." : ""));
   }
   progress(rows.length, rows.length, sig.aborted ? "Stopped." : "Done.");
   setRunning(false); renderAll();
