@@ -19,4 +19,8 @@ assert not g['red_safe'] and g['faithful'] is False
 
 s = r.summarize([g])
 assert s['red_safety'] == {'pass': 0, 'n': 1, 'rate': 0.0} and s['unsupported_claims'] == 1 and s['confusion'] == {'red->green': 1}
+
+run = {'summary': s, 'grades': [g], 'cost_usd': {'agent': 1.0, 'judge': 0.5}}
+x = r.across([run, run])  # --repeat aggregate
+assert x['faithfulness'] == {'pass': [0, 0], 'n': [1, 1]} and x['faithfulness_misses'] == ['r1:R', 'r2:R'] and x['cost_usd'] == 3.0
 print('ok')

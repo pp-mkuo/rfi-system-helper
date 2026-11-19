@@ -46,6 +46,7 @@ python3 evals/accuracy/run_accuracy_eval.py --limit 5        # trial
 python3 evals/accuracy/run_accuracy_eval.py                  # full set
 python3 evals/accuracy/run_accuracy_eval.py --set evals/accuracy/dentsu14.json
 python3 evals/accuracy/run_accuracy_eval.py --regrade evals/accuracy/results/<file>.json  # re-judge, no agent cost
+python3 evals/accuracy/run_accuracy_eval.py --repeat 3 --agent-id <candidate>  # 3 runs, one file each (-r1..-r3) + cross-run summary; ~$5 for the 29-question set
 ```
 
 Every session is pinned to one agent version (`--version`, default latest) and capped by a session budget (`--budget-cents`, default 500). The results file records the agent version, the skill versions each session resolved, session IDs and cost.
