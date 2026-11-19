@@ -466,6 +466,26 @@ async function openRun(id, run) {
 }
 
 // --- render -------------------------------------------------------------------
+// What a row shows at the right edge.
+function rowState(r) {
+  if (r.status === "failed") return { key: "failed", label: "Retry" };
+  if (r.status === "working") return { key: "working", label: "Working…" };
+  if (r.status === "pending" || !r.status) return { key: "pending", label: "Waiting" };
+  if (r.lane === "GREEN" && r.status === "drafted") return r.accepted ? { key: "accepted", label: "Accepted" } : { key: "review", label: "Draft to review" };
+  return { key: "routed", label: "Routed" };
+}
+// Flag icons, known ones first in a fixed order, then any other agent flag, then a Legal Approved source.
+function flagList(r) {
+  const FLAGS = [["owner unconfirmed", "unconfirmed", "Owner unconfirmed", () => "Q&A Bank proposed this owner. Confirm before routing."],
+    ["no owner on file", "noowner", "No owner on file", () => "No owner on file for this topic."],
+    ["stitched claim", "stitched", "Stitched claim", () => "Draft joins claims from more than one source. Check it reads true."],
+    ["uncovered sub-question", "uncovered", "Uncovered sub-question", () => r.uncovered ? `No library source for: ${r.uncovered}` : "Part of the question has no library source."]];
+  const fs = r.flags || [], out = [];
+  for (const [f, key, label, tip] of FLAGS) if (fs.includes(f)) out.push({ key, label, tip: tip(r) });
+  for (const f of fs) if (!FLAGS.some(k => k[0] === f)) out.push({ key: "other", label: f, tip: "Flag from rfi-agent." });
+  if ((r.sources || []).some(s => s.legal && s.used)) out.push({ key: "legal", label: "Legal Approved", tip: "The draft uses a Legal Approved answer." });
+  return out;
+}
 function counts() {
   const c = { GREEN: 0, AMBER: 0, RED: 0, flagged: 0, failed: 0, total: state.rows.length };
   for (const r of state.rows) { if (r.lane) c[r.lane]++; if (r.flags.length) c.flagged++; if (r.status === "failed") c.failed++; }
