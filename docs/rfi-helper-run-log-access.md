@@ -9,7 +9,7 @@ Point-in-time note, written 2026-11-19 against the Artifact runtime contract 0.2
 
 ## What the run log needs
 
-The page saves each run to its `db` store at `logs/<viewer id>/runs/<run id>`. It declares `db` with no access rules, so the defaults apply:
+The page saves each run to its `db` store at `logs/<viewer id>/runs/<run id>`. The rules aren't in this repo; they're set when the page is published. The personal copy (9XvbBf…, read 2026-11-19) declares `{path: "logs", read: "admin", write: "owner"}` and `{path: "logs/{self}", read: "interact", write: "interact"}`. Check the Enterprise copy's rules from a session signed in to that account. With these rules, or with the defaults, writing works like this:
 
 | Share-menu level | Runtime level | Can save a run? |
 |---|---|---|
@@ -34,7 +34,7 @@ Testers also need the Claude desktop app with pp-joke installed, or rfi-agent ca
 
 ## Who can read the runs
 
-Under today's defaults, **anyone who can open the page can read every run**, Viewers included: `logs/` uses the default `read: "view"` rule. Runs hold client RFI questions and draft answers. If they should be visible only to the people who ran them and to Editors, that takes a rules change, which is a separate decision for Maggie and Caedon. For example: `{path: "logs", read: "admin", write: "admin"}` plus `{path: "logs/{self}", read: "interact", write: "interact"}`.
+With the personal copy's rules, **the owner and Editors read every run**, a Contributor reads only their own, and Viewers read none. Runs hold client RFI questions and draft answers. If a copy is published without these rules, the defaults let anyone who can open the page read every run. So republish with the same `capabilities` declaration, or leave it out so the stored one carries forward.
 
 ## What changed on the page (AF-127, same PR as AF-126)
 
