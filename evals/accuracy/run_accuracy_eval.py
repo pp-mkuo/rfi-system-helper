@@ -30,6 +30,7 @@ import time
 AGENT_ID = 'agent_018cUnLHJKgSVrFqY346wgTs'
 ENV_ID = 'env_01GkLzSQxse6zmM8FxeDE7Ag'        # same as agents/rfi-agent/agent.md metadata
 VAULT_ID = 'vlt_011Cgv3jMN4CJVKKKx48ts6F'
+MEMORY_STORE = None   # AF-129: --memory-store attaches a read-only store (used with --agent-id rfi-agent-memory)
 JUDGE_MODEL = 'claude-opus-5-5'
 JUDGE_PRICE = (4.00, 20.00)   # $/MTok in/out, Opus 5.5 list price (2026-11)
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -59,10 +60,13 @@ def ant(*args, parse=True):
 def run_batch(batch, version, budget_cents, title):
     text = 'Here are questions from a client RFI questionnaire.\n\n' + '\n\n'.join(
         f'{q["id"]}. {q["question"]}' for q in batch) + PROTOCOL
+    extra = ['--vault-id', VAULT_ID] if VAULT_ID else []
+    if MEMORY_STORE:
+        extra += ['--resource', json.dumps({'type': 'memory_store', 'memory_store_id': MEMORY_STORE, 'access': 'read_only'})]
     s = ant('beta:sessions', 'create',
             '--agent', json.dumps({'type': 'agent', 'id': AGENT_ID, 'version': version}),
-            '--environment-id', ENV_ID, '--vault-id', VAULT_ID, '--title', title,
-            '--metadata', json.dumps({'ticket': 'AF-50'}),
+            '--environment-id', ENV_ID, *extra, '--title', title,
+            '--metadata', json.dumps({'ticket': 'AF-129' if MEMORY_STORE else 'AF-50'}),
             '--budget', json.dumps({'type': 'limit', 'max_list_cost': {'amount': str(budget_cents), 'currency': 'USD'}}),
             '--initial-event', json.dumps({'type': 'user.message', 'content': [{'type': 'text', 'text': text}]}))
     deadline = time.time() + 20 * 60
@@ -83,7 +87,7 @@ def collect(sid):
     end = [e for e in events if e['type'] in ('session.status_idle', 'session.status_terminated')]
     session = ant('beta:sessions', 'retrieve', '--session-id', sid)
     uses = {e['id']: e for e in events if e['type'] == 'agent.tool_use'}
-    searches = [e['input'] for e in uses.values() if 'query.py' in json.dumps(e.get('input'))]
+    searches = [e['input'] for e in uses.values() if re.search(r'query\.py|/mnt/memory', json.dumps(e.get('input')))]
     # Evidence = the output of every bash call: exactly what the agent saw. It often writes
     # query.py output to a file and prints it later through its own formatter, so neither
     # the command text nor the JSON shape is a reliable key. File reads (skills) are excluded.
@@ -171,6 +175,7 @@ def summarize(grades):
 
 
 def main():
+    global AGENT_ID, VAULT_ID, MEMORY_STORE
     ap = argparse.ArgumentParser()
     ap.add_argument('--set', default=os.path.join(HERE, 'questions.json'))
     ap.add_argument('--limit', type=int, help='first N questions only (trial)')
@@ -178,7 +183,12 @@ def main():
     ap.add_argument('--budget-cents', type=int, default=500, help='hard spend cap per session')
     ap.add_argument('--version', type=int, help='agent version to pin; default = latest')
     ap.add_argument('--regrade', help='re-run grading on a saved results file, no agent sessions')
+    ap.add_argument('--agent-id', default=AGENT_ID)
+    ap.add_argument('--memory-store', help='memstore_... to attach read-only; drops the vault')
     a = ap.parse_args()
+    AGENT_ID = a.agent_id
+    if a.memory_store:
+        MEMORY_STORE, VAULT_ID = a.memory_store, None
 
     if a.regrade:
         res = json.load(open(a.regrade))
@@ -194,7 +204,7 @@ def main():
         version = a.version or ant('beta:agents', 'retrieve', '--agent-id', AGENT_ID)['version']
         res = {'date': datetime.date.today().isoformat(), 'set': qset['set'], 'set_file': os.path.relpath(a.set, HERE),
                'answer_key_verified_by': qset.get('answer_key_verified_by'),
-               'agent': {'id': AGENT_ID, 'version': version}, 'environment_id': ENV_ID, 'vault_id': VAULT_ID,
+               'agent': {'id': AGENT_ID, 'version': version}, 'environment_id': ENV_ID, 'vault_id': VAULT_ID, 'memory_store': MEMORY_STORE,
                'judge_model': JUDGE_MODEL, 'questions': qs_list, 'batches': [], 'grades': []}
         for n in range(0, len(qs_list), a.batch_size):
             batch = qs_list[n:n + a.batch_size]
@@ -208,7 +218,8 @@ def main():
     res['summary'] = summarize(res['grades'])
     res['cost_usd'] = {'agent': sum(b['cost_cents'] for b in res['batches']) / 100,
                        'judge': round(sum(g.get('judge_cost_cents', 0) for g in res['grades']) / 100, 2)}
-    out = a.regrade or os.path.join(HERE, 'results', f'{res["date"]}-{res["set"]}-v{res["agent"]["version"]}'
+    tag = '-memory' if res.get('memory_store') else ''
+    out = a.regrade or os.path.join(HERE, 'results', f'{res["date"]}-{res["set"]}{tag}-v{res["agent"]["version"]}'
                                     f'{"-trial" + str(a.limit) if a.limit else ""}.json')
     json.dump(res, open(out, 'w'), indent=1, ensure_ascii=False)
     print(json.dumps({'summary': res['summary'], 'cost_usd': res['cost_usd']}, indent=1))
