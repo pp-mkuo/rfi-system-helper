@@ -1,0 +1,311 @@
+{
+ "set": "cmi2025-slice",
+ "provenance": "agent-generated",
+ "answer_key_verified_by": null,
+ "last-verified": "never",
+ "about": "Agent-built 2026-11-12 for AF-50. Green rows and their approved_answer are from the CMI Agency RFI 2025 as submitted (pipeline/records.json, RFI 2026 batch, also in the agent's index). Triage and route_any are the agent's reading of agents/rfi-agent/skills/rfi-system-helper/SKILL.md and need Caedon's check before scores count.",
+ "route_rule": "A routed question passes if its Route text contains any route_any string (case-insensitive).",
+ "questions": [
+  {
+   "id": "CMI-001",
+   "source": "CMI Agency RFI - 2025 (row 1)",
+   "question": "Please define audience source/methodology. If you build proprietary audiences, please include sources and seeds.",
+   "triage": "green",
+   "route_any": [],
+   "approved_answer": "PulsePoint builds proprietary audiences using a combination of first-party HCP data, de-identified medical and pharmacy claims, and real-time behavioral and contextual signals. PulsePoint's HCP data is built on Medscape first party data. We rely on Medscape CRM as the source because re-identification requires a consented foundation-- something only Medscape provides at scale. DTC audiences are derived from millions of annual claims and enriched with engagement and content consumption signals using our patented contextual engine mapped to National Library of Medicine's taxonomy. All data is HIPAA- and NAI-compliant and refreshed continuously to maintain accuracy.",
+   "note": ""
+  },
+  {
+   "id": "CMI-062",
+   "source": "CMI Agency RFI - 2025 (row 62)",
+   "question": "How do you ensure compliance with global data privacy regulations (e.g., GDPR, CCPA, LGPD) and state health data regulations",
+   "triage": "red",
+   "route_any": [
+    "Jessica Hoffman",
+    "rfi@internetbrands.com"
+   ],
+   "approved_answer": "PulsePoint ensures compliance by using only de-identified data for DTC targeting and obtaining named, first-party consent for HCP data. We follow HIPAA, NAI, GDPR, CCPA, and LGPD guidelines, and apply Safe Harbor or Expert Determination methods to protect patient privacy. Data use is governed by strict contracts, population thresholds, and internal audits to meet both global and state-level health data requirements.",
+   "note": "GDPR/CCPA/state health-data compliance is the legal/privacy row. Library holds an answer; the skill says not to use it."
+  },
+  {
+   "id": "CMI-007",
+   "source": "CMI Agency RFI - 2025 (row 7)",
+   "question": "What identity graphs are integrated with your platform? (LiveRamp, Axciom, etc.)",
+   "triage": "green",
+   "route_any": [],
+   "approved_answer": "PulsePoint operates its own identity graph. We also are integrated with enternal partners such as LiveRamp/RampID and other privacy-compliant ID solutions, including UID2 and ID5.",
+   "note": ""
+  },
+  {
+   "id": "ADD-1",
+   "source": "agent-written from the routing table",
+   "question": "What CPM should we expect for HCP display, and what volume discounts apply?",
+   "triage": "amber",
+   "route_any": [
+    "AE"
+   ],
+   "approved_answer": null,
+   "note": "Skill edge case: rates and discounts go to the AE."
+  },
+  {
+   "id": "CMI-013",
+   "source": "CMI Agency RFI - 2025 (row 13)",
+   "question": "What levels of geographic targeting are available? (Zip11, Zip9, Zip5, Postal, H3, Household-Home Address, etc.)",
+   "triage": "green",
+   "route_any": [],
+   "approved_answer": "PulsePoint supports geographic targeting at ZIP levels, along with DMA, county, state, postal code and custom radius targeting. We also support household-level targeting based on our identity graph.",
+   "note": ""
+  },
+  {
+   "id": "CMI-063",
+   "source": "CMI Agency RFI - 2025 (row 63)",
+   "question": "What certifications do you hold (e.g., ISO 27001, SOC 2)?",
+   "triage": "red",
+   "route_any": [
+    "rfi@internetbrands.com",
+    "security"
+   ],
+   "approved_answer": "Certifications in discusssion",
+   "note": "Certifications (ISO 27001, SOC 2) are company security procedure."
+  },
+  {
+   "id": "CMI-015",
+   "source": "CMI Agency RFI - 2025 (row 15)",
+   "question": "Can the timeframe be adjusted within an audience/pixel segment?",
+   "triage": "green",
+   "route_any": [],
+   "approved_answer": "Yes, PulsePoint allows full control over audience recency settings for pixel-based audiences.",
+   "note": ""
+  },
+  {
+   "id": "CMI-042",
+   "source": "CMI Agency RFI - 2025 (row 42)",
+   "question": "Please provide detail on any planned product launches.",
+   "triage": "amber",
+   "route_any": [
+    "Amanda Alterman"
+   ],
+   "approved_answer": "See full roadmap presentation",
+   "note": "Roadmap goes to Amanda Alterman. The submitted answer was \"See full roadmap presentation\"."
+  },
+  {
+   "id": "CMI-016",
+   "source": "CMI Agency RFI - 2025 (row 16)",
+   "question": "Please list all reporting capabilities. (Specific reporting capabilities to call out, in platform reporting view, downloadable reports. Include all reporting metrics available)",
+   "triage": "green",
+   "route_any": [],
+   "approved_answer": "PulsePoint offers in-platform dashboards and downloadable reports with metrics and dimensions across audience, channel, creative, and geography. Reporting includes PLD (Physician-Level Data), AQ (Audience Quality), Rx, impression delivery, CTR, CPM, frequency, reach, and engagement among many other metrics including custom CMI/Compas and/or client attributes. Full metric reporting includes: Advertiser Name Campaign Name LineItem Name Tactic Name Ad Size Creative Name Creative ID Ad Type Video Size Video Placement Creative Note Creative Type Inventory Type Conversion Type Conversion Pixel ID Conversion Pixel Name Line Item Type Campaign ID LineItem ID Tactic ID Advertiser ID NPI Number NPI Full Name NPI First Name NPI Last Name NPI Profession NPI Specialty NPI Subspecialty NPI Type Device Type Operating System Browser Country State City DMA Name ZIP Area code Creative Placement ID DMA Code Domain App Bundle Keywords IAB Category Condition Category End User Domain Publisher Venue type Endemic Auction Type PMP ID PMP Name PMP Exchange Inventory Source NPI List Served Brand CMI_PlacementID Contract Confirmation # IO Brand Name Vehicle_Name Buy Type Impressions Clicks Conversions Unique Devices Bids Click-through Conversions View-through Conversions NPI Reach NPI Frequency CTR Media Spend Data Spend Total Spend eCPM eCPC eCPA Platform Fee Win Rate Average Bid Price Deal Fee Billable Total Spend HUMAN Cost First Quartile Views Second Quartile Views Third Quartile Views Complete Views Q1 Rate Q2 Rate Q3 Rate Completion Rate Exposed Prescribers Overall Prescribers, Patients Under Exposed Prescribers Patients Under Overall Prescribers Average TRx per Overall Prescriber Average TRx per Exposed Prescriber Rx Trends New to Brand Prescribers exposed Top new prescribers Top influenced prescribers Top droppers NRx NBRx Cost Pers AQ Index QAR % Patient Reach",
+   "note": ""
+  },
+  {
+   "id": "ADD-2",
+   "source": "agent-written from the routing table",
+   "question": "What tmax and QPS limits do you set on bid requests from our SSP, and which data centers do you bid from?",
+   "triage": "amber",
+   "route_any": [
+    "TPM"
+   ],
+   "approved_answer": null,
+   "note": "OpenRTB / latency / data-centre row."
+  },
+  {
+   "id": "CMI-017",
+   "source": "CMI Agency RFI - 2025 (row 17)",
+   "question": "Please confirm PLD Passback Cadence. (Daily, Weekly, Monthly, etc.)",
+   "triage": "green",
+   "route_any": [],
+   "approved_answer": "PulsePoint can provide PLD on an hourly, daily, weekly, monthly, quarterly or annual basis. Users can schedule reporting directly from the UI.",
+   "note": ""
+  },
+  {
+   "id": "CMI-064",
+   "source": "CMI Agency RFI - 2025 (row 64)",
+   "question": "How do you handle data subject access requests (DSARs)?",
+   "triage": "red",
+   "route_any": [
+    "Jessica Hoffman",
+    "rfi@internetbrands.com"
+   ],
+   "approved_answer": "PulsePoint maintains processes to respond to DSARs in compliance with GDPR, CCPA, and other regulations.",
+   "note": "DSARs are legal/privacy (data rights)."
+  },
+  {
+   "id": "CMI-018",
+   "source": "CMI Agency RFI - 2025 (row 18)",
+   "question": "Do you have any additional measurement features specific to healthcare? (Clinical insights, NRx, etc.)",
+   "triage": "green",
+   "route_any": [],
+   "approved_answer": "Yes, PulsePoint has a comphrensive Clinical Insights Dashboard for both HCP and DTC campaigns that incorporates Rx and associated metrics. PulsePoint also operates HCP365, designed to measure the impact of media on HCP brand engagement.",
+   "note": ""
+  },
+  {
+   "id": "ADD-3",
+   "source": "agent-written from the routing table",
+   "question": "What was the IVT rate on our campaigns last quarter?",
+   "triage": "amber",
+   "route_any": [
+    "Divyang",
+    "Matt Katz"
+   ],
+   "approved_answer": null,
+   "note": "Account-specific quality figure; the 2026-11-10 CLI test routed this to Divyang / Matt Katz."
+  },
+  {
+   "id": "CMI-024",
+   "source": "CMI Agency RFI - 2025 (row 24)",
+   "question": "Which measurement partners are integrated with your platform? (Consider survey, traffic, claims, attention, etc.)",
+   "triage": "green",
+   "route_any": [],
+   "approved_answer": "Komodo, IQVIA (beta), Crossix (beta) and PulsePoint. PulsePoint is also a 1pc partner of Crossix.",
+   "note": ""
+  },
+  {
+   "id": "CMI-065",
+   "source": "CMI Agency RFI - 2025 (row 65)",
+   "question": "What is your policy on data retention?",
+   "triage": "red",
+   "route_any": [
+    "Jessica Hoffman",
+    "rfi@internetbrands.com"
+   ],
+   "approved_answer": "Data retained only as needed/reasonable",
+   "note": "Skill edge case: \"What is your data retention policy?\" is red."
+  },
+  {
+   "id": "CMI-029",
+   "source": "CMI Agency RFI - 2025 (row 29)",
+   "question": "Please list channels supported. (Display, OLV, CTV, etc.)",
+   "triage": "green",
+   "route_any": [],
+   "approved_answer": "Display, OLV, CTV, Native, Audio, EHR, Social, Search Extension, DOOH, POC, Search (alpha)",
+   "note": ""
+  },
+  {
+   "id": "ADD-4",
+   "source": "agent-written from the routing table",
+   "question": "Can you run programmatic guaranteed deals on Disney inventory via Magnite?",
+   "triage": "amber",
+   "route_any": [
+    "Jay Irwin",
+    "Doug Richards"
+   ],
+   "approved_answer": null,
+   "note": "Skill edge case (PG on Disney via Magnite)."
+  },
+  {
+   "id": "CMI-036",
+   "source": "CMI Agency RFI - 2025 (row 36)",
+   "question": "What are your frequency capping capabilities? (Campaign level frequency caps, limitations, etc. Across channels, campaigns, PGs, etc.)",
+   "triage": "green",
+   "route_any": [],
+   "approved_answer": "Campaign, Line Item, Tactic; By Hour, Day, Week and Month; By Device, Person and Household",
+   "note": ""
+  },
+  {
+   "id": "CMI-066",
+   "source": "CMI Agency RFI - 2025 (row 66)",
+   "question": "What security protocols and measures do you have in place to protect client data and platform integrity?",
+   "triage": "red",
+   "route_any": [
+    "rfi@internetbrands.com",
+    "security"
+   ],
+   "approved_answer": "See Privacy Policy: https://www.pulsepoint.com/legal/platform-privacy-policy",
+   "note": "Security protocols are data/platform security."
+  },
+  {
+   "id": "CMI-041",
+   "source": "CMI Agency RFI - 2025 (row 41)",
+   "question": "What Brand Safety, IVT, and Fraud settings are available in platform? (DoubleVerify, Jounce, Human, etc.)",
+   "triage": "green",
+   "route_any": [],
+   "approved_answer": "HUMAN, DV, Jounce, Pixalate",
+   "note": "Skill edge case: brand safety vendors are green."
+  },
+  {
+   "id": "CMI-057",
+   "source": "CMI Agency RFI - 2025 (row 57)",
+   "question": "How does your DSP handle forecasting and pacing for Programmatic Guaranteed deals?",
+   "triage": "amber",
+   "route_any": [
+    "Jay Irwin",
+    "Doug Richards",
+    "TPM"
+   ],
+   "approved_answer": "Varies based on PG/Publisher",
+   "note": "Unsure: the library answer is only \"Varies based on PG/Publisher\". Could be green if the agent finds more."
+  },
+  {
+   "id": "CMI-049",
+   "source": "CMI Agency RFI - 2025 (row 49)",
+   "question": "Do you offer bid shading capabilities?",
+   "triage": "green",
+   "route_any": [],
+   "approved_answer": "Yes, via CPM optimization. PulsePoint does not profit from use of these capabilities. All savings generated are appreciated directly by CMI/Advertisers.",
+   "note": ""
+  },
+  {
+   "id": "ADD-5",
+   "source": "agent-written from the routing table",
+   "question": "Our October invoice does not match the impressions shown in the UI. Can you explain the discrepancy?",
+   "triage": "amber",
+   "route_any": [
+    "AM",
+    "Erica Yard"
+   ],
+   "approved_answer": null,
+   "note": "Billing discrepancy goes to the AM on the account / Erica Yard."
+  },
+  {
+   "id": "CMI-051",
+   "source": "CMI Agency RFI - 2025 (row 51)",
+   "question": "Please list all targeting options",
+   "triage": "green",
+   "route_any": [],
+   "approved_answer": "Behavioral Segments (third party), NPI List, Retargeting Pixels, Conversion Pixels, HCP Specialty, Smart List Dx/Rx/Px, Smart List Rx Behavior Change, Smart List Endemic Reserch, Smart List site engagement, Smart List search engagement, Health Populations, Bespoke, OTC Populations, IP address, Clickers, Keyword Population, Practice Staff, Lookalike Audiences, Health Populations +, Age, Ethnicity, Gender, Health Pages, IAB categories, Keywords, Language, Endemics, Geo Radius, Geo Targets, Postal Codes, Area Codes, Weather Signals, DV ABS, DV Brand Safety, Browser, Custom Targeting Bundle, Device, Domain, Apps, IVT, Inventory Source, Inventory Type, Operating System, PMP/PG Deals, Viewability.",
+   "note": ""
+  },
+  {
+   "id": "ADD-6",
+   "source": "agent-written from the routing table",
+   "question": "Describe your DE&I hiring commitments and current workforce diversity figures.",
+   "triage": "red",
+   "route_any": [
+    "rfi@internetbrands.com"
+   ],
+   "approved_answer": null,
+   "note": "Skill edge case: DE&I goes to the IB RFI team."
+  },
+  {
+   "id": "CMI-055",
+   "source": "CMI Agency RFI - 2025 (row 55)",
+   "question": "Do you have any contextual Integrations or proprietary offerings?",
+   "triage": "green",
+   "route_any": [],
+   "approved_answer": "Yes, Health Pages patented contextual engine, which also feeds Health Populations and Health Populations Plus targeting. Keyword Population taregting is also proprietary and also available.",
+   "note": ""
+  },
+  {
+   "id": "ADD-7",
+   "source": "agent-written from the routing table",
+   "question": "What is your company's carbon-emissions reduction target, and do you report Scope 3 emissions?",
+   "triage": "red",
+   "route_any": [
+    "michael.cordova"
+   ],
+   "approved_answer": null,
+   "note": "Sustainability row."
+  },
+  {
+   "id": "ADD-8",
+   "source": "agent-written from the routing table",
+   "question": "Do you run criminal background checks on employees who can access client data?",
+   "triage": "red",
+   "route_any": [
+    "rfi@internetbrands.com"
+   ],
+   "approved_answer": null,
+   "note": "HR policy goes to the IB RFI team."
+  }
+ ]
+}

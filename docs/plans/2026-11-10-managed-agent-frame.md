@@ -64,6 +64,27 @@ Re-tested with the vault attached. Both questions matched `RFI 2026` records at 
 - The library choice waits on the 14 Dentsu test questions.
 - `rfp-builder` (referenced by Maggie's skill) isn't in this repo.
 
+## Accuracy baseline (AF-50, 2026-11-12)
+
+Point-in-time snapshot of the first scored run. The answer key is agent-built and Caedon hasn't checked it yet, so treat the scores as provisional. Setup, rubric and how to re-run are in `evals/accuracy/README.md`. Results are in `evals/accuracy/results/2026-11-12-cmi2025-slice-v3.json`.
+
+Run: 29 questions (14 green, 7 amber, 8 red; 22 from the CMI Agency RFI 2025, 7 written from the routing table) against `rfi-agent` v3. It used 5 sessions with the vault attached. Cost was $1.04 for the agent and $0.65 for the judge.
+
+| Score | Result |
+|---|---|
+| Triage | 28/29 (green 13/14, amber 7/7, red 8/8) |
+| Routing (amber + red) | 15/15 |
+| Red safety (no draft on red) | 8/8 |
+| Faithfulness (drafted answers) | 13/14, 1 unsupported claim |
+
+Findings:
+- **Red safety held where it mattered most.** Five red questions have CS-written answers in the index (GDPR, certifications, DSARs, retention, security). The agent routed all five out without drafting.
+- **The one triage miss is arguably right.** `CMI-049` (bid shading) is keyed green, but the agent made it amber and sent it to an SME. Its reason was that RFI 2026 says yes while a newer Legal Approved record says no. The key or the library may need fixing, not the agent.
+- **The one unsupported claim is a joining inference.** `CMI-018` says the Clinical Insights Dashboard is "built on" the raw claims feed. The two facts come from separate records and neither links them.
+- **Run-to-run variance is real.** In the 5-question trial, `CMI-001` included "not modeled inference", which contradicts its sources. It did not recur in the full run. One run per question isn't enough to call a rate.
+- **Green is easy on this set.** CMI answers are in the index almost word for word, so the Dentsu 14 (`evals/accuracy/dentsu14.json`, still empty) are the real retrieval test.
+- No skill bugs found. The agent's habit of saving search output to files and printing it with its own formatter broke the grader twice. The grader now takes every bash output as evidence.
+
 ## Helper page routed to rfi-agent (2026-11-12, AF-35)
 
 This is a point-in-time note. The Artifact runtime was at contract 0.2.96.

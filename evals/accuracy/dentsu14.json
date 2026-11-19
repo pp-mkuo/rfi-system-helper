@@ -1,0 +1,7 @@
+{
+ "set": "dentsu14",
+ "provenance": "agent-generated",
+ "last-verified": "never",
+ "about": "Slot for the 14 Dentsu test questions Maggie is sending. Fill questions[] with the same fields as questions.json, then run with --set evals/accuracy/dentsu14.json.",
+ "questions": []
+}
